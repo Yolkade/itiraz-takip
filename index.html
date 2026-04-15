@@ -2,202 +2,296 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>İtiraz Takip Paneli</title>
+  <title>İtiraz Takip Paneli - Pro</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+    
+    body { font-family: 'Poppins', sans-serif; cursor: default; }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { bg: transparent; }
+    ::-webkit-scrollbar-thumb { bg: #4b5563; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { bg: #6b7280; }
+
+    .glow-on-hover {
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .glow-on-hover::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+      transform: translate(-50%, -50%) scale(0);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      opacity: 0;
+    }
+    .glow-on-hover:hover::after { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    .glow-on-hover:active { transform: scale(0.97); }
+
+    .table-row-active:hover { background-color: rgba(255,255,255,0.03); }
+    
+    /* Geri sayım için özel yazı tipi */
+    .timer-font { font-family: 'Courier New', Courier, monospace; font-weight: 700; font-variant-numeric: tabular-nums; }
+  </style>
 </head>
-<body class="bg-gray-100 p-6">
-  <div class="max-w-5xl mx-auto">
+<body class="bg-gray-950 text-gray-100 p-4 md:p-8 min-h-screen">
+  <div class="max-w-7xl mx-auto">
 
-    <div class="flex justify-between items-center mb-4">
-      <h1 class="text-2xl font-bold text-gray-800">İtiraz Takip Paneli</h1>
+    <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 pb-4 border-b border-gray-800 gap-4">
+      <div class="flex items-center gap-4">
+        <div class="p-3 bg-gray-800 rounded-2xl shadow-inner text-2xl">⚖️</div>
+        <div>
+          <h1 class="text-3xl font-extrabold text-white tracking-tighter">İtiraz Takip <span class="text-xs text-blue-400 font-mono">PRO</span></h1>
+          <p class="text-gray-500 text-sm">Girişlerinizi yönetin ve süreci anlık takip edin.</p>
+        </div>
+      </div>
+      <div class="flex gap-3 bg-gray-900 p-4 rounded-2xl shadow-xl border border-gray-800 w-full md:w-auto justify-around md:justify-start">
+        <div class="text-center md:text-right border-r border-gray-700 pr-3">
+          <div class="text-xs text-gray-500">TOPLAM HESAP</div>
+          <div id="totalCount" class="text-2xl font-bold text-blue-400">0</div>
+        </div>
+        <div class="text-center md:text-right">
+          <div class="text-xs text-gray-500">SAAT</div>
+          <div id="liveClock" class="text-2xl font-bold font-mono text-gray-300">00:00:00</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+      
+      <div class="bg-gray-900 p-6 rounded-3xl shadow-xl border border-gray-800">
+        <h2 class="text-xl font-bold text-white mb-5 flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Yeni Hesap Ekle
+        </h2>
+        <div class="space-y-4">
+          <input id="name" placeholder="Hesap Adı veya Benzersiz ID" class="w-full bg-gray-800 border border-gray-700 p-4 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition text-gray-100 placeholder-gray-500 font-medium" />
+          <textarea id="reason" placeholder="İtiraz Nedeni / Not" rows="3" class="w-full bg-gray-800 border border-gray-700 p-4 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition text-gray-100 placeholder-gray-500"></textarea>
+          <button onclick="addRow()" class="w-full bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-xl font-extrabold text-lg transition-all glow-on-hover shadow-lg">LİSTEYE EKLE</button>
+        </div>
+      </div>
+
+      <div class="lg:col-span-2 bg-gray-900 p-6 rounded-3xl shadow-xl border border-gray-800">
+        <h2 class="text-xl font-bold text-white mb-5 flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          Hızlı Araçlar ve Arama
+        </h2>
+        <div class="space-y-4">
+          <input id="search" oninput="render()" placeholder="Listede ara... (Kısayol F3)" class="w-full bg-gray-800/50 border border-gray-700 p-4 rounded-xl focus:ring-2 focus:ring-gray-500 outline-none transition text-gray-100 placeholder-gray-500 font-medium" />
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <button onclick="exportData()" class="bg-gray-700 hover:bg-gray-600 text-white px-5 py-3 rounded-xl font-semibold text-sm transition glow-on-hover flex items-center justify-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+              Yedek İndir
+            </button>
+            <input type="file" id="importFile" class="hidden" onchange="importData(event)" />
+            <button onclick="document.getElementById('importFile').click()" class="bg-gray-700 hover:bg-gray-600 text-white px-5 py-3 rounded-xl font-semibold text-sm transition glow-on-hover flex items-center justify-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0l-4 4m4-4v12" /></svg>
+              Yedek Yükle
+            </button>
+            <button onclick="if(confirm('Tüm veriler kalıcı olarak silinecek. Emin misin?')) { data=[]; saveData(); render(); }" class="bg-red-950/50 hover:bg-red-900 text-red-400 px-5 py-3 rounded-xl font-semibold text-sm transition col-span-2 md:col-span-1 flex items-center justify-center gap-2 border border-red-900/50">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+              Sıfırla
+            </button>
+          </div>
+          <p class="text-xs text-gray-600 mt-2 font-mono">Veriler tarayıcınızın LocalStorage hafızasında tutulur. Başka bir cihazda kullanmak için Yedek İndir/Yükle yapın.</p>
+        </div>
+      </div>
+
     </div>
 
-    <div class="bg-white p-4 rounded-2xl shadow-sm mb-4">
-      <input id="search" oninput="render()" placeholder="Listede ara... (Hızlı odak için F3)" class="border p-2 w-full rounded-lg focus:ring-2 focus:ring-blue-400 outline-none" />
-    </div>
-
-    <div class="bg-white p-4 rounded-2xl shadow-sm mb-4 flex flex-wrap gap-2">
-      <button onclick="exportData()" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition">Yedek İndir (.json)</button>
-      <input type="file" id="importFile" class="hidden" onchange="importData(event)" />
-      <button onclick="document.getElementById('importFile').click()" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg transition">Yedek Yükle</button>
-    </div>
-
-    <div class="bg-white p-4 rounded-2xl shadow-sm mb-6 flex flex-wrap gap-2">
-      <input id="name" placeholder="Hesap Adı / ID" class="border p-2 flex-1 min-w-[200px] rounded-lg" />
-      <input id="reason" placeholder="İtiraz Nedeni" class="border p-2 flex-1 min-w-[200px] rounded-lg" />
-      <button onclick="addRow()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-bold transition">Listeye Ekle</button>
-    </div>
-
-    <div class="overflow-x-auto">
-      <table class="w-full bg-white rounded-2xl shadow-sm overflow-hidden">
-        <thead>
-          <tr class="bg-gray-200 text-gray-700">
-            <th class="p-3 text-left">Hesap</th>
-            <th class="p-3 text-left">Neden</th>
-            <th class="p-3 text-center">İtiraz Sayısı</th>
-            <th class="p-3 text-left">Durum / Kalan Süre</th>
-            <th class="p-3 text-center">Aksiyonlar</th>
-          </tr>
-        </thead>
-        <tbody id="tableBody" class="divide-y divide-gray-100"></tbody>
-      </table>
+    <div class="bg-gray-900 rounded-3xl shadow-2xl border border-gray-800 overflow-hidden mb-10">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse table-auto">
+          <thead>
+            <tr class="bg-gray-800/50 text-gray-400">
+              <th class="p-5 font-bold uppercase text-xs tracking-wider">Hesap / Not</th>
+              <th class="p-5 font-bold uppercase text-xs tracking-wider text-center">İtiraz Dengesi</th>
+              <th class="p-5 font-bold uppercase text-xs tracking-wider">Durum & Kalan Süre</th>
+              <th class="p-5 font-bold uppercase text-xs tracking-wider text-right">Eylemler</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody" class="divide-y divide-gray-800/50">
+            </tbody>
+        </table>
+      </div>
     </div>
 
   </div>
 
 <script>
-let data = JSON.parse(localStorage.getItem('itirazData')) || [];
+// --- VERİ YÖNETİMİ ---
+let data = JSON.parse(localStorage.getItem('itirazData_pro')) || [];
 
 function saveData() {
-  localStorage.setItem('itirazData', JSON.stringify(data));
+  localStorage.setItem('itirazData_pro', JSON.stringify(data));
+  document.getElementById('totalCount').innerText = data.length;
 }
 
+// --- KAYIT EKLEME ---
 function addRow() {
-  const nameInput = document.getElementById('name');
-  const reasonInput = document.getElementById('reason');
-  const name = nameInput.value.trim();
-  const reason = reasonInput.value.trim();
-
-  if (!name) return alert('Lütfen bir hesap adı girin!');
-
-  data.push({ name, reason, count: 0, resetTime: null });
-  nameInput.value = '';
-  reasonInput.value = '';
-  saveData();
-  render();
+  const n = document.getElementById('name');
+  const r = document.getElementById('reason');
+  if (!n.value.trim()) return alert('⚠️ Lütfen bir Hesap Adı veya ID girin!');
+  data.push({ name: n.value.trim(), reason: r.value.trim(), count: 0, resetTime: null });
+  n.value = ''; r.value = '';
+  saveData(); render();
 }
 
+// --- İTİRAZ GÖNDERME ---
 function sendAppeal(index) {
-  // Filtrelenmiş listedeki index'i gerçek veri listesindeki objeyle eşleştir
   const item = filteredData()[index];
   if (item.count >= 3) return;
-
   item.count++;
-  if (item.count === 3) {
-    // 7 gün bekleme süresi ekle
-    item.resetTime = Date.now() + 7*24*60*60*1000;
-  }
-
-  saveData();
-  render();
+  if (item.count === 3) item.resetTime = Date.now() + 7*24*60*60*1000;
+  saveData(); render();
 }
 
+// --- SİLME ---
 function deleteRow(index) {
-  if(!confirm('Bu kaydı silmek istediğine emin misin?')) return;
+  if(!confirm(`🗑️ '${filteredData()[index].name}' hesabını silmek istediğine emin misin?`)) return;
   const item = filteredData()[index];
   data = data.filter(d => d !== item);
-  saveData();
-  render();
+  saveData(); render();
 }
 
+// --- SÜRE HESAPLAMA ---
 function getRemaining(time) {
   const diff = time - Date.now();
-  if (diff <= 0) return 'Hazır';
-  const days = Math.floor(diff/(1000*60*60*24));
-  const hours = Math.floor((diff/(1000*60*60))%24);
-  const minutes = Math.floor((diff/(1000*60))%60);
-  return `${days}g ${hours}s ${minutes}d`;
+  if (diff <= 0) return 'READY';
+  
+  const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const m = Math.floor((diff / (1000 * 60)) % 60);
+  const s = Math.floor((diff / 1000) % 60);
+
+  let parts = [];
+  if (d > 0) parts.push(`${d}g`);
+  parts.push(`${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`);
+  
+  return parts.join(' ');
 }
 
+// --- FİLTRELEME VE ARAMA ---
 function filteredData() {
   const q = document.getElementById('search').value.toLowerCase();
-  return data.filter(x => 
-    x.name.toLowerCase().includes(q) || 
-    x.reason.toLowerCase().includes(q)
-  );
+  return data.filter(x => x.name.toLowerCase().includes(q) || x.reason.toLowerCase().includes(q));
 }
 
 function highlight(text, q) {
   if (!q) return text;
   const r = new RegExp(`(${q})`, 'gi');
-  return text.replace(r, '<mark class="bg-yellow-200">$1</mark>');
+  return text.replace(r, '<mark class="bg-blue-900/50 text-blue-200 p-0.5 rounded">$1</mark>');
 }
 
+// --- EKRANA BASMA (GÖRÜNTÜLEME) ---
 function render() {
   const tbody = document.getElementById('tableBody');
-  tbody.innerHTML = '';
-
   const q = document.getElementById('search').value;
   const list = filteredData();
 
   if(list.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-gray-400">Kayıt bulunamadı.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="4" class="p-16 text-center text-gray-600 italic font-light">📋 Takip listeniz şu an boş veya aramanızla eşleşen kayıt yok.</td></tr>';
     return;
   }
 
+  let html = '';
   list.forEach((item, i) => {
-    let status = '<span class="text-green-600 font-medium">Kullanılabilir</span>';
-    let btnClass = "bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded shadow-sm transition";
+    let status = '<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-950 text-green-300 border border-green-900/50">MÜSAİT</span>';
+    let btnClass = "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-md transition glow-on-hover";
     
     if(item.count >= 3) {
       const remaining = getRemaining(item.resetTime);
-      if(remaining === 'Hazır') {
+      if(remaining === 'READY') {
         item.count = 0;
         item.resetTime = null;
         saveData();
       } else {
-        status = `<span class="text-red-500 font-bold">${remaining}</span>`;
-        btnClass = "bg-gray-300 text-gray-500 px-3 py-1 rounded cursor-not-allowed";
+        status = `<span class="inline-flex items-center gap-1.5 font-bold timer-font text-xl text-red-500 bg-red-950/50 px-3 py-1.5 rounded-xl border border-red-900/50 shadow-inner">⏱️ ${remaining}</span>`;
+        btnClass = "bg-gray-700 text-gray-500 px-4 py-2 rounded-xl text-sm font-bold cursor-not-allowed";
       }
     }
 
-    tbody.innerHTML += `
-    <tr class="hover:bg-gray-50 transition">
-      <td class="p-3 font-medium text-gray-700">${highlight(item.name, q)}</td>
-      <td class="p-3 text-gray-600">${highlight(item.reason, q)}</td>
-      <td class="p-3 text-center font-bold">${item.count}/3</td>
-      <td class="p-3">${status}</td>
-      <td class="p-3 text-center flex justify-center gap-2">
-        <button onclick="sendAppeal(${i})" class="${btnClass}">İtiraz Et</button>
-        <button onclick="deleteRow(${i})" class="bg-red-100 text-red-600 hover:bg-red-600 hover:text-white px-3 py-1 rounded transition">Sil</button>
+    const progressPercentage = (item.count / 3) * 100;
+
+    html += `
+    <tr class="table-row-active transition-colors">
+      <td class="p-5 align-top">
+        <div class="font-semibold text-gray-100 text-lg">${highlight(item.name, q)}</div>
+        <div class="text-gray-500 text-sm mt-1 max-w-sm whitespace-pre-wrap">${highlight(item.reason, q) || '<span class="italic text-gray-700">Not eklenmemiş.</span>'}</div>
+      </td>
+      <td class="p-5 align-top">
+        <div class="flex flex-col items-center">
+          <div class="font-bold text-3xl font-mono text-white">${item.count}<span class="text-xs text-gray-600">/3</span></div>
+          <div class="w-full bg-gray-800 rounded-full h-1.5 mt-2 overflow-hidden shadow-inner border border-gray-700">
+            <div class="bg-blue-500 h-1.5 rounded-full" style="width: ${progressPercentage}%"></div>
+          </div>
+        </div>
+      </td>
+      <td class="p-5 align-top font-medium">${status}</td>
+      <td class="p-5 align-top text-right">
+        <div class="flex justify-end items-center gap-2">
+          <button onclick="sendAppeal(${i})" class="${btnClass}">İtiraz Gönder</button>
+          <button onclick="deleteRow(${i})" class="text-gray-600 hover:text-red-500 hover:bg-red-950/30 p-2.5 rounded-xl transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+            </svg>
+          </button>
+        </div>
       </td>
     </tr>`;
   });
+  tbody.innerHTML = html;
 }
 
-// 💾 YEDEK AL (JSON)
+// --- YEDEKLEME VE ARAÇLAR ---
 function exportData(){
-  if(data.length === 0) return alert('Yedeklenecek veri yok!');
-  const blob = new Blob([JSON.stringify(data, null, 2)], {type:"application/json"});
+  if(data.length === 0) return alert('💡 Yedeklenecek veri yok!');
+  const blob = new Blob([JSON.stringify(data)], {type:"application/json"});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = `itiraz_takip_yedek_${new Date().toLocaleDateString()}.json`;
+  a.download = `itiraz_liste_pro_${new Date().toISOString().split('T')[0]}.json`;
   a.click();
 }
 
-// 📂 YEDEK YÜKLE
 function importData(e){
   const file = e.target.files[0];
   if(!file) return;
   const reader = new FileReader();
   reader.onload = function(evt){
     try {
-      const imported = JSON.parse(evt.target.result);
-      if(Array.isArray(imported)) {
-        data = imported;
-        saveData();
-        render();
-        alert('Yedek başarıyla yüklendi!');
+      const importedData = JSON.parse(evt.target.result);
+      if(confirm('🚨 Mevcut listenizin üzerine yazılacak. Emin misiniz?')) {
+        data = importedData;
+        saveData(); render();
+        alert('✅ Yedek başarıyla yüklendi.');
       }
-    } catch(err) {
-      alert('Hatalı yedek dosyası!');
-    }
+    } catch(err) { alert('❌ Hatalı yedek dosyası!'); }
   };
   reader.readAsText(file);
 }
 
-// F3 Arama Odaklama
-window.addEventListener('keydown', e => {
-  if(e.key === 'F3' || (e.ctrlKey && e.key === 'f')) {
-    e.preventDefault();
-    document.getElementById('search').focus();
-  }
-});
+// Klavye Kısayolları (F3 Arama Odaklama)
+window.addEventListener('keydown', e => { if(e.key === 'F3') { e.preventDefault(); document.getElementById('search').focus(); } });
 
-// İlk çalıştırma
+// --- DÖNGÜLER ---
+// Canlı Saat
+setInterval(() => {
+  document.getElementById('liveClock').innerText = new Date().toLocaleTimeString('tr-TR');
+}, 1000);
+
+// Saniyede bir tabloyu tazele (Sürelerin akması için)
+setInterval(render, 1000);
+
+// İlk Çalıştırma
+saveData(); // İstatistiği güncellemek için
 render();
-// Her dakika durumları (kalan süreleri) güncelle
-setInterval(render, 60000);
 </script>
 
 </body>
