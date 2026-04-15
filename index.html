@@ -2,106 +2,106 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Astaroth - Shadow Protocol v5.4</title>
+  <title>Astaroth - Shadow Protocol v5.5</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Poppins:wght@400;600;700&family=JetBrains+Mono:wght@700&display=swap');
     
-    body { font-family: 'Poppins', sans-serif; background: #03060e; color: #e5e7eb; margin: 0; overflow-x: hidden; }
-    .glass { background: rgba(10, 15, 28, 0.8); backdrop-filter: blur(15px); border: 1px solid rgba(59, 130, 246, 0.15); }
+    body { font-family: 'Poppins', sans-serif; background: #02040a; color: #e5e7eb; margin: 0; overflow-x: hidden; }
+    .glass { background: rgba(8, 12, 24, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(59, 130, 246, 0.1); }
     
-    /* AGRESİF VE HAVALI LOGO */
+    /* LOGO: DAHA SERT VE SİBER */
     .astaroth-logo {
-        font-family: 'Orbitron', sans-serif; font-size: 3.2rem; font-weight: 900;
-        letter-spacing: 8px; text-transform: uppercase;
-        background: linear-gradient(180deg, #fff 0%, #3b82f6 50%, #1d4ed8 100%);
+        font-family: 'Orbitron', sans-serif; font-size: 3.5rem; font-weight: 900;
+        letter-spacing: 12px; text-transform: uppercase;
+        background: linear-gradient(to bottom, #fff 20%, #3b82f6 50%, #000 95%);
         -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.6));
-        text-shadow: 2px 2px 0px rgba(0,0,0,1);
+        filter: drop-shadow(0 0 25px rgba(59, 130, 246, 0.4));
+        position: relative;
     }
 
-    .mono-timer { font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+    .mono-timer { font-family: 'JetBrains Mono', monospace; font-weight: 700; letter-spacing: -1px; }
 
-    @keyframes pulse-attention {
-      0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6); }
-      70% { box-shadow: 0 0 0 15px rgba(16, 185, 129, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    @keyframes pulse-ready {
+      0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); border-color: rgba(16, 185, 129, 0.2); }
+      70% { box-shadow: 0 0 0 15px rgba(16, 185, 129, 0); border-color: rgba(16, 185, 129, 0.8); }
+      100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); border-color: rgba(16, 185, 129, 0.2); }
     }
-    .needs-attention { animation: pulse-attention 2s infinite; border: 1px solid #10b981 !important; background: rgba(16, 185, 129, 0.15) !important; }
+    .ready-glow { animation: pulse-ready 2s infinite; background: rgba(16, 185, 129, 0.1) !important; color: #10b981 !important; }
 
-    .progress-container { width: 100%; height: 6px; background: rgba(255,255,255,0.03); border-radius: 10px; margin-top: 8px; overflow: hidden; }
+    .progress-container { width: 100%; height: 6px; background: rgba(255,255,255,0.02); border-radius: 10px; margin-top: 10px; overflow: hidden; }
     .progress-bar { height: 100%; background: linear-gradient(90deg, #f97316, #ea580c); transition: width 1s linear; }
 
-    .stats-panel { position: fixed; bottom: 25px; left: 25px; padding: 18px 25px; border-radius: 28px; background: #0a0f1c; border: 1px solid rgba(59, 130, 246, 0.2); z-index: 100; box-shadow: 0 15px 40px rgba(0,0,0,0.7); }
-    .copy-toast { position: fixed; top: 20px; right: 20px; background: #3b82f6; color: white; padding: 14px 28px; border-radius: 18px; transform: translateY(-120px); transition: 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55); z-index: 1000; font-weight: bold; border: 1px solid rgba(255,255,255,0.2); }
+    .stats-panel { position: fixed; bottom: 30px; left: 30px; padding: 20px 30px; border-radius: 30px; background: #080c18; border: 1px solid rgba(59, 130, 246, 0.15); z-index: 100; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
+    .copy-toast { position: fixed; top: 25px; right: 25px; background: #3b82f6; color: white; padding: 15px 30px; border-radius: 20px; transform: translateY(-130px); transition: 0.6s cubic-bezier(0.18, 0.89, 0.32, 1.28); z-index: 1000; font-weight: 800; border: 1px solid rgba(255,255,255,0.1); }
     
-    .filter-btn { transition: all 0.4s; border: 1px solid rgba(255,255,255,0.05); color: #64748b; }
-    .filter-btn.active { background: #1d4ed8; border-color: #3b82f6; color: white; box-shadow: 0 0 20px rgba(30, 64, 175, 0.6); }
+    .filter-btn { transition: all 0.5s; border: 1px solid rgba(255,255,255,0.03); color: #4b5563; font-weight: 800; }
+    .filter-btn.active { background: #2563eb; border-color: #3b82f6; color: white; box-shadow: 0 0 25px rgba(37, 99, 235, 0.4); }
   </style>
 </head>
 <body class="p-4 md:p-8 text-sm">
 
-  <div id="copyToast" class="copy-toast">Sistem Onaylandı ⚡</div>
+  <div id="copyToast" class="copy-toast">İŞLEM BAŞARILI ⚡</div>
 
-  <div class="stats-panel glass space-y-3">
-    <div class="flex items-center gap-4"><div class="w-3 h-3 rounded-full bg-blue-500 shadow-[0_0_12px_#3b82f6]"></div><span id="totalCount" class="mono-timer text-lg">0</span></div>
-    <div class="flex items-center gap-4"><div class="w-3 h-3 rounded-full bg-orange-500 shadow-[0_0_12px_#f97316]"></div><span id="waitingCount" class="mono-timer text-orange-500 text-lg">0</span></div>
-    <div class="flex items-center gap-4"><div class="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_12px_#10b981]"></div><span id="readyCount" class="mono-timer text-emerald-500 text-lg">0</span></div>
+  <div class="stats-panel glass space-y-4">
+    <div class="flex items-center gap-5"><div class="w-3 h-3 rounded-full bg-blue-500 shadow-[0_0_15px_#3b82f6]"></div><span id="totalCount" class="mono-timer text-xl">0</span></div>
+    <div class="flex items-center gap-5"><div class="w-3 h-3 rounded-full bg-orange-500 shadow-[0_0_15px_#f97316]"></div><span id="waitingCount" class="mono-timer text-orange-500 text-xl">0</span></div>
+    <div class="flex items-center gap-5"><div class="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_15px_#10b981]"></div><span id="readyCount" class="mono-timer text-emerald-500 text-xl">0</span></div>
   </div>
 
-  <div class="max-w-7xl mx-auto pb-32">
-    <header class="flex flex-col md:flex-row justify-between items-center mb-16 gap-8">
+  <div class="max-w-7xl mx-auto pb-40">
+    <header class="flex flex-col md:flex-row justify-between items-center mb-20 gap-10">
       <div id="logo" class="astaroth-logo">ASTAROTH</div>
-      <div id="liveClock" class="text-4xl font-bold mono-timer bg-blue-950/20 px-10 py-4 rounded-[2rem] border border-blue-500/10 text-blue-400 shadow-2xl">00:00:00</div>
+      <div id="liveClock" class="text-4xl font-bold mono-timer bg-blue-950/10 px-12 py-5 rounded-[2.5rem] border border-blue-500/10 text-blue-500 shadow-inner">00:00:00</div>
     </header>
 
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
-      <div class="lg:col-span-4 space-y-8">
-        <div class="glass p-10 rounded-[3rem]">
-            <h2 class="text-[11px] font-bold mb-8 text-blue-500 uppercase tracking-[0.4em]">HESAP TANIMLA</h2>
-            <div class="space-y-5">
-              <input id="name" placeholder="Hesap Tanımı" class="w-full p-5 rounded-2xl bg-black/50 border border-white/5 outline-none focus:border-blue-500/40 transition-all text-lg" />
-              <select id="reasonSelect" class="w-full p-5 rounded-2xl bg-black/50 border border-white/5 outline-none cursor-pointer"></select>
-              <button onclick="addRow()" class="w-full bg-blue-700 hover:bg-blue-600 py-5 rounded-2xl font-black transition-all uppercase tracking-widest text-lg shadow-[0_10px_20px_rgba(29,78,216,0.3)] active:scale-95">LİSTEYE EKLE</button>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+      <div class="lg:col-span-4 space-y-10">
+        <div class="glass p-12 rounded-[3.5rem]">
+            <h2 class="text-[12px] font-black mb-10 text-blue-500 uppercase tracking-[0.5em]">PROTOKOL GİRİŞİ</h2>
+            <div class="space-y-6">
+              <input id="name" placeholder="Hesap Tanımlayıcı" class="w-full p-6 rounded-2xl bg-black border border-white/5 outline-none focus:border-blue-500/50 transition-all text-xl" />
+              <select id="reasonSelect" class="w-full p-6 rounded-2xl bg-black border border-white/5 outline-none cursor-pointer"></select>
+              <button onclick="addRow()" class="w-full bg-blue-700 hover:bg-blue-600 py-6 rounded-2xl font-black transition-all uppercase tracking-widest text-xl shadow-[0_15px_30px_rgba(29,78,216,0.2)] active:scale-95">SİSTEME KAYDET</button>
             </div>
         </div>
 
-        <div class="glass p-10 rounded-[3rem]">
-          <h2 class="text-[11px] font-bold mb-8 text-emerald-500 uppercase tracking-[0.4em] text-center">TASLAKLAR</h2>
-          <div class="flex gap-3 mb-6">
-            <input id="newTemplate" placeholder="Metin..." class="flex-1 p-4 rounded-xl bg-black/50 border border-white/5 text-sm outline-none" />
-            <button onclick="addTemplate()" class="bg-emerald-700 px-6 rounded-xl font-bold hover:bg-emerald-600 transition-all">+</button>
+        <div class="glass p-12 rounded-[3.5rem]">
+          <h2 class="text-[12px] font-black mb-10 text-emerald-500 uppercase tracking-[0.5em] text-center">NOT KÜTÜPHANESİ</h2>
+          <div class="flex gap-4 mb-8">
+            <input id="newTemplate" placeholder="Yeni metin..." class="flex-1 p-5 rounded-xl bg-black border border-white/5 text-sm outline-none" />
+            <button onclick="addTemplate()" class="bg-emerald-700 px-7 rounded-xl font-bold hover:bg-emerald-600 transition-all">+</button>
           </div>
-          <div id="templateList" class="max-h-72 overflow-y-auto space-y-4 pr-3 custom-scrollbar"></div>
+          <div id="templateList" class="max-h-80 overflow-y-auto space-y-5 pr-4 custom-scrollbar"></div>
         </div>
       </div>
 
       <div class="lg:col-span-8">
-        <div class="glass rounded-[3.5rem] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.6)]">
-          <div class="p-8 bg-black/30 border-b border-white/5 space-y-6">
-            <div class="flex flex-wrap gap-4">
-                <button id="filterAll" onclick="setFilter('all')" class="filter-btn active text-[11px] font-bold px-8 py-3 rounded-2xl bg-gray-900/40 uppercase tracking-widest">TÜMÜ</button>
-                <button id="filterReady" onclick="setFilter('ready')" class="filter-btn text-[11px] font-bold px-8 py-3 rounded-2xl bg-gray-900/40 uppercase tracking-widest">MÜSAİTLER</button>
-                <button id="filterWaiting" onclick="setFilter('waiting')" class="filter-btn text-[11px] font-bold px-8 py-3 rounded-2xl bg-gray-900/40 text-orange-500 uppercase tracking-widest font-black">SÜREDEKİLER</button>
+        <div class="glass rounded-[4rem] overflow-hidden shadow-[0_30px_80px_rgba(0,0,0,0.7)]">
+          <div class="p-10 bg-black/40 border-b border-white/5 space-y-8">
+            <div class="flex flex-wrap gap-5">
+                <button id="filterAll" onclick="setFilter('all')" class="filter-btn active text-[12px] px-10 py-4 rounded-2xl bg-gray-900/50 uppercase tracking-widest">TÜMÜ</button>
+                <button id="filterReady" onclick="setFilter('ready')" class="filter-btn text-[12px] px-10 py-4 rounded-2xl bg-gray-900/50 uppercase tracking-widest text-emerald-500">MÜSAİTLER</button>
+                <button id="filterWaiting" onclick="setFilter('waiting')" class="filter-btn text-[12px] px-10 py-4 rounded-2xl bg-gray-900/50 text-orange-500 uppercase tracking-widest">SÜREDEKİLER</button>
             </div>
             
-            <div class="flex items-center justify-between gap-8">
-                <input id="search" oninput="render()" placeholder="Hızlı filtrele..." class="bg-transparent outline-none flex-1 text-xl border-b border-white/5 pb-2 focus:border-blue-500/50 transition-all" />
-                <div class="flex gap-4">
-                    <button onclick="exportData()" class="text-[10px] font-bold bg-gray-800 hover:bg-gray-700 px-6 py-3 rounded-xl transition-all">YEDEK AL</button>
+            <div class="flex items-center justify-between gap-10">
+                <input id="search" oninput="render()" placeholder="Veri tabanında ara..." class="bg-transparent outline-none flex-1 text-2xl border-b border-white/10 pb-3 focus:border-blue-500/60 transition-all" />
+                <div class="flex gap-5">
+                    <button onclick="exportData()" class="text-[11px] font-black bg-gray-800 hover:bg-gray-700 px-8 py-4 rounded-xl">YEDEK</button>
                     <input type="file" id="importFile" class="hidden" onchange="importData(event)" accept=".json" />
-                    <button onclick="document.getElementById('importFile').click()" class="text-[10px] font-bold bg-blue-900/30 text-blue-300 px-6 py-3 rounded-xl border border-blue-500/20">YÜKLE</button>
+                    <button onclick="document.getElementById('importFile').click()" class="text-[11px] font-black bg-blue-900/20 text-blue-400 px-8 py-4 rounded-xl border border-blue-500/20">YÜKLE</button>
                 </div>
             </div>
           </div>
           <div class="overflow-x-auto">
             <table class="w-full text-left">
-              <thead class="text-[10px] uppercase text-gray-500 bg-black/40">
+              <thead class="text-[11px] uppercase text-gray-600 bg-black/50">
                 <tr>
-                  <th class="p-10">HESAP BİLGİSİ</th>
-                  <th class="p-10 text-center">HAK</th>
-                  <th class="p-10 text-center">GERİ SAYIM</th>
-                  <th class="p-10 text-right">İŞLEM</th>
+                  <th class="p-12">HESAP DETAYI</th>
+                  <th class="p-12 text-center">İTİRAZ</th>
+                  <th class="p-12 text-center">GERİ SAYIM</th>
+                  <th class="p-12 text-right">İŞLEM</th>
                 </tr>
               </thead>
               <tbody id="tableBody" class="divide-y divide-white/5"></tbody>
@@ -112,20 +112,20 @@
     </div>
   </div>
 
-  <div id="editModal" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/95 backdrop-blur-3xl">
-    <div class="bg-[#050810] border border-blue-500/20 w-full max-w-xl rounded-[4rem] p-16 space-y-10 shadow-2xl">
-        <div class="flex justify-between items-center"><h3 class="text-3xl font-bold text-blue-500 tracking-tighter">PARAMETRE GÜNCELLE</h3><button onclick="closeEdit()" class="text-5xl text-gray-700 hover:text-white transition-all">&times;</button></div>
-        <div class="space-y-8">
-            <div><label class="text-[11px] ml-3 text-gray-500 uppercase tracking-[0.2em]">Hesap Adı</label><input id="editName" class="w-full p-6 rounded-2xl bg-black border border-white/5 outline-none focus:border-blue-500/50 text-xl" /></div>
-            <div class="grid grid-cols-2 gap-8">
-                <div><label class="text-[11px] ml-3 text-gray-500 uppercase tracking-[0.2em]">İtiraz Hak</label><input id="editCount" type="number" min="0" max="3" class="w-full p-6 rounded-2xl bg-black border border-white/5 outline-none text-xl text-center" /></div>
-                <div><label class="text-[11px] ml-3 text-gray-500 uppercase tracking-[0.2em]">Süre (+/-)</label><input id="editMinutes" type="number" class="w-full p-6 rounded-2xl bg-black border border-white/5 outline-none text-xl text-center" placeholder="Dakika" /></div>
+  <div id="editModal" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/98 backdrop-blur-3xl">
+    <div class="bg-[#02040a] border border-blue-500/10 w-full max-w-2xl rounded-[5rem] p-20 space-y-12 shadow-2xl">
+        <div class="flex justify-between items-center"><h3 class="text-4xl font-black text-blue-600 tracking-tighter">VERİ MANİPÜLASYON</h3><button onclick="closeEdit()" class="text-6xl text-gray-800 hover:text-white transition-all">&times;</button></div>
+        <div class="space-y-10">
+            <div><label class="text-[12px] ml-4 text-gray-600 uppercase tracking-[0.3em]">HESAP ADI</label><input id="editName" class="w-full p-7 rounded-2xl bg-black border border-white/5 outline-none focus:border-blue-500/50 text-2xl" /></div>
+            <div class="grid grid-cols-2 gap-10">
+                <div><label class="text-[12px] ml-4 text-gray-600 uppercase tracking-[0.3em]">İTİRAZ SAYISI</label><input id="editCount" type="number" min="0" max="3" class="w-full p-7 rounded-2xl bg-black border border-white/5 outline-none text-2xl text-center" /></div>
+                <div><label class="text-[12px] ml-4 text-gray-600 uppercase tracking-[0.3em]">SÜRE (+/- DAKİKA)</label><input id="editMinutes" type="number" class="w-full p-7 rounded-2xl bg-black border border-white/5 outline-none text-2xl text-center" placeholder="0" /></div>
             </div>
-            <div><label class="text-[11px] ml-3 text-gray-500 uppercase tracking-[0.2em]">Zaman Atlama (Manuel Tarih)</label><input id="editTime" type="datetime-local" class="w-full p-6 rounded-2xl bg-black border border-white/5 outline-none text-lg" /></div>
+            <div><label class="text-[12px] ml-4 text-gray-600 uppercase tracking-[0.3em]">BAŞLANGIÇ NOKTASI</label><input id="editTime" type="datetime-local" class="w-full p-7 rounded-2xl bg-black border border-white/5 outline-none text-xl" /></div>
         </div>
-        <div class="flex gap-6 pt-6">
-            <button onclick="closeEdit()" class="flex-1 py-6 rounded-3xl bg-gray-900 font-bold uppercase tracking-widest text-[12px] hover:bg-gray-800 transition-all">İPTAL</button>
-            <button onclick="saveEdit()" class="flex-1 py-6 rounded-3xl bg-blue-700 font-bold shadow-2xl uppercase tracking-widest text-[12px] hover:bg-blue-600 transition-all">VERİYE İŞLE</button>
+        <div class="flex gap-8 pt-8">
+            <button onclick="closeEdit()" class="flex-1 py-7 rounded-[2rem] bg-gray-950 font-black uppercase tracking-widest text-[13px] hover:bg-gray-900 transition-all">İPTAL</button>
+            <button onclick="saveEdit()" class="flex-1 py-7 rounded-[2rem] bg-blue-800 font-black shadow-2xl uppercase tracking-widest text-[13px] hover:bg-blue-700 transition-all">SİSTEMİ GÜNCELLE</button>
         </div>
     </div>
   </div>
@@ -145,7 +145,7 @@ const save = () => {
 function showToast(msg) {
     const t = document.getElementById('copyToast');
     t.innerText = msg; t.style.transform = 'translateY(0)';
-    setTimeout(() => t.style.transform = 'translateY(-120px)', 2500);
+    setTimeout(() => t.style.transform = 'translateY(-130px)', 3000);
 }
 
 function updateStats() {
@@ -169,7 +169,7 @@ function renderTemplates() {
     const select = document.getElementById('reasonSelect');
     list.innerHTML = ''; select.innerHTML = '';
     templates.forEach((t, i) => {
-        list.innerHTML += `<div class="flex items-center gap-4 bg-white/[0.03] p-5 rounded-2xl border border-white/5 group hover:border-emerald-500/40 transition-all"><span class="flex-1 text-xs font-semibold truncate">${t}</span><button onclick="navigator.clipboard.writeText('${t}').then(()=>showToast('Sistem Onaylandı 📋'))" class="text-emerald-500 opacity-30 group-hover:opacity-100 transition-all text-xl">📋</button><button onclick="deleteTemplate(${i})" class="text-red-900 hover:text-red-500 transition-all px-2">✕</button></div>`;
+        list.innerHTML += `<div class="flex items-center gap-5 bg-white/[0.02] p-6 rounded-2xl border border-white/5 group hover:border-emerald-500/50 transition-all"><span class="flex-1 text-sm font-bold truncate">${t}</span><button onclick="navigator.clipboard.writeText('${t}').then(()=>showToast('TASLAK KOPYALANDI 📋'))" class="text-emerald-500 opacity-20 group-hover:opacity-100 transition-all text-2xl">📋</button><button onclick="deleteTemplate(${i})" class="text-red-950 hover:text-red-600 transition-all px-3">✕</button></div>`;
         select.innerHTML += `<option value="${t}">${t}</option>`;
     });
 }
@@ -188,12 +188,12 @@ function addRow() {
     document.getElementById('name').value = ''; save(); render();
 }
 
-function sendAppeal(i) {
-    const list = getProcessedData();
-    const item = data.find(x => x.id === list[i].id);
-    if(item.count < 3) {
+// KRİTİK FİX: BUTON ARTIK ID ÜZERİNDEN ÇALIŞIYOR
+function sendAppeal(id) {
+    const item = data.find(x => x.id === id);
+    if(item && item.count < 3) {
         const template = templates.find(t => t.includes(item.reason)) || item.reason;
-        navigator.clipboard.writeText(template).then(() => showToast("Veri Kopyalandı ⚡"));
+        navigator.clipboard.writeText(template).then(() => showToast("İTİRAZ METNİ HAZIR ⚡"));
         item.count++;
         item.wasWaiting = false;
         if(item.count === 3) item.resetTime = Date.now() + 604800000;
@@ -201,10 +201,9 @@ function sendAppeal(i) {
     }
 }
 
-function openEdit(i) {
-    const list = getProcessedData();
-    const item = list[i];
-    editingIndex = data.findIndex(x => x.id === item.id);
+function openEdit(id) {
+    const item = data.find(x => x.id === id);
+    editingIndex = data.findIndex(x => x.id === id);
     document.getElementById('editName').value = item.name;
     document.getElementById('editCount').value = item.count;
     document.getElementById('editMinutes').value = 0;
@@ -231,9 +230,8 @@ function saveEdit() {
 
 function closeEdit() { document.getElementById('editModal').classList.add('hidden'); }
 
-function deleteRow(i) {
-    const list = getProcessedData();
-    if(confirm('Kayıt silinsin mi?')) { data = data.filter(x => x.id !== list[i].id); save(); render(); }
+function deleteRow(id) {
+    if(confirm('Veri geri dönülemez şekilde silinsin mi?')) { data = data.filter(x => x.id !== id); save(); render(); }
 }
 
 function getProcessedData() {
@@ -250,7 +248,7 @@ function render() {
     const list = getProcessedData();
     tbody.innerHTML = '';
     
-    list.forEach((item, i) => {
+    list.forEach((item) => {
         let isWaiting = item.count === 3;
         let diff = isWaiting ? item.resetTime - Date.now() : 0;
         
@@ -259,8 +257,8 @@ function render() {
             isWaiting = false; save(); 
         }
 
-        let readyClass = item.wasWaiting ? 'needs-attention' : '';
-        let statusHtml = `<div><span class="${readyClass} text-[11px] text-emerald-500 font-black border border-emerald-500/20 bg-emerald-500/5 px-6 py-2.5 rounded-full uppercase tracking-[0.2em] transition-all">MÜSAİT</span></div>`;
+        let readyClass = item.wasWaiting ? 'ready-glow' : '';
+        let statusHtml = `<div><span class="${readyClass} text-[12px] font-black border border-white/5 bg-white/5 px-8 py-3 rounded-full uppercase tracking-widest transition-all">MÜSAİT</span></div>`;
         
         if(isWaiting) {
             const d = Math.floor(diff/86400000);
@@ -271,22 +269,22 @@ function render() {
             
             statusHtml = `
                 <div class="flex flex-col items-center">
-                    <span class="mono-timer text-orange-500 text-base font-black tracking-tight">
-                        ${d}G <span class="text-white/10">:</span> ${h.toString().padStart(2,'0')}S <span class="text-white/10">:</span> ${m.toString().padStart(2,'0')}D <span class="text-white/10">:</span> ${s.toString().padStart(2,'0')}Sn
+                    <span class="mono-timer text-orange-500 text-lg font-black">
+                        ${d}G <span class="text-white/5">:</span> ${h.toString().padStart(2,'0')}S <span class="text-white/5">:</span> ${m.toString().padStart(2,'0')}D <span class="text-white/5">:</span> ${s.toString().padStart(2,'0')}Sn
                     </span>
                     <div class="progress-container"><div class="progress-bar" style="width: ${perc}%"></div></div>
                 </div>`;
         }
         
         tbody.innerHTML += `
-            <tr class="hover:bg-blue-600/[0.03] transition-all border-b border-white/[0.02]">
-                <td class="p-10"><div class="font-bold text-[17px] text-white tracking-tight">${item.name}</div><div class="text-[11px] text-gray-500 mt-2 uppercase font-bold tracking-widest">${item.reason}</div></td>
-                <td class="p-10 text-center font-black text-3xl italic text-white/5 select-none">${item.count}/3</td>
-                <td class="p-10 text-center">${statusHtml}</td>
-                <td class="p-10 text-right flex justify-end gap-4">
-                    <button onclick="sendAppeal(${i})" class="bg-blue-600 hover:bg-blue-500 px-8 py-4 rounded-2xl text-[11px] font-black tracking-widest transition-all ${isWaiting ? 'opacity-10 cursor-not-allowed':''} shadow-lg shadow-blue-900/20">İTİRAZ</button>
-                    <button onclick="openEdit(${i})" class="bg-gray-900 border border-white/5 p-4 rounded-2xl text-gray-400 hover:text-white transition-all">⚙️</button>
-                    <button onclick="deleteRow(${i})" class="p-4 text-gray-800 hover:text-red-500 transition-all">🗑️</button>
+            <tr class="hover:bg-blue-600/[0.04] transition-all border-b border-white/[0.02]">
+                <td class="p-12"><div class="font-black text-[18px] text-white tracking-tight">${item.name}</div><div class="text-[12px] text-gray-600 mt-2 uppercase font-black tracking-widest">${item.reason}</div></td>
+                <td class="p-12 text-center font-black text-4xl italic text-white/5 select-none">${item.count}/3</td>
+                <td class="p-12 text-center">${statusHtml}</td>
+                <td class="p-12 text-right flex justify-end gap-5">
+                    <button onclick="sendAppeal(${item.id})" class="bg-blue-600 hover:bg-blue-500 px-10 py-5 rounded-2xl text-[12px] font-black tracking-widest transition-all ${isWaiting ? 'opacity-5 cursor-not-allowed':''} shadow-xl">İTİRAZ</button>
+                    <button onclick="openEdit(${item.id})" class="bg-gray-950 border border-white/5 p-5 rounded-2xl text-gray-600 hover:text-white transition-all">⚙️</button>
+                    <button onclick="deleteRow(${item.id})" class="p-5 text-gray-900 hover:text-red-500 transition-all">🗑️</button>
                 </td>
             </tr>`;
     });
@@ -296,7 +294,7 @@ function render() {
 function exportData() {
     const blob = new Blob([JSON.stringify({data, templates})], {type:"application/json"});
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-    a.download = `astaroth_v5.4.json`; a.click();
+    a.download = `astaroth_v5.5.json`; a.click();
 }
 
 function importData(e) {
@@ -307,7 +305,7 @@ function importData(e) {
         try {
             const imp = JSON.parse(evt.target.result);
             if (imp.data) { data = imp.data; templates = imp.templates || templates; save(); render(); renderTemplates(); }
-        } catch (err) { alert('Hatalı veri yapısı!'); }
+        } catch (err) { alert('Sistem hatası: Veri bozuk!'); }
     };
     reader.readAsText(file);
 }
