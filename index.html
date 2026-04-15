@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>İtiraz Kontrol Merkezi - Pro v4.3</title>
+  <title>İtiraz Kontrol Merkezi - Full v4.4</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap');
@@ -19,7 +19,7 @@
 
   <div class="max-w-7xl mx-auto">
     <header class="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
-      <h1 class="text-3xl font-black tracking-tighter italic text-blue-500">CONTROL PANEL <span class="text-white text-xs">v4.3</span></h1>
+      <h1 class="text-3xl font-black tracking-tighter italic text-blue-500">CONTROL PANEL <span class="text-white text-xs">v4.4</span></h1>
       <div id="liveClock" class="text-2xl font-bold mono bg-gray-900 px-6 py-2 rounded-2xl border border-blue-900/30 text-blue-400">00:00:00</div>
     </header>
 
@@ -82,23 +82,33 @@
         <h3 class="font-bold">Kaydı Düzenle</h3>
         <button onclick="closeEdit()" class="text-2xl text-gray-500">&times;</button>
       </div>
-      <div class="p-8 space-y-4">
-        <input id="editName" class="w-full p-4 rounded-xl" placeholder="Hesap Adı" />
-        <input id="editReason" class="w-full p-4 rounded-xl" placeholder="Neden" />
-        <div class="flex gap-4">
-            <div class="flex-1">
-                <label class="text-[10px] text-gray-400 mb-1 block uppercase">İtiraz Hakkı</label>
-                <input id="editCount" type="number" min="0" max="3" class="w-full p-4 rounded-xl font-bold" />
+      <div class="p-8 space-y-6">
+        <div>
+            <label class="text-[10px] text-blue-400 mb-2 block uppercase font-bold">Hesap Bilgileri</label>
+            <input id="editName" class="w-full p-4 rounded-xl mb-3 shadow-inner" placeholder="Hesap Adı" />
+            <input id="editReason" class="w-full p-4 rounded-xl shadow-inner" placeholder="Neden" />
+        </div>
+        
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label class="text-[10px] text-orange-400 mb-2 block uppercase font-bold">İtiraz Hakkı (0-3)</label>
+                <input id="editCount" type="number" min="0" max="3" class="w-full p-4 rounded-xl font-bold text-lg" />
             </div>
-            <div class="flex-1">
-                <label class="text-[10px] text-gray-400 mb-1 block uppercase">Kalan Dakika</label>
-                <input id="editMinutes" type="number" class="w-full p-4 rounded-xl font-bold" />
+            <div>
+                <label class="text-[10px] text-emerald-400 mb-2 block uppercase font-bold">Manuel Geri Sayım (Dk)</label>
+                <input id="editMinutes" type="number" placeholder="Dakika..." class="w-full p-4 rounded-xl font-bold" />
             </div>
+        </div>
+
+        <div>
+            <label class="text-[10px] text-purple-400 mb-2 block uppercase font-bold">📅 Takvimli Zaman Ayarı (Alternatif)</label>
+            <input id="editTime" type="datetime-local" class="w-full p-4 rounded-xl bg-gray-950 font-mono text-sm" />
+            <p class="text-[9px] text-gray-500 mt-2 italic">*Takvimden bir tarih seçerseniz, geri sayım o tarihe 7 gün ekleyerek başlar.</p>
         </div>
       </div>
       <div class="p-6 bg-black/20 flex gap-3">
-        <button onclick="closeEdit()" class="flex-1 py-3 rounded-xl bg-gray-800 font-bold">İPTAL</button>
-        <button onclick="saveEdit()" class="flex-1 py-3 rounded-xl bg-blue-600 font-bold">KAYDET</button>
+        <button onclick="closeEdit()" class="flex-1 py-4 rounded-2xl bg-gray-800 font-bold hover:bg-gray-700 transition">İPTAL</button>
+        <button onclick="saveEdit()" class="flex-1 py-4 rounded-2xl bg-blue-600 font-bold hover:bg-blue-500 transition">GÜNCELLE</button>
       </div>
     </div>
   </div>
@@ -157,6 +167,11 @@ function openEdit(i) {
   document.getElementById('editReason').value = item.reason;
   document.getElementById('editCount').value = item.count;
   document.getElementById('editMinutes').value = item.resetTime ? Math.round((item.resetTime - Date.now())/60000) : 0;
+  
+  let base = item.resetTime ? new Date(item.resetTime - 604800000) : new Date();
+  const tz = base.getTimezoneOffset() * 60000;
+  document.getElementById('editTime').value = new Date(base - tz).toISOString().slice(0, 16);
+  
   document.getElementById('editModal').classList.remove('hidden');
 }
 
@@ -165,8 +180,24 @@ function saveEdit() {
   item.name = document.getElementById('editName').value;
   item.reason = document.getElementById('editReason').value;
   item.count = parseInt(document.getElementById('editCount').value);
-  const mins = parseInt(document.getElementById('editMinutes').value);
-  item.resetTime = (item.count === 3 && mins > 0) ? Date.now() + (mins * 60000) : (item.count === 3 ? Date.now() + 604800000 : null);
+  
+  const minsVal = parseInt(document.getElementById('editMinutes').value);
+  const timeVal = new Date(document.getElementById('editTime').value).getTime();
+
+  if(item.count === 3) {
+      let currentBase = item.resetTime ? (item.resetTime - 604800000) : 0;
+      // Eğer takvim değişmişse takvimi baz al
+      if(Math.abs(timeVal - currentBase) > 60000) {
+          item.resetTime = timeVal + 604800000;
+      } 
+      // Değilse manuel dakikayı baz al
+      else if(minsVal > 0) {
+          item.resetTime = Date.now() + (minsVal * 60000);
+      }
+  } else {
+      item.resetTime = null;
+  }
+  
   save(); render(); closeEdit();
 }
 
@@ -209,7 +240,6 @@ function render() {
   });
 }
 
-// ÖNEMLİ: YEDEK AKTARMA FONKSİYONU
 function exportData() {
   const blob = new Blob([JSON.stringify({data, templates})], {type:"application/json"});
   const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
@@ -229,7 +259,7 @@ function importData(e) {
         save(); render(); renderTemplates();
         alert('Yedek başarıyla yüklendi!');
       }
-    } catch (err) { alert('Hata: Dosya okunamadı!'); }
+    } catch (err) { alert('Hata!'); }
   };
   reader.readAsText(file);
 }
