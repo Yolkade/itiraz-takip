@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Astaroth v5.9.1 - Shadow Protocol</title>
+  <title>Astaroth - Shadow Protocol</title>
   
   <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAlCAYAAAAwYKuzAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAASFSURBVFhHvZi7bx1FFMa/c6+V2OHhgDENIEWCwhAJF9BAZaEghSAQUqBESCaW7aQMBqek4g9A4pWOggaBhSyooEOYOHRAYUgHSEi4ofBe73MozpmZM7Oze6+diM8azc45u2d+8ziz60vDk6cNAADEFchfygUBACl/Ss4fyUj4Y4oYMIYbAxbAdIAlNQY2MRganryPrQokCRa3nenogAmOTjEgUWLW0mAh1FHgtCYnpOH0/W4PUjxLGrzlU9eBrK0PQnx9t4gEUC9rCOdnTNutzcsPIC2TXNeULRQNp+dMN5yCiUBDoH44VhomDe7FgJ1woY0vU9BHkVGs/XAAQFMzD7g9GMPNz8/hm+3PcfbxBR6pwJEdOREAAwId2//Gm1fwxdZ2J+uAKw3nnYuLizjz6AIOCoOsBLLcYFQgaGcF3Zb/woUXMRwOuf9EoamZeXUOqqUlwvrlK9i8tgkigp2Aoiiwv7/v2saYwN/XvvuuU7h3djbw7+zsYHn5ErKDAz8zDMSzPzUz785BDwcAA6ysXcbVjc3gga+2vsS1d95S96kpH6OlpefwwcfXZe9xvN0bP2J9dQWjLAZkyRLH4k7LGsgKLgd5g6wA8kpm2w7G3p9YnqCAUBuDrDASj+u80nHacoCk+rKzWSnAUUnIcoOicTc5MCLCuD8QUDck8QxGsgcPS8mPeEBSBnZ0YWFVtd3YhusSKEqbbtwpadh4JlU8AqExPMhRIXFLIC/Vs1H/6F5iVlGDs85mXw4UlThjuHZsZWNH3bTj5TZeIA/bC1jVfCSMCpKgBnltN7iVwPVJIOumHe+wNF1HIACApk49yO9iuyRSExFeeG0dF5ff9ncb4Ldff8J325/y/cYApMYYs6vDGQDOPHYW519dCfx7v9zE+++uIj9MZ3Ev4LmL63j59Q22ufPMHXCt+jj+33++gU/eW0PRAdi7xGXFRwG/EfzRYNtxfRx/eg969QJWjRwJNuvsEXEH24elgQk+HsIyYK8t+iaeQRe09Nl3J9t8Kkifbb6uVx3XT51fwzOv+D0IIvz7zx/4c+8HHgsRByIJOKa+Z+4hPLLwrEowwl97u/j6o1VUeXoPdgACwABPPr+Gp1/aCB64dXML338m72eyGapTt1sPP7GEc5c+DGx/39rFt9fXUBUMGB86vAdlmfnr1n5QGkmScM8UlfFBjPElXhtd5J66Tu/BxvA+5DAUlIHQKPmgZd1gJN9vwZ5xfdpnFWiqSMyqYSgdj7M4MSgpPoslkOvTvknca8m+OxsVgCE9C69CWLyvbkwrHmdxYlBSVBZb+aUu5V3sjgg3g/HsWOiU/GzUdbi8WW6Ql+Esx0X90wSVwXwd2qWWhPC+lGz6dstvj37RcHrOIOhQapfZyhaAWvWBptQFlra7f9zRA+kuNaiVuxwHKgBpDlHbOf63Gdd23ghWK2Vrdxqq3z/5r1uBLbJHInlRTKb+G4/w+6C3+2Y35FhNOAIBhOpcfyF7gDass96m+kFpeOK0SQGFoNJOtVrQE2riGTwxy0vcA9P2i+1/0H+L5aWjIQdnYAAAAABJRU5ErkJggg==">
 
@@ -41,6 +41,10 @@
     table { table-layout: fixed; width: 100%; }
     th, td { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     input[type="datetime-local"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
+    
+    /* Yeni eklenen stil: Durum başlığı tıklanabilir */
+    #status-header { cursor: pointer; transition: color 0.2s; }
+    #status-header:hover { color: #3b82f6; }
   </style>
 </head>
 <body class="p-4 md:p-6 text-sm">
@@ -100,7 +104,7 @@
                 <tr>
                   <th class="p-5 w-2/5 text-left">HESAP / NOT</th>
                   <th class="p-5 text-center w-24">HAK</th>
-                  <th class="p-5 text-center w-40">DURUM</th>
+                  <th id="status-header" onclick="toggleSort()" class="p-5 text-center w-40">DURUM <span id="status-sort-icon">↕</span></th>
                   <th class="p-5 text-right w-44">KONTROL</th>
                 </tr>
               </thead>
@@ -136,6 +140,7 @@ let data = JSON.parse(localStorage.getItem('astar_db_v59')) || [];
 let templates = JSON.parse(localStorage.getItem('astar_tpl_v59')) || ["Ödenmemiş Bakiye", "Sistemleri Atlama", "Kabul Edilemez İş Uygulamaları"];
 let currentFilter = 'all';
 let editingIndex = null;
+let currentSortMode = 'none'; // none -> time -> ready
 
 const save = () => {
     localStorage.setItem('astar_db_v59', JSON.stringify(data));
@@ -156,6 +161,18 @@ function setFilter(f) {
     currentFilter = f;
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     document.getElementById('filter' + f.charAt(0).toUpperCase() + f.slice(1)).classList.add('active');
+    render();
+}
+
+function toggleSort() {
+    const icon = document.getElementById('status-sort-icon');
+    if (currentSortMode === 'none' || currentSortMode === 'ready') {
+        currentSortMode = 'time';
+        icon.innerText = '⏳';
+    } else {
+        currentSortMode = 'ready';
+        icon.innerText = '✅';
+    }
     render();
 }
 
@@ -232,9 +249,30 @@ function render() {
     const tbody = document.getElementById('tableBody');
     let list = [...data];
     const q = document.getElementById('search').value.toLowerCase();
+    
     if(q) list = list.filter(x => x.name.toLowerCase().includes(q));
     if(currentFilter === 'ready') list = list.filter(x => x.count < 3 || (x.resetTime && x.resetTime - Date.now() <= 0));
     else if(currentFilter === 'waiting') list = list.filter(x => x.count === 3 && (x.resetTime - Date.now() > 0));
+
+    // Sıralama Mantığı
+    if (currentSortMode === 'time') {
+        list.sort((a, b) => {
+            let waitA = a.count === 3 && a.resetTime && (a.resetTime - Date.now() > 0);
+            let waitB = b.count === 3 && b.resetTime && (b.resetTime - Date.now() > 0);
+            if (waitA && waitB) return a.resetTime - b.resetTime;
+            if (waitA && !waitB) return -1;
+            if (!waitA && waitB) return 1;
+            return 0;
+        });
+    } else if (currentSortMode === 'ready') {
+        list.sort((a, b) => {
+            let waitA = a.count === 3 && a.resetTime && (a.resetTime - Date.now() > 0);
+            let waitB = b.count === 3 && b.resetTime && (b.resetTime - Date.now() > 0);
+            if (!waitA && waitB) return -1;
+            if (waitA && !waitB) return 1;
+            return 0;
+        });
+    }
 
     tbody.innerHTML = '';
     list.forEach((item) => {
