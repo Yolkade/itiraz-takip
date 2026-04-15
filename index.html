@@ -2,10 +2,9 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Astaroth v5.9.1 - Shadow Protocol</title>
   
-  <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAF7SURBVHgB7VexS8NQEH7vS5IWRXAnESfRQUXFwUF0E5f+Bc7i5CguTo4OLjo6OPgfiIidvSgd7O4m4uTo4CKCDio4ODi0vS9pYhMba5O06QMPXvK+97vf3Xv37pI4jjEYDAaDwWDwN9BCv5U4jhP05uC9A69D6AL6Anb0VpSST9S4G+v37U5K6Z4fO+OAtv8GvAVwD4Nf+U8X4C6A035m6S1DqVvL4I6/ALwCv9v5fQXA95H1O+n6vWbAnwXwA0v7pXmFvgPglN5C7/b+XgPwvZbeXet3w8D/E8AHlvbXwXp7bS6An28O3ttrL//0L7wS7E5K6baK4Q3wUfTOnV7u7bXbAbwEvvWbL53f/vEAbqF3W5vUv7R/H9Cj2E4VwxfAnz9P3vPofH9T/v57GPhK5w4vI/D3D4Dr9Tvp9jWDL1be9f9/AFfT5z/w5/oN3EH45N/+F/AC/W86v3fB/R5wX3Q66fYNg0H9A4wBfwF4m10V7X4VFAAAAABJRU5ErkJggg==">
+  <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAlCAYAAAAwYKuzAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAASFSURBVFhHvZi7bx1FFMa/c6+V2OHhgDENIEWCwhAJF9BAZaEghSAQUqBESCaW7aQMBqek4g9A4pWOggaBhSyooEOYOHRAYUgHSEi4ofBe73MozpmZM7Oze6+diM8azc45u2d+8ziz60vDk6cNAADEFchfygUBACl/Ss4fyUj4Y4oYMIYbAxbAdIAlNQY2MRganryPrQokCRa3nenogAmOTjEgUWLW0mAh1FHgtCYnpOH0/W4PUjxLGrzlU9eBrK0PQnx9t4gEUC9rCOdnTNutzcsPIC2TXNeULRQNp+dMN5yCiUBDoH44VhomDe7FgJ1woY0vU9BHkVGs/XAAQFMzD7g9GMPNz8/hm+3PcfbxBR6pwJEdOREAAwId2//Gm1fwxdZ2J+uAKw3nnYuLizjz6AIOCoOsBLLcYFQgaGcF3Zb/woUXMRwOuf9EoamZeXUOqqUlwvrlK9i8tgkigp2Aoiiwv7/v2saYwN/XvvuuU7h3djbw7+zsYHn5ErKDAz8zDMSzPzUz785BDwcAA6ysXcbVjc3gga+2vsS1d95S96kpH6OlpefwwcfXZe9xvN0bP2J9dQWjLAZkyRLH4k7LGsgKLgd5g6wA8kpm2w7G3p9YnqCAUBuDrDASj+u80nHacoCk+rKzWSnAUUnIcoOicTc5MCLCuD8QUDck8QxGsgcPS8mPeEBSBnZ0YWFVtd3YhusSKEqbbtwpadh4JlU8AqExPMhRIXFLIC/Vs1H/6F5iVlGDs85mXw4UlThjuHZsZWNH3bTj5TZeIA/bC1jVfCSMCpKgBnltN7iVwPVJIOumHe+wNF1HIACApk49yO9iuyRSExFeeG0dF5ff9ncb4Ldff8J325/y/cYApMYYs6vDGQDOPHYW519dCfx7v9zE+++uIj9MZ3Ev4LmL63j59Q22ufPMHXCt+jj+33++gU/eW0PRAdi7xGXFRwG/EfzRYNtxfRx/eg969QJWjRwJNuvsEXEH24elgQk+HsIyYK8t+iaeQRe09Nl3J9t8Kkifbb6uVx3XT51fwzOv+D0IIvz7zx/4c+8HHgsRByIJOKa+Z+4hPLLwrEowwl97u/j6o1VUeXoPdgACwABPPr+Gp1/aCB64dXML338m72eyGapTt1sPP7GEc5c+DGx/39rFt9fXUBUMGB86vAdlmfnr1n5QGkmScM8UlfFBjPElXhtd5J66Tu/BxvA+5DAUlIHQKPmgZd1gJN9vwZ5xfdpnFWiqSMyqYSgdj7M4MSgpPoslkOvTvknca8m+OxsVgCE9C69CWLyvbkwrHmdxYlBSVBZb+aUu5V3sjgg3g/HsWOiU/GzUdbi8WW6Ql+Esx0X90wSVwXwd2qWWhPC+lGz6dstvj37RcHrOIOhQapfZyhaAWvWBptQFlra7f9zRA+kuNaiVuxwHKgBpDlHbOf63Gdd23ghWK2Vrdxqq3z/5r1uBLbJHInlRTKb+G4/w+6C3+2Y35FhNOAIBhOpcfyF7gDass96m+kFpeOK0SQGFoNJOtVrQE2riGTwxy0vcA9P2i+1/0H+L5aWjIQdnYAAAAABJRU5ErkJggg==">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -42,10 +41,6 @@
     table { table-layout: fixed; width: 100%; }
     th, td { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     input[type="datetime-local"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
-    
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
   </style>
 </head>
 <body class="p-4 md:p-6 text-sm">
@@ -142,7 +137,6 @@ let templates = JSON.parse(localStorage.getItem('astar_tpl_v59')) || ["Ödenmemi
 let currentFilter = 'all';
 let editingIndex = null;
 
-// Kayıt ve İstatistik
 const save = () => {
     localStorage.setItem('astar_db_v59', JSON.stringify(data));
     localStorage.setItem('astar_tpl_v59', JSON.stringify(templates));
@@ -150,16 +144,14 @@ const save = () => {
 };
 
 function updateStats() {
-    const now = Date.now();
     const total = data.length;
-    const waiting = data.filter(x => x.count >= 3 && (x.resetTime - now > 0)).length;
+    const waiting = data.filter(x => x.count === 3 && (x.resetTime - Date.now() > 0)).length;
     const ready = total - waiting;
     document.getElementById('totalCount').innerText = total;
     document.getElementById('waitingCount').innerText = waiting;
     document.getElementById('readyCount').innerText = ready;
 }
 
-// Filtreleme
 function setFilter(f) {
     currentFilter = f;
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -167,217 +159,139 @@ function setFilter(f) {
     render();
 }
 
-// Saat ve Otomatik Yenileme
-setInterval(() => {
-    document.getElementById('liveClock').innerText = new Date().toLocaleTimeString('tr-TR');
-    renderTimers();
-}, 1000);
-
-function renderTimers() {
-    const now = Date.now();
-    data.forEach((item, index) => {
-        const timerEl = document.getElementById(`timer-${index}`);
-        const rowEl = document.getElementById(`row-${index}`);
-        if (!timerEl) return;
-
-        const diff = item.resetTime - now;
-        if (item.count >= 3 && diff > 0) {
-            const h = Math.floor(diff / 3600000);
-            const m = Math.floor((diff % 3600000) / 60000);
-            const s = Math.floor((diff % 60000) / 1000);
-            timerEl.innerText = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-            const percent = Math.max(0, (diff / (24 * 60 * 60 * 1000)) * 100);
-            const bar = document.getElementById(`bar-${index}`);
-            if (bar) bar.style.width = percent + "%";
-        } else {
-            timerEl.innerText = "HAZIR";
-            timerEl.className = "ready-alert px-3 py-1 rounded-lg text-[10px]";
-        }
+function renderTemplates() {
+    const list = document.getElementById('templateList');
+    const select = document.getElementById('reasonSelect');
+    list.innerHTML = ''; select.innerHTML = '';
+    templates.forEach((t, i) => {
+        list.innerHTML += `<div class="flex items-center bg-white/5 p-3 rounded-xl border border-white/5 text-xs"><span class="flex-1 truncate">${t}</span><button onclick="deleteTemplate(${i})" class="text-red-900 hover:text-red-500 px-2 font-bold">✕</button></div>`;
+        select.innerHTML += `<option value="${t}">${t}</option>`;
     });
 }
 
-// Tabloyu Çiz
-function render() {
-    const search = document.getElementById('search').value.toLowerCase();
-    const now = Date.now();
-    const tbody = document.getElementById('tableBody');
-    tbody.innerHTML = '';
-
-    data.forEach((item, index) => {
-        const isWaiting = item.count >= 3 && (item.resetTime - now > 0);
-        
-        if (currentFilter === 'ready' && isWaiting) return;
-        if (currentFilter === 'waiting' && !isWaiting) return;
-        if (search && !item.name.toLowerCase().includes(search) && !item.reason.toLowerCase().includes(search)) return;
-
-        const tr = document.createElement('tr');
-        tr.id = `row-${index}`;
-        tr.className = "hover:bg-white/[0.02] transition-colors";
-        tr.innerHTML = `
-            <td class="p-5">
-                <div class="font-bold text-white text-base">${item.name}</div>
-                <div class="text-[10px] text-gray-500 mt-1 uppercase">${item.reason}</div>
-            </td>
-            <td class="p-5 text-center font-mono text-lg ${item.count >= 3 ? 'text-red-500' : 'text-blue-400'}">${item.count}/3</td>
-            <td class="p-5">
-                <div class="flex flex-col items-center gap-2">
-                    <span id="timer-${index}" class="mono-timer font-bold text-xs">--:--:--</span>
-                    ${isWaiting ? `<div class="progress-container"><div id="bar-${index}" class="progress-bar"></div></div>` : ''}
-                </div>
-            </td>
-            <td class="p-5 text-right space-x-2">
-                <button onclick="increment(${index})" class="bg-blue-600/20 text-blue-400 p-2 rounded-lg hover:bg-blue-600 hover:text-white">🚀</button>
-                <button onclick="openEdit(${index})" class="bg-gray-800 p-2 rounded-lg hover:bg-white hover:text-black text-xs">DÜZENLE</button>
-                <button onclick="deleteRow(${index})" class="text-red-900 hover:text-red-500 p-2">✕</button>
-            </td>
-        `;
-        tbody.appendChild(tr);
-    });
-    renderTimers();
-    updateStats();
+function addTemplate() {
+    const v = document.getElementById('newTemplate').value.trim();
+    if(v) { templates.push(v); document.getElementById('newTemplate').value = ''; save(); renderTemplates(); }
 }
 
-// Veri İşlemleri
+function deleteTemplate(i) { templates.splice(i, 1); save(); renderTemplates(); }
+
 function addRow() {
-    const name = document.getElementById('name').value;
-    const reason = document.getElementById('reasonSelect').value;
-    if (!name) return alert("İsim boş olamaz!");
-    
-    data.push({
-        name,
-        reason,
-        count: 0,
-        resetTime: 0,
-        created: Date.now()
-    });
-    document.getElementById('name').value = '';
-    save();
-    render();
+    const n = document.getElementById('name').value.trim();
+    if(!n) return;
+    data.push({ name: n, reason: document.getElementById('reasonSelect').value, count: 0, resetTime: null, id: Date.now(), wasWaiting: false });
+    document.getElementById('name').value = ''; save(); render();
 }
 
-function increment(index) {
-    data[index].count++;
-    if (data[index].count >= 3) {
-        data[index].resetTime = Date.now() + (24 * 60 * 60 * 1000); // 24 Saat
-    }
-    save();
-    render();
-}
-
-function deleteRow(index) {
-    if(confirm('Silinsin mi?')) {
-        data.splice(index, 1);
-        save();
-        render();
+function sendAppeal(id) {
+    const item = data.find(x => x.id === id);
+    if(item && item.count < 3) {
+        item.count++;
+        item.wasWaiting = false; 
+        if(item.count === 3) item.resetTime = Date.now() + 604800000;
+        save(); render();
     }
 }
 
-// Modal İşlemleri
-function openEdit(index) {
-    editingIndex = index;
-    const item = data[index];
+function openEdit(id) {
+    const item = data.find(x => x.id === id);
+    editingIndex = data.findIndex(x => x.id === id);
     document.getElementById('editName').value = item.name;
-    document.getElementById('editReason').value = item.reason;
+    document.getElementById('editReason').value = item.reason; 
     document.getElementById('editCount').value = item.count;
     document.getElementById('editMinutes').value = 0;
-    
-    if (item.resetTime > 0) {
-        const d = new Date(item.resetTime);
-        d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
-        document.getElementById('editTime').value = d.toISOString().slice(0,16);
-    }
-
+    let base = item.resetTime ? new Date(item.resetTime - 604800000) : new Date();
+    const tz = base.getTimezoneOffset() * 60000;
+    document.getElementById('editTime').value = new Date(base - tz).toISOString().slice(0, 16);
     document.getElementById('editModal').classList.remove('hidden');
 }
 
 function saveEdit() {
     const item = data[editingIndex];
     item.name = document.getElementById('editName').value;
-    item.reason = document.getElementById('editReason').value;
+    item.reason = document.getElementById('editReason').value; 
     item.count = parseInt(document.getElementById('editCount').value);
-    
-    const manualTime = document.getElementById('editTime').value;
-    if (manualTime) {
-        item.resetTime = new Date(manualTime).getTime();
-    }
-
-    const addMin = parseInt(document.getElementById('editMinutes').value);
-    if (addMin !== 0) {
-        item.resetTime = (item.resetTime || Date.now()) + (addMin * 60000);
-    }
-
-    closeEdit();
-    save();
-    render();
+    const mins = parseInt(document.getElementById('editMinutes').value);
+    const tVal = new Date(document.getElementById('editTime').value).getTime();
+    if(item.count === 3) {
+        let currentReset = item.resetTime || (Date.now() + 604800000);
+        let currentBase = currentReset - 604800000;
+        if(Math.abs(tVal - currentBase) > 60000) { item.resetTime = tVal + 604800000; } 
+        else if(mins !== 0) { item.resetTime = currentReset + (mins * 60000); }
+    } else { item.resetTime = null; item.wasWaiting = false; }
+    save(); render(); closeEdit();
 }
 
-function closeEdit() {
-    document.getElementById('editModal').classList.add('hidden');
-    editingIndex = null;
+function closeEdit() { document.getElementById('editModal').classList.add('hidden'); }
+
+function deleteRow(id) {
+    if(confirm('Hesap silinsin mi?')) { data = data.filter(x => x.id !== id); save(); render(); }
 }
 
-// Taslak Yönetimi
-function addTemplate() {
-    const val = document.getElementById('newTemplate').value;
-    if (val) {
-        templates.push(val);
-        document.getElementById('newTemplate').value = '';
-        save();
-        renderTemplates();
-    }
-}
+function render() {
+    const tbody = document.getElementById('tableBody');
+    let list = [...data];
+    const q = document.getElementById('search').value.toLowerCase();
+    if(q) list = list.filter(x => x.name.toLowerCase().includes(q));
+    if(currentFilter === 'ready') list = list.filter(x => x.count < 3 || (x.resetTime && x.resetTime - Date.now() <= 0));
+    else if(currentFilter === 'waiting') list = list.filter(x => x.count === 3 && (x.resetTime - Date.now() > 0));
 
-function renderTemplates() {
-    const list = document.getElementById('templateList');
-    const select = document.getElementById('reasonSelect');
-    list.innerHTML = '';
-    select.innerHTML = '';
+    tbody.innerHTML = '';
+    list.forEach((item) => {
+        let isWaiting = item.count === 3 && item.resetTime && (item.resetTime - Date.now() > 0);
+        let diff = isWaiting ? item.resetTime - Date.now() : 0;
+        
+        if(item.count === 3 && item.resetTime && diff <= 0) { 
+            item.count = 0; item.resetTime = null; item.wasWaiting = true;
+            isWaiting = false; save(); 
+        }
 
-    templates.forEach((t, i) => {
-        // Listeye ekle
-        const div = document.createElement('div');
-        div.className = "flex justify-between items-center bg-white/5 p-2 rounded group";
-        div.innerHTML = `<span>${t}</span><button onclick="removeTemplate(${i})" class="opacity-0 group-hover:opacity-100 text-red-500">✕</button>`;
-        list.appendChild(div);
-
-        // Selectbox'a ekle
-        const opt = document.createElement('option');
-        opt.value = t;
-        opt.innerText = t;
-        select.appendChild(opt);
+        let readyClass = item.wasWaiting ? 'ready-alert' : '';
+        let statusHtml = `<div><span class="${readyClass} text-[10px] font-bold border border-emerald-500/20 px-4 py-1.5 rounded-full bg-emerald-500/5 text-emerald-500 transition-all">MÜSAİT</span></div>`;
+        
+        if(isWaiting) {
+            const d = Math.floor(diff/86400000), h = Math.floor((diff/3600000)%24), m = Math.floor((diff/60000)%60);
+            const perc = (diff / 604800000) * 100;
+            statusHtml = `<div class="flex flex-col items-center gap-1"><span class="mono-timer text-orange-500 text-xs font-bold">${d}G ${h}S ${m}D</span><div class="progress-container"><div class="progress-bar" style="width: ${perc}%"></div></div></div>`;
+        }
+        
+        tbody.innerHTML += `
+            <tr class="border-b border-white/[0.02] hover:bg-white/[0.01] transition">
+                <td class="p-4 text-left"><div class="font-bold text-sm truncate text-white">${item.name}</div><div class="text-[10px] text-gray-500 truncate uppercase">${item.reason}</div></td>
+                <td class="p-4 text-center text-xl font-bold opacity-10 italic text-white">${item.count}/3</td>
+                <td class="p-4 text-center">${statusHtml}</td>
+                <td class="p-4 text-right flex justify-end gap-2">
+                    <button onclick="sendAppeal(${item.id})" class="bg-blue-600 hover:bg-blue-500 px-5 py-2 rounded-xl text-[10px] font-bold text-white ${isWaiting ? 'opacity-10 cursor-not-allowed':''}">İTİRAZ</button>
+                    <button onclick="openEdit(${item.id})" class="text-gray-500 hover:text-white p-2">⚙️</button>
+                    <button onclick="deleteRow(${item.id})" class="text-gray-900 hover:text-red-500 p-2">🗑️</button>
+                </td>
+            </tr>`;
     });
+    updateStats();
 }
 
-function removeTemplate(i) {
-    templates.splice(i, 1);
-    save();
-    renderTemplates();
-}
-
-// Yedekleme
 function exportData() {
-    const blob = new Blob([JSON.stringify(data)], {type: 'application/json'});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `astaroth_backup_${new Date().toLocaleDateString()}.json`;
-    a.click();
+    const blob = new Blob([JSON.stringify({data, templates})], {type:"application/json"});
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+    a.download = `astaroth_HD_icons.json`; a.click();
 }
 
 function importData(e) {
     const file = e.target.files[0];
+    if (!file) return;
     const reader = new FileReader();
-    reader.onload = (ev) => {
-        data = JSON.parse(ev.target.result);
-        save();
-        render();
+    reader.onload = (evt) => {
+        try {
+            const imp = JSON.parse(evt.target.result);
+            if (imp.data) { data = imp.data; templates = imp.templates || templates; save(); render(); renderTemplates(); }
+        } catch (err) { alert('Hata!'); }
     };
     reader.readAsText(file);
 }
 
-// Başlat
-renderTemplates();
-render();
+setInterval(() => { document.getElementById('liveClock').innerText = new Date().toLocaleTimeString('tr-TR'); }, 1000);
+setInterval(render, 30000); 
+renderTemplates(); render();
 </script>
 </body>
 </html>
