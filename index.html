@@ -2,44 +2,43 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>İtiraz Kontrol Merkezi - Ultra Hızlı v4.2</title>
+  <title>İtiraz Kontrol Merkezi - Pro v4.3</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap');
-    body { font-family: 'Poppins', sans-serif; background: #0b0f1a; color: #e5e7eb; }
+    body { font-family: 'Poppins', sans-serif; background: #0b0f1a; color: #e5e7eb; margin: 0; }
     .glass { background: rgba(17, 24, 39, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(75, 85, 99, 0.3); }
     .mono { font-family: 'JetBrains Mono', monospace; }
-    input, select, textarea { background: #1f2937 !important; border: 1px solid #374151 !important; color: white !important; outline: none !important; }
-    .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+    input, select { background: #1f2937 !important; border: 1px solid #374151 !important; color: white !important; outline: none !important; }
+    .btn-click:active { transform: scale(0.96); opacity: 0.9; }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 10px; }
-    /* Buton Tıklama Efekti */
-    .btn-click:active { transform: scale(0.95); opacity: 0.8; }
   </style>
 </head>
 <body class="p-4 md:p-8 custom-scrollbar">
 
   <div class="max-w-7xl mx-auto">
     <header class="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
-      <h1 class="text-3xl font-black tracking-tighter italic text-blue-500">CONTROL PANEL <span class="text-white text-xs">v4.2</span></h1>
-      <div id="liveClock" class="text-2xl font-bold mono bg-gray-900 px-6 py-2 rounded-2xl border border-blue-900/30 shadow-lg shadow-blue-500/10 text-blue-400">00:00:00</div>
+      <h1 class="text-3xl font-black tracking-tighter italic text-blue-500">CONTROL PANEL <span class="text-white text-xs">v4.3</span></h1>
+      <div id="liveClock" class="text-2xl font-bold mono bg-gray-900 px-6 py-2 rounded-2xl border border-blue-900/30 text-blue-400">00:00:00</div>
     </header>
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
       <div class="lg:col-span-4 space-y-6">
         <div class="glass p-6 rounded-3xl shadow-2xl">
-          <h2 class="text-lg font-bold mb-4 text-blue-400 flex items-center gap-2">👤 Yeni Hesap</h2>
+          <h2 class="text-lg font-bold mb-4 text-blue-400">👤 Yeni Hesap</h2>
           <div class="space-y-3">
             <input id="name" placeholder="Hesap Adı" class="w-full p-3 rounded-xl text-sm" />
             <select id="reasonSelect" class="w-full p-3 rounded-xl text-sm cursor-pointer"></select>
-            <button onclick="addRow()" class="btn-click w-full bg-blue-600 hover:bg-blue-500 py-3 rounded-xl font-bold transition shadow-lg shadow-blue-600/20 uppercase tracking-widest">LİSTEYE EKLE</button>
+            <button onclick="addRow()" class="btn-click w-full bg-blue-600 hover:bg-blue-500 py-3 rounded-xl font-bold transition uppercase">LİSTEYE EKLE</button>
           </div>
         </div>
 
         <div class="glass p-6 rounded-3xl shadow-2xl">
-          <h2 class="text-lg font-bold mb-4 text-emerald-400 flex items-center gap-2">📝 Not Taslakları</h2>
+          <h2 class="text-lg font-bold mb-4 text-emerald-400">📝 Not Taslakları</h2>
           <div class="space-y-3">
             <div class="flex gap-2">
-              <input id="newTemplate" placeholder="Yeni taslak..." class="flex-1 p-2 rounded-lg text-xs" />
+              <input id="newTemplate" placeholder="Yeni not metni..." class="flex-1 p-2 rounded-lg text-xs" />
               <button onclick="addTemplate()" class="btn-click bg-emerald-600 px-4 rounded-lg text-xs font-bold">+</button>
             </div>
             <div id="templateList" class="max-h-48 overflow-y-auto space-y-2 custom-scrollbar pr-2"></div>
@@ -49,22 +48,24 @@
 
       <div class="lg:col-span-8">
         <div class="glass rounded-3xl shadow-2xl overflow-hidden">
-          <div class="p-4 bg-gray-900/50 flex flex-wrap justify-between gap-4">
-            <input id="search" oninput="render()" placeholder="Listede hızlı ara..." class="bg-transparent border-none flex-1 min-w-[200px] p-1 text-sm outline-none" />
+          <div class="p-4 bg-gray-900/50 flex flex-wrap items-center justify-between gap-4">
+            <input id="search" oninput="render()" placeholder="Hızlı ara..." class="bg-transparent border-none flex-1 min-w-[200px] p-1 text-sm outline-none" />
+            
             <div class="flex gap-2">
-                <button onclick="exportData()" class="btn-click text-[10px] font-bold bg-gray-800 px-3 py-1.5 rounded-lg hover:bg-gray-700 transition border border-white/5 uppercase tracking-widest">Yedek Al</button>
+                <button onclick="exportData()" class="btn-click text-[10px] font-bold bg-gray-800 px-4 py-2 rounded-lg hover:bg-gray-700 transition border border-white/5 uppercase">Yedek Al</button>
                 <input type="file" id="importFile" class="hidden" onchange="importData(event)" accept=".json" />
-                <button onclick="document.getElementById('importFile').click()" class="btn-click text-[10px] font-bold bg-blue-900/30 text-blue-400 px-3 py-1.5 rounded-lg hover:bg-blue-900/50 transition border border-blue-500/20 uppercase tracking-widest">Yedek Yükle</button>
+                <button onclick="document.getElementById('importFile').click()" class="btn-click text-[10px] font-bold bg-blue-900/40 text-blue-300 px-4 py-2 rounded-lg hover:bg-blue-800 transition border border-blue-500/30 uppercase">Yedek Yükle</button>
             </div>
           </div>
+          
           <div class="overflow-x-auto">
             <table class="w-full text-left">
               <thead class="text-[10px] uppercase font-bold text-gray-500 bg-black/20">
                 <tr>
-                  <th class="p-5">Hesap / Not</th>
-                  <th class="p-5 text-center">İtiraz</th>
-                  <th class="p-5">Geri Sayım</th>
-                  <th class="p-5 text-right">Eylemler</th>
+                  <th class="p-5">HESAP / NOT</th>
+                  <th class="p-5 text-center">İTİRAZ</th>
+                  <th class="p-5 text-center">GERİ SAYIM</th>
+                  <th class="p-5 text-right">İŞLEM</th>
                 </tr>
               </thead>
               <tbody id="tableBody" class="divide-y divide-white/5"></tbody>
@@ -75,52 +76,41 @@
     </div>
   </div>
 
-  <div id="editModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/95 backdrop-blur-xl">
-    <div class="bg-[#111827] border border-gray-700 w-full max-w-2xl rounded-[2.5rem] shadow-2xl overflow-hidden animate-in zoom-in duration-200">
-      <div class="p-8 border-b border-white/5 bg-white/5 flex justify-between items-center">
-        <h3 class="text-xl font-bold">Kaydı Düzenle</h3>
-        <button onclick="closeEdit()" class="text-3xl text-gray-500 hover:text-white transition">&times;</button>
+  <div id="editModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
+    <div class="bg-[#111827] border border-gray-700 w-full max-w-xl rounded-[2.5rem] shadow-2xl overflow-hidden">
+      <div class="p-6 border-b border-white/5 flex justify-between items-center">
+        <h3 class="font-bold">Kaydı Düzenle</h3>
+        <button onclick="closeEdit()" class="text-2xl text-gray-500">&times;</button>
       </div>
-
-      <div class="p-8 grid grid-cols-1 md:grid-cols-2 gap-8 text-sm">
-        <div class="space-y-5">
-          <div>
-            <label class="text-xs text-blue-400 font-bold mb-2 block uppercase tracking-widest font-mono">Hesap Detayları</label>
-            <input id="editName" placeholder="Hesap Adı" class="w-full p-4 rounded-xl mb-3" />
-            <input id="editReason" placeholder="İtiraz Nedeni" class="w-full p-4 rounded-xl" />
-          </div>
-          <div>
-            <label class="text-xs text-orange-400 font-bold mb-2 block uppercase tracking-widest font-mono">İtiraz Hakkı (0-3)</label>
-            <input id="editCount" type="number" min="0" max="3" class="w-full p-4 rounded-xl font-bold text-lg" />
-          </div>
-        </div>
-
-        <div class="bg-blue-600/5 p-6 rounded-[2rem] border border-blue-500/20 space-y-4">
-          <label class="text-xs text-blue-400 font-bold block uppercase tracking-widest italic font-mono">Zamanlayıcı Ayarı</label>
-          <input id="editTime" type="datetime-local" class="w-full p-3 rounded-xl bg-gray-950 font-mono text-xs" />
-          <div class="border-t border-white/5 pt-4">
-             <input id="editMinutes" type="number" placeholder="Manuel kalan dakika..." class="w-full p-3 rounded-xl text-xs" />
-          </div>
+      <div class="p-8 space-y-4">
+        <input id="editName" class="w-full p-4 rounded-xl" placeholder="Hesap Adı" />
+        <input id="editReason" class="w-full p-4 rounded-xl" placeholder="Neden" />
+        <div class="flex gap-4">
+            <div class="flex-1">
+                <label class="text-[10px] text-gray-400 mb-1 block uppercase">İtiraz Hakkı</label>
+                <input id="editCount" type="number" min="0" max="3" class="w-full p-4 rounded-xl font-bold" />
+            </div>
+            <div class="flex-1">
+                <label class="text-[10px] text-gray-400 mb-1 block uppercase">Kalan Dakika</label>
+                <input id="editMinutes" type="number" class="w-full p-4 rounded-xl font-bold" />
+            </div>
         </div>
       </div>
-
-      <div class="p-8 bg-black/20 flex gap-4">
-        <button onclick="closeEdit()" class="btn-click flex-1 py-4 rounded-2xl font-bold bg-gray-800">İPTAL</button>
-        <button onclick="saveEdit()" class="btn-click flex-1 py-4 rounded-2xl font-bold bg-blue-600">GÜNCELLE</button>
+      <div class="p-6 bg-black/20 flex gap-3">
+        <button onclick="closeEdit()" class="flex-1 py-3 rounded-xl bg-gray-800 font-bold">İPTAL</button>
+        <button onclick="saveEdit()" class="flex-1 py-3 rounded-xl bg-blue-600 font-bold">KAYDET</button>
       </div>
     </div>
   </div>
 
 <script>
-let data = JSON.parse(localStorage.getItem('itiraz_final_v4')) || [];
-let templates = JSON.parse(localStorage.getItem('itiraz_templates_v4')) || [
-  "Ödenmemiş Bakiye", "Sistemleri Atlama", "Kabul Edilemez İş Uygulamaları", "Şüpheli Ödeme", "Doğrulama"
-];
+let data = JSON.parse(localStorage.getItem('itiraz_v4_final')) || [];
+let templates = JSON.parse(localStorage.getItem('itiraz_v4_temps')) || ["Ödenmemiş Bakiye", "Sistemleri Atlama", "Şüpheli Ödeme"];
 let editingIndex = null;
 
-const saveData = () => {
-  localStorage.setItem('itiraz_final_v4', JSON.stringify(data));
-  localStorage.setItem('itiraz_templates_v4', JSON.stringify(templates));
+const save = () => {
+  localStorage.setItem('itiraz_v4_final', JSON.stringify(data));
+  localStorage.setItem('itiraz_v4_temps', JSON.stringify(templates));
 };
 
 function renderTemplates() {
@@ -130,36 +120,33 @@ function renderTemplates() {
   templates.forEach((t, i) => {
     list.innerHTML += `<div class="flex justify-between items-center bg-gray-800/40 p-2 rounded-lg text-[10px] border border-white/5">
       <span class="truncate pr-2">${t}</span>
-      <button onclick="deleteTemplate(${i})" class="text-red-900 hover:text-red-500 font-bold px-2">SİL</button>
+      <button onclick="deleteTemplate(${i})" class="text-red-500 font-bold px-1">SİL</button>
     </div>`;
     select.innerHTML += `<option value="${t}">${t}</option>`;
   });
 }
 
 function addTemplate() {
-  const val = document.getElementById('newTemplate').value.trim();
-  if(val) { templates.push(val); document.getElementById('newTemplate').value = ''; saveData(); renderTemplates(); }
+  const v = document.getElementById('newTemplate').value.trim();
+  if(v) { templates.push(v); document.getElementById('newTemplate').value = ''; save(); renderTemplates(); }
 }
 
-function deleteTemplate(i) { templates.splice(i, 1); saveData(); renderTemplates(); }
+function deleteTemplate(i) { templates.splice(i, 1); save(); renderTemplates(); }
 
 function addRow() {
   const n = document.getElementById('name').value.trim();
-  const r = document.getElementById('reasonSelect').value;
   if(!n) return;
-  data.push({ name: n, reason: r, count: 0, resetTime: null });
+  data.push({ name: n, reason: document.getElementById('reasonSelect').value, count: 0, resetTime: null });
   document.getElementById('name').value = '';
-  saveData(); render();
+  save(); render();
 }
 
-// ARTIK HIZLI VE TAKILMAYAN İTİRAZ FONKSİYONU
 function sendAppeal(i) {
-  const item = filteredData()[i];
-  if(item.count < 3) {
-    item.count++;
-    if(item.count === 3) item.resetTime = Date.now() + 604800000;
-    saveData(); 
-    render(); // VERİ DEĞİŞİR DEĞİŞMEZ ANINDA TABLOYU GÜNCELLE (BEKLETME YAPMAZ)
+  const realIdx = data.indexOf(filteredData()[i]);
+  if(data[realIdx].count < 3) {
+    data[realIdx].count++;
+    if(data[realIdx].count === 3) data[realIdx].resetTime = Date.now() + 604800000;
+    save(); render();
   }
 }
 
@@ -169,9 +156,6 @@ function openEdit(i) {
   document.getElementById('editName').value = item.name;
   document.getElementById('editReason').value = item.reason;
   document.getElementById('editCount').value = item.count;
-  let base = item.resetTime ? new Date(item.resetTime - 604800000) : new Date();
-  const tz = base.getTimezoneOffset() * 60000;
-  document.getElementById('editTime').value = new Date(base - tz).toISOString().slice(0, 16);
   document.getElementById('editMinutes').value = item.resetTime ? Math.round((item.resetTime - Date.now())/60000) : 0;
   document.getElementById('editModal').classList.remove('hidden');
 }
@@ -181,20 +165,15 @@ function saveEdit() {
   item.name = document.getElementById('editName').value;
   item.reason = document.getElementById('editReason').value;
   item.count = parseInt(document.getElementById('editCount').value);
-  const timeVal = new Date(document.getElementById('editTime').value).getTime();
-  const minsVal = parseInt(document.getElementById('editMinutes').value);
-  if(item.count === 3) {
-    let oldBase = item.resetTime ? (item.resetTime - 604800000) : 0;
-    if(Math.abs(timeVal - oldBase) > 60000) item.resetTime = timeVal + 604800000;
-    else if(minsVal > 0) item.resetTime = Date.now() + (minsVal * 60000);
-  } else { item.resetTime = null; }
-  saveData(); render(); closeEdit();
+  const mins = parseInt(document.getElementById('editMinutes').value);
+  item.resetTime = (item.count === 3 && mins > 0) ? Date.now() + (mins * 60000) : (item.count === 3 ? Date.now() + 604800000 : null);
+  save(); render(); closeEdit();
 }
 
 function closeEdit() { document.getElementById('editModal').classList.add('hidden'); }
 
 function deleteRow(i) {
-  if(confirm('Silinsin mi?')) { data.splice(data.indexOf(filteredData()[i]), 1); saveData(); render(); }
+  if(confirm('Silinsin mi?')) { data.splice(data.indexOf(filteredData()[i]), 1); save(); render(); }
 }
 
 const filteredData = () => {
@@ -210,33 +189,31 @@ function render() {
     let status = '<span class="text-[10px] text-emerald-500 font-bold border border-emerald-900 bg-emerald-950/20 px-3 py-1 rounded-full uppercase">Müsait</span>';
     if(item.count === 3) {
       const diff = item.resetTime - Date.now();
-      if(diff <= 0) { item.count = 0; item.resetTime = null; saveData(); }
+      if(diff <= 0) { item.count = 0; item.resetTime = null; save(); }
       else {
         const d = Math.floor(diff/86400000), h = Math.floor((diff/3600000)%24), m = Math.floor((diff/60000)%60), s = Math.floor((diff/1000)%60);
-        status = `<span class="mono text-orange-500 font-bold text-base">${d}g ${h}:${m}:${s}</span>`;
+        status = `<span class="mono text-orange-500 font-bold text-sm">${d}g ${h}:${m}:${s}</span>`;
       }
     }
     tbody.innerHTML += `
       <tr class="hover:bg-white/5 transition-colors">
-        <td class="p-5">
-          <div class="font-bold text-sm">${item.name}</div>
-          <div class="text-[10px] text-gray-500">${item.reason}</div>
-        </td>
-        <td class="p-5 text-center font-bold text-xl text-gray-700 italic">${item.count}/3</td>
-        <td class="p-5">${status}</td>
-        <td class="p-5 text-right flex justify-end gap-3">
-          <button onclick="sendAppeal(${i})" class="btn-click bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-xl text-xs font-bold transition ${item.count >= 3 ? 'opacity-10 cursor-not-allowed':''}">İTİRAZ ET</button>
-          <button onclick="openEdit(${i})" class="btn-click bg-gray-800 hover:bg-gray-700 px-3 py-2 rounded-xl text-[10px] font-bold text-gray-300 border border-white/5 transition uppercase">Düzenle</button>
-          <button onclick="deleteRow(${i})" class="text-gray-700 hover:text-red-500 p-2 transition">🗑️</button>
+        <td class="p-5"><div class="font-bold text-sm">${item.name}</div><div class="text-[10px] text-gray-500">${item.reason}</div></td>
+        <td class="p-5 text-center font-bold text-xl italic text-gray-700">${item.count}/3</td>
+        <td class="p-5 text-center">${status}</td>
+        <td class="p-5 text-right flex justify-end gap-2">
+          <button onclick="sendAppeal(${i})" class="btn-click bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-xl text-[10px] font-bold transition ${item.count >= 3 ? 'opacity-20 cursor-not-allowed':''}">İTİRAZ</button>
+          <button onclick="openEdit(${i})" class="btn-click bg-gray-800 hover:bg-gray-700 p-2 rounded-xl text-gray-400">⚙️</button>
+          <button onclick="deleteRow(${i})" class="btn-click p-2 text-gray-600 hover:text-red-500">🗑️</button>
         </td>
       </tr>`;
   });
 }
 
+// ÖNEMLİ: YEDEK AKTARMA FONKSİYONU
 function exportData() {
   const blob = new Blob([JSON.stringify({data, templates})], {type:"application/json"});
   const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-  a.download = `itiraz_panel_yedek_${new Date().toLocaleDateString()}.json`; a.click();
+  a.download = `itiraz_panel_yedek.json`; a.click();
 }
 
 function importData(e) {
@@ -249,10 +226,10 @@ function importData(e) {
       if (imported.data) {
         data = imported.data;
         if (imported.templates) templates = imported.templates;
-        saveData(); render(); renderTemplates();
-        alert('Yedek başarıyla içeri aktarıldı!');
+        save(); render(); renderTemplates();
+        alert('Yedek başarıyla yüklendi!');
       }
-    } catch (err) { alert('Hatalı dosya!'); }
+    } catch (err) { alert('Hata: Dosya okunamadı!'); }
   };
   reader.readAsText(file);
 }
