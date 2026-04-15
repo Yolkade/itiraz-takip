@@ -2,31 +2,31 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>İtiraz Takip Paneli - Pro Edit</title>
+  <title>İtiraz Takip Paneli - Akıllı Zaman</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
     body { font-family: 'Poppins', sans-serif; }
     .dark-card { background: #111827; border: 1px border #1f2937; }
-    .timer-font { font-family: 'Courier New', Courier, monospace; }
+    .timer-font { font-family: 'Courier New', Courier, monospace; letter-spacing: -1px; }
   </style>
 </head>
 <body class="bg-gray-950 text-gray-100 p-4 md:p-8 min-h-screen">
   <div class="max-w-7xl mx-auto">
 
     <header class="flex flex-col md:flex-row justify-between items-center mb-8 pb-4 border-b border-gray-800 gap-4">
-      <h1 class="text-3xl font-extrabold text-white">İtiraz Takip <span class="text-blue-500 text-sm">V2</span></h1>
-      <div id="liveClock" class="text-2xl font-bold font-mono text-gray-400 bg-gray-900 px-4 py-2 rounded-2xl border border-gray-800">00:00:00</div>
+      <h1 class="text-3xl font-extrabold text-white">İtiraz Takip <span class="text-blue-500 text-sm italic">SMART TIMING</span></h1>
+      <div id="liveClock" class="text-2xl font-bold font-mono text-blue-400 bg-gray-900 px-6 py-2 rounded-2xl border border-gray-800 shadow-lg shadow-blue-900/10">00:00:00</div>
     </header>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
       
-      <div class="dark-card p-6 rounded-3xl shadow-xl">
+      <div class="dark-card p-6 rounded-3xl shadow-xl border border-gray-800">
         <h2 class="text-xl font-bold mb-4 flex items-center gap-2 text-blue-400">➕ Yeni Hesap</h2>
         <div class="space-y-4">
-          <input id="name" placeholder="Hesap Adı / ID" class="w-full bg-gray-800 p-4 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition" />
+          <input id="name" placeholder="Hesap Adı / ID" class="w-full bg-gray-800 p-4 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition border border-gray-700" />
           
-          <select id="reasonSelect" onchange="toggleCustomReason()" class="w-full bg-gray-800 p-4 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition cursor-pointer">
+          <select id="reasonSelect" onchange="toggleCustomReason()" class="w-full bg-gray-800 p-4 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition cursor-pointer border border-gray-700">
             <option value="Ödenmemiş Bakiye">Ödenmemiş Bakiye</option>
             <option value="Sistemleri Atlama">Sistemleri Atlama</option>
             <option value="Kabul Edilemez İş Uygulamaları">Kabul Edilemez İş Uygulamaları</option>
@@ -35,30 +35,30 @@
             <option value="custom">Özel Not Yaz...</option>
           </select>
 
-          <input id="customReason" placeholder="Özel notunuzu girin..." class="hidden w-full bg-gray-800 p-4 rounded-xl outline-none border border-blue-900/50" />
+          <input id="customReason" placeholder="Özel notunuzu girin..." class="hidden w-full bg-gray-800 p-4 rounded-xl outline-none border border-blue-500/30" />
           
-          <button onclick="addRow()" class="w-full bg-blue-600 hover:bg-blue-700 p-4 rounded-xl font-bold transition shadow-lg active:scale-95">EKLE</button>
+          <button onclick="addRow()" class="w-full bg-blue-600 hover:bg-blue-700 p-4 rounded-xl font-bold transition shadow-lg active:scale-95">LİSTEYE EKLE</button>
         </div>
       </div>
 
-      <div class="lg:col-span-2 dark-card p-6 rounded-3xl shadow-xl">
+      <div class="lg:col-span-2 dark-card p-6 rounded-3xl shadow-xl border border-gray-800">
         <h2 class="text-xl font-bold mb-4 text-gray-400">🔍 Arama & Araçlar</h2>
-        <input id="search" oninput="render()" placeholder="Listede ara..." class="w-full bg-gray-800/50 p-4 rounded-xl outline-none border border-gray-700 mb-4" />
+        <input id="search" oninput="render()" placeholder="Listede ara..." class="w-full bg-gray-800/50 p-4 rounded-xl outline-none border border-gray-700 mb-4 focus:border-gray-500 transition" />
         <div class="flex gap-2">
-          <button onclick="exportData()" class="flex-1 bg-gray-800 hover:bg-gray-700 p-3 rounded-xl text-sm font-semibold transition">Yedek İndir</button>
+          <button onclick="exportData()" class="flex-1 bg-gray-800 hover:bg-gray-700 p-3 rounded-xl text-sm font-semibold transition border border-gray-700">Yedek İndir</button>
           <input type="file" id="importFile" class="hidden" onchange="importData(event)" />
-          <button onclick="document.getElementById('importFile').click()" class="flex-1 bg-gray-800 hover:bg-gray-700 p-3 rounded-xl text-sm font-semibold transition">Yedek Yükle</button>
+          <button onclick="document.getElementById('importFile').click()" class="flex-1 bg-gray-800 hover:bg-gray-700 p-3 rounded-xl text-sm font-semibold transition border border-gray-700">Yedek Yükle</button>
         </div>
       </div>
     </div>
 
-    <div class="dark-card rounded-3xl shadow-2xl overflow-hidden">
+    <div class="dark-card rounded-3xl shadow-2xl overflow-hidden border border-gray-800">
       <table class="w-full text-left">
-        <thead class="bg-gray-800/50 text-gray-400 text-xs uppercase">
+        <thead class="bg-gray-800/50 text-gray-500 text-xs uppercase tracking-widest">
           <tr>
             <th class="p-5">Hesap Bilgisi</th>
-            <th class="p-5 text-center">İtiraz</th>
-            <th class="p-5">Durum</th>
+            <th class="p-5 text-center">İtiraz Hak</th>
+            <th class="p-5">Durum / Geri Sayım</th>
             <th class="p-5 text-right">İşlemler</th>
           </tr>
         </thead>
@@ -67,36 +67,38 @@
     </div>
   </div>
 
-  <div id="editModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-    <div class="bg-gray-900 border border-gray-700 p-8 rounded-3xl w-full max-w-md shadow-2xl">
-      <h3 class="text-2xl font-bold mb-6 text-white">Kaydı Düzenle</h3>
+  <div id="editModal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 z-50">
+    <div class="bg-gray-900 border border-gray-700 p-8 rounded-3xl w-full max-w-md shadow-2xl relative">
+      <h3 class="text-2xl font-bold mb-6 text-white border-b border-gray-800 pb-2">Kaydı Düzenle</h3>
       <div class="space-y-4">
         <div>
-          <label class="text-xs text-gray-500 mb-1 block">Hesap Adı</label>
-          <input id="editName" class="w-full bg-gray-800 p-4 rounded-xl outline-none focus:ring-2 focus:ring-blue-500" />
+          <label class="text-[10px] uppercase font-bold text-gray-500 mb-1 block">Hesap Adı</label>
+          <input id="editName" class="w-full bg-gray-800 p-4 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 border border-gray-700" />
         </div>
         <div>
-          <label class="text-xs text-gray-500 mb-1 block">Not</label>
-          <input id="editReason" class="w-full bg-gray-800 p-4 rounded-xl outline-none focus:ring-2 focus:ring-blue-500" />
+          <label class="text-[10px] uppercase font-bold text-gray-500 mb-1 block">Not / Neden</label>
+          <input id="editReason" class="w-full bg-gray-800 p-4 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 border border-gray-700" />
         </div>
-        <div>
-          <label class="text-xs text-gray-500 mb-1 block">Kalan Süre (Dakika)</label>
-          <input id="editMinutes" type="number" placeholder="Örn: 10080 (7 gün)" class="w-full bg-gray-800 p-4 rounded-xl outline-none focus:ring-2 focus:ring-orange-500" />
-          <p class="text-[10px] text-gray-600 mt-1">* 7 gün = 10080 dakika. Sıfırlamak için 0 yazın.</p>
+        
+        <div class="p-4 bg-blue-900/10 border border-blue-900/30 rounded-2xl">
+          <label class="text-xs font-bold text-blue-400 mb-3 block italic">İtirazın Yapıldığı Zaman (Geçmişe Ayarla):</label>
+          <input id="editTime" type="datetime-local" class="w-full bg-gray-800 p-3 rounded-xl outline-none focus:ring-2 focus:ring-orange-500 text-sm border border-gray-700" />
+          <p class="text-[10px] text-gray-500 mt-2">* Buraya yazdığın saatten itibaren 7 gün hesaplanır.</p>
         </div>
+
         <div class="flex gap-3 pt-4">
-          <button onclick="closeEdit()" class="flex-1 bg-gray-800 p-4 rounded-xl font-bold">İptal</button>
-          <button onclick="saveEdit()" class="flex-1 bg-green-600 p-4 rounded-xl font-bold">Kaydet</button>
+          <button onclick="closeEdit()" class="flex-1 bg-gray-800 p-4 rounded-xl font-bold hover:bg-gray-700 transition">İptal</button>
+          <button onclick="saveEdit()" class="flex-1 bg-blue-600 p-4 rounded-xl font-bold hover:bg-blue-500 shadow-lg shadow-blue-600/20 transition">GÜNCELLE</button>
         </div>
       </div>
     </div>
   </div>
 
 <script>
-let data = JSON.parse(localStorage.getItem('itirazData_v2')) || [];
+let data = JSON.parse(localStorage.getItem('itirazData_smart')) || [];
 let editingIndex = null;
 
-function saveData() { localStorage.setItem('itirazData_v2', JSON.stringify(data)); }
+function saveData() { localStorage.setItem('itirazData_smart', JSON.stringify(data)); }
 
 function toggleCustomReason() {
   const select = document.getElementById('reasonSelect');
@@ -121,23 +123,30 @@ function sendAppeal(index) {
   const item = filteredData()[index];
   if (item.count >= 3) return;
   item.count++;
-  if (item.count === 3) item.resetTime = Date.now() + 7*24*60*60*1000;
+  if (item.count === 3) {
+    // Mevcut zamandan 7 gün sonrasına kur
+    item.resetTime = Date.now() + (7 * 24 * 60 * 60 * 1000);
+  }
   saveData(); render();
 }
 
-// --- DÜZENLEME FONKSİYONLARI ---
+// --- DÜZENLEME (AKILLI ZAMAN HESABI) ---
 function openEdit(index) {
   const item = filteredData()[index];
   editingIndex = data.indexOf(item);
   document.getElementById('editName').value = item.name;
   document.getElementById('editReason').value = item.reason;
   
-  // Kalan süreyi dakikaya çevirip inputa yaz
-  let mins = 0;
-  if (item.resetTime && item.resetTime > Date.now()) {
-    mins = Math.round((item.resetTime - Date.now()) / 60000);
+  // Eğer süre varsa, o sürenin BAŞLANGIÇ noktasını bul (resetTime - 7 gün)
+  let baseTime = new Date();
+  if (item.resetTime) {
+      baseTime = new Date(item.resetTime - (7 * 24 * 60 * 60 * 1000));
   }
-  document.getElementById('editMinutes').value = mins;
+  
+  // input datetime-local formatına çevir (YYYY-MM-DDTHH:MM)
+  const tzoffset = (new Date()).getTimezoneOffset() * 60000;
+  const localISOTime = (new Date(baseTime - tzoffset)).toISOString().slice(0, 16);
+  document.getElementById('editTime').value = localISOTime;
   
   document.getElementById('editModal').classList.remove('hidden');
 }
@@ -149,11 +158,16 @@ function saveEdit() {
   item.name = document.getElementById('editName').value;
   item.reason = document.getElementById('editReason').value;
   
-  const mins = parseInt(document.getElementById('editMinutes').value);
-  if (mins > 0) {
-    item.resetTime = Date.now() + (mins * 60000);
-    item.count = 3; // Süre verildiğine göre itiraz dolmuş sayılmalı
+  // Girilen saatten 7 gün sonrasını hesapla
+  const inputTime = new Date(document.getElementById('editTime').value).getTime();
+  const targetTime = inputTime + (7 * 24 * 60 * 60 * 1000);
+
+  // Eğer hedef zaman şu andan sonraysa süreyi kur
+  if (targetTime > Date.now()) {
+    item.resetTime = targetTime;
+    item.count = 3;
   } else {
+    // Süre dolmuşsa veya zaman girilmemişse sıfırla
     item.resetTime = null;
     item.count = 0;
   }
@@ -186,33 +200,33 @@ function render() {
   tbody.innerHTML = '';
 
   list.forEach((item, i) => {
-    let status = '<span class="text-green-400 text-xs font-bold border border-green-900 bg-green-950/30 px-3 py-1 rounded-full">MÜSAİT</span>';
-    let btnClass = "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold transition";
+    let status = '<span class="text-green-400 text-[10px] font-bold border border-green-900/50 bg-green-950/20 px-3 py-1 rounded-lg">MÜSAİT</span>';
+    let btnClass = "bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-xl text-xs font-bold transition shadow-md shadow-blue-900/20";
     
     if(item.count >= 3) {
       const rem = getRemaining(item.resetTime);
       if(rem === 'READY') { item.count = 0; item.resetTime = null; saveData(); }
       else {
-        status = `<span class="timer-font text-orange-500 font-bold bg-orange-950/20 px-3 py-2 rounded-xl border border-orange-900/50">${rem}</span>`;
-        btnClass = "bg-gray-800 text-gray-600 px-4 py-2 rounded-xl text-xs font-bold cursor-not-allowed";
+        status = `<span class="timer-font text-xl text-orange-500 font-bold bg-orange-950/30 px-4 py-2 rounded-2xl border border-orange-900/40 shadow-inner">${rem}</span>`;
+        btnClass = "bg-gray-800 text-gray-600 px-5 py-2 rounded-xl text-xs font-bold cursor-not-allowed border border-gray-700";
       }
     }
 
     tbody.innerHTML += `
-    <tr class="hover:bg-white/5 transition">
+    <tr class="hover:bg-white/5 transition-colors group">
       <td class="p-5">
-        <div class="font-bold text-gray-100">${item.name}</div>
-        <div class="text-xs text-gray-500 mt-1">${item.reason}</div>
+        <div class="font-bold text-gray-100 group-hover:text-blue-400 transition">${item.name}</div>
+        <div class="text-[11px] text-gray-500 mt-1">${item.reason}</div>
       </td>
-      <td class="p-5 text-center font-bold text-xl">${item.count}/3</td>
+      <td class="p-5 text-center font-black text-2xl text-gray-700 font-mono italic">${item.count}/3</td>
       <td class="p-5">${status}</td>
-      <td class="p-5 text-right flex justify-end gap-2">
+      <td class="p-5 text-right flex justify-end gap-3 items-center">
         <button onclick="sendAppeal(${i})" class="${btnClass}">İtiraz Et</button>
-        <button onclick="openEdit(${i})" class="bg-gray-800 hover:bg-gray-700 text-gray-300 p-2 rounded-lg transition">
-           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+        <button onclick="openEdit(${i})" class="bg-gray-800/50 hover:bg-gray-700 text-gray-400 p-2.5 rounded-xl transition border border-gray-700">
+           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
         </button>
-        <button onclick="deleteRow(${i})" class="text-red-900 hover:text-red-500 p-2 transition">
-           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
+        <button onclick="deleteRow(${i})" class="text-gray-700 hover:text-red-500 p-2 transition">
+           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
         </button>
       </td>
     </tr>`;
@@ -220,7 +234,7 @@ function render() {
 }
 
 // YEDEKLEME
-function exportData(){ const blob = new Blob([JSON.stringify(data)], {type:"application/json"}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `itiraz_v2_yedek.json`; a.click(); }
+function exportData(){ const blob = new Blob([JSON.stringify(data)], {type:"application/json"}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `itiraz_smart_yedek.json`; a.click(); }
 function importData(e){ const f = e.target.files[0]; if(!f) return; const r = new FileReader(); r.onload = (evt) => { data = JSON.parse(evt.target.result); saveData(); render(); }; r.readAsText(f); }
 
 setInterval(() => { document.getElementById('liveClock').innerText = new Date().toLocaleTimeString('tr-TR'); }, 1000);
