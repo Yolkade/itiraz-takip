@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Astaroth v5.8 - Ultimate</title>
+  <title>Astaroth v5.9 - Solid State</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@800&family=Poppins:wght@400;600;700&family=JetBrains+Mono:wght@700&display=swap');
@@ -20,7 +20,6 @@
 
     .mono-timer { font-family: 'JetBrains Mono', monospace; }
 
-    /* SÜRESİ BİTENLER İÇİN ÖZEL YANIP SÖNME EFEKTİ */
     @keyframes pulse-ready-alert {
       0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.1); }
       50% { box-shadow: 0 0 0 15px rgba(16, 185, 129, 0); background: rgba(16, 185, 129, 0.4); }
@@ -28,26 +27,20 @@
     }
     .ready-alert { animation: pulse-ready-alert 1.5s infinite; border: 1px solid #10b981 !important; color: #10b981 !important; font-weight: 900 !important; }
 
-    /* SOL ALT İSTATİSTİK PANELİ STİLİ */
-    .stats-overlay { position: fixed; bottom: 25px; left: 25px; z-index: 100; padding: 15px 20px; border-radius: 20px; background: #080c18; border: 1px solid rgba(59, 130, 246, 0.15); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+    .stats-overlay { position: fixed; bottom: 25px; left: 25px; z-index: 100; padding: 15px 20px; border-radius: 20px; background: #080c18; border: 1px solid rgba(59, 130, 246, 0.15); }
 
     .progress-container { width: 100px; height: 4px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; }
     .progress-bar { height: 100%; background: #f97316; }
 
-    .copy-toast { position: fixed; top: 20px; right: 20px; background: #3b82f6; padding: 12px 24px; border-radius: 12px; transform: translateY(-100px); transition: 0.4s; z-index: 1000; font-weight: bold; font-size: 13px; }
-    
     .filter-btn { transition: 0.3s; border: 1px solid rgba(255,255,255,0.05); color: #64748b; font-size: 11px; }
     .filter-btn.active { background: #1d4ed8; color: white; border-color: #3b82f6; }
 
     table { table-layout: fixed; width: 100%; }
     th, td { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    
     input[type="datetime-local"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
   </style>
 </head>
 <body class="p-4 md:p-6 text-sm">
-
-  <div id="copyToast" class="copy-toast">KOPYALANDI ⚡</div>
 
   <div class="stats-overlay space-y-3">
     <div class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-white shadow-[0_0_8px_#fff]"></div><span id="totalCount" class="mono-timer font-bold">0</span></div>
@@ -66,16 +59,16 @@
         <div class="glass p-6 rounded-3xl">
             <h2 class="text-[10px] font-bold mb-5 text-blue-500 tracking-widest uppercase">YENİ KAYIT</h2>
             <div class="space-y-4">
-              <input id="name" placeholder="Hesap Adı" class="w-full p-4 rounded-xl bg-black/50 border border-white/5 outline-none focus:border-blue-500 transition-all text-xs" />
-              <select id="reasonSelect" class="w-full p-4 rounded-xl bg-black/50 border border-white/5 outline-none cursor-pointer text-xs"></select>
-              <button onclick="addRow()" class="w-full bg-blue-700 hover:bg-blue-600 py-4 rounded-xl font-bold transition-all text-sm uppercase">Sisteme Kaydet</button>
+              <input id="name" placeholder="Hesap Adı" class="w-full p-4 rounded-xl bg-black border border-white/5 outline-none focus:border-blue-500 text-xs text-white" />
+              <select id="reasonSelect" class="w-full p-4 rounded-xl bg-black border border-white/5 outline-none cursor-pointer text-xs text-white"></select>
+              <button onclick="addRow()" class="w-full bg-blue-700 hover:bg-blue-600 py-4 rounded-xl font-bold transition-all text-sm uppercase">Ekle</button>
             </div>
         </div>
 
         <div class="glass p-6 rounded-3xl">
           <h2 class="text-[10px] font-bold mb-5 text-emerald-500 tracking-widest text-center uppercase">Taslaklar</h2>
           <div class="flex gap-2 mb-4">
-            <input id="newTemplate" placeholder="Yeni metin..." class="flex-1 p-3 rounded-lg bg-black border border-white/5 text-xs outline-none" />
+            <input id="newTemplate" placeholder="Metin..." class="flex-1 p-3 rounded-lg bg-black border border-white/5 text-xs outline-none text-white" />
             <button onclick="addTemplate()" class="bg-emerald-700 px-4 rounded-lg font-bold">+</button>
           </div>
           <div id="templateList" class="max-h-60 overflow-y-auto space-y-3 pr-2 text-xs"></div>
@@ -91,7 +84,7 @@
                 <button id="filterWaiting" onclick="setFilter('waiting')" class="filter-btn px-6 py-2 rounded-xl uppercase font-bold text-orange-400">SÜREDEKİLER</button>
             </div>
             <div class="flex items-center gap-4">
-                <input id="search" oninput="render()" placeholder="Listede ara..." class="bg-transparent border-b border-white/10 flex-1 py-1 outline-none focus:border-blue-500 text-lg" />
+                <input id="search" oninput="render()" placeholder="Ara..." class="bg-transparent border-b border-white/10 flex-1 py-1 outline-none focus:border-blue-500 text-lg text-white" />
                 <button onclick="exportData()" class="text-[10px] bg-gray-800 px-4 py-2 rounded-lg">YEDEK</button>
                 <input type="file" id="importFile" class="hidden" onchange="importData(event)" accept=".json" />
                 <button onclick="document.getElementById('importFile').click()" class="text-[10px] bg-blue-900/20 text-blue-400 px-4 py-2 rounded-lg border border-blue-500/10">YÜKLE</button>
@@ -102,7 +95,7 @@
             <table class="w-full">
               <thead class="text-[9px] uppercase text-gray-500 bg-black/30">
                 <tr>
-                  <th class="p-5 w-2/5">HESAP / NOT</th>
+                  <th class="p-5 w-2/5 text-left">HESAP / NOT</th>
                   <th class="p-5 text-center w-24">HAK</th>
                   <th class="p-5 text-center w-40">DURUM</th>
                   <th class="p-5 text-right w-44">KONTROL</th>
@@ -118,39 +111,36 @@
 
   <div id="editModal" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/95 backdrop-blur-md">
     <div class="bg-[#111827] border border-blue-500/20 w-full max-w-lg rounded-[2.5rem] p-10 space-y-8 shadow-2xl">
-        <div class="flex justify-between items-center"><h3 class="text-2xl font-bold text-blue-400 italic">Veri Manipülasyonu</h3><button onclick="closeEdit()" class="text-4xl text-gray-600 hover:text-white">&times;</button></div>
+        <div class="flex justify-between items-center"><h3 class="text-2xl font-bold text-blue-400 italic">Düzenle</h3><button onclick="closeEdit()" class="text-4xl text-gray-600 hover:text-white">&times;</button></div>
         <div class="space-y-6">
-            <div><label class="text-[10px] ml-2 text-gray-400 uppercase tracking-widest font-mono">Hesap Adı</label><input id="editName" class="w-full p-4 rounded-xl bg-black border border-white/5 outline-none" /></div>
+            <div><label class="text-[10px] ml-2 text-gray-400 uppercase tracking-widest font-mono">Hesap Adı</label><input id="editName" class="w-full p-4 rounded-xl bg-black border border-white/5 outline-none text-white" /></div>
+            
+            <div><label class="text-[10px] ml-2 text-gray-400 uppercase tracking-widest font-mono">İtiraz Notu / Sebebi</label><input id="editReason" class="w-full p-4 rounded-xl bg-black border border-white/5 outline-none text-white" /></div>
+            
             <div class="grid grid-cols-2 gap-4">
-                <div><label class="text-[10px] ml-2 text-gray-400 uppercase tracking-widest font-mono">Hak (0-3)</label><input id="editCount" type="number" min="0" max="3" class="w-full p-4 rounded-xl bg-black border border-white/5 text-center" /></div>
-                <div><label class="text-[10px] ml-2 text-gray-400 uppercase tracking-widest font-mono">Dakika (+/-)</label><input id="editMinutes" type="number" class="w-full p-4 rounded-xl bg-black border border-white/5 text-center" /></div>
+                <div><label class="text-[10px] ml-2 text-gray-400 uppercase tracking-widest font-mono">Hak (0-3)</label><input id="editCount" type="number" min="0" max="3" class="w-full p-4 rounded-xl bg-black border border-white/5 text-center text-white text-lg" /></div>
+                <div><label class="text-[10px] ml-2 text-gray-400 uppercase tracking-widest font-mono">Dakika (+/-)</label><input id="editMinutes" type="number" class="w-full p-4 rounded-xl bg-black border border-white/5 text-center text-white" /></div>
             </div>
-            <div><label class="text-[10px] ml-2 text-blue-400 uppercase tracking-widest font-black font-mono">📅 Tarihli Zaman Atlama</label><input id="editTime" type="datetime-local" class="w-full p-4 rounded-xl bg-black border border-white/5 font-mono" /></div>
+            <div><label class="text-[10px] ml-2 text-blue-400 uppercase tracking-widest font-black font-mono">📅 Tarihli Zaman Ayarı</label><input id="editTime" type="datetime-local" class="w-full p-4 rounded-xl bg-black border border-white/5 font-mono text-white" /></div>
         </div>
-        <div class="flex gap-4 pt-4 border-t border-white/5">
-            <button onclick="closeEdit()" class="flex-1 py-4 rounded-xl bg-gray-800 font-bold uppercase text-[11px]">İptal</button>
-            <button onclick="saveEdit()" class="flex-1 py-4 rounded-xl bg-blue-600 font-black uppercase text-[11px]">Güncelle</button>
+        <div class="flex gap-4 pt-4">
+            <button onclick="closeEdit()" class="flex-1 py-4 rounded-xl bg-gray-800 font-bold uppercase text-[11px]">Vazgeç</button>
+            <button onclick="saveEdit()" class="flex-1 py-4 rounded-xl bg-blue-600 font-black uppercase text-[11px]">Kaydet</button>
         </div>
     </div>
   </div>
 
 <script>
-let data = JSON.parse(localStorage.getItem('astar_db_v58')) || [];
-let templates = JSON.parse(localStorage.getItem('astar_tpl_v58')) || ["Ödenmemiş Bakiye", "Sistemleri Atlama", "Kabul Edilemez İş Uygulamaları"];
+let data = JSON.parse(localStorage.getItem('astar_db_v59')) || [];
+let templates = JSON.parse(localStorage.getItem('astar_tpl_v59')) || ["Ödenmemiş Bakiye", "Sistemleri Atlama", "Kabul Edilemez İş Uygulamaları"];
 let currentFilter = 'all';
 let editingIndex = null;
 
 const save = () => {
-    localStorage.setItem('astar_db_v58', JSON.stringify(data));
-    localStorage.setItem('astar_tpl_v58', JSON.stringify(templates));
+    localStorage.setItem('astar_db_v59', JSON.stringify(data));
+    localStorage.setItem('astar_tpl_v59', JSON.stringify(templates));
     updateStats();
 };
-
-function showToast(msg) {
-    const t = document.getElementById('copyToast');
-    t.innerText = msg; t.style.transform = 'translateY(0)';
-    setTimeout(() => t.style.transform = 'translateY(-100px)', 2000);
-}
 
 function updateStats() {
     const total = data.length;
@@ -173,7 +163,7 @@ function renderTemplates() {
     const select = document.getElementById('reasonSelect');
     list.innerHTML = ''; select.innerHTML = '';
     templates.forEach((t, i) => {
-        list.innerHTML += `<div class="flex items-center bg-white/5 p-3 rounded-xl border border-white/5 group text-xs"><span class="flex-1 truncate">${t}</span><button onclick="navigator.clipboard.writeText('${t}').then(()=>showToast('Metin Kopyalandı'))" class="text-emerald-500 mx-2">📋</button><button onclick="deleteTemplate(${i})" class="text-red-900 hover:text-red-500">✕</button></div>`;
+        list.innerHTML += `<div class="flex items-center bg-white/5 p-3 rounded-xl border border-white/5 text-xs"><span class="flex-1 truncate">${t}</span><button onclick="deleteTemplate(${i})" class="text-red-900 hover:text-red-500 px-2 font-bold">✕</button></div>`;
         select.innerHTML += `<option value="${t}">${t}</option>`;
     });
 }
@@ -192,12 +182,12 @@ function addRow() {
     document.getElementById('name').value = ''; save(); render();
 }
 
+// ARTIK KOPYALAMAZ, SADECE SAYACI ARTIRIR [YENİ]
 function sendAppeal(id) {
     const item = data.find(x => x.id === id);
     if(item && item.count < 3) {
-        navigator.clipboard.writeText(item.reason).then(() => showToast("KOPYALANDI"));
         item.count++;
-        item.wasWaiting = false; // İtiraz edilince yanıp sönme dursun
+        item.wasWaiting = false; 
         if(item.count === 3) item.resetTime = Date.now() + 604800000;
         save(); render();
     }
@@ -207,6 +197,7 @@ function openEdit(id) {
     const item = data.find(x => x.id === id);
     editingIndex = data.findIndex(x => x.id === id);
     document.getElementById('editName').value = item.name;
+    document.getElementById('editReason').value = item.reason; // Notu getir
     document.getElementById('editCount').value = item.count;
     document.getElementById('editMinutes').value = 0;
     let base = item.resetTime ? new Date(item.resetTime - 604800000) : new Date();
@@ -218,6 +209,7 @@ function openEdit(id) {
 function saveEdit() {
     const item = data[editingIndex];
     item.name = document.getElementById('editName').value;
+    item.reason = document.getElementById('editReason').value; // Notu kaydet
     item.count = parseInt(document.getElementById('editCount').value);
     const mins = parseInt(document.getElementById('editMinutes').value);
     const tVal = new Date(document.getElementById('editTime').value).getTime();
@@ -233,7 +225,7 @@ function saveEdit() {
 function closeEdit() { document.getElementById('editModal').classList.add('hidden'); }
 
 function deleteRow(id) {
-    if(confirm('Silinsin mi?')) { data = data.filter(x => x.id !== id); save(); render(); }
+    if(confirm('Hesap silinsin mi?')) { data = data.filter(x => x.id !== id); save(); render(); }
 }
 
 function render() {
@@ -249,16 +241,13 @@ function render() {
         let isWaiting = item.count === 3 && item.resetTime && (item.resetTime - Date.now() > 0);
         let diff = isWaiting ? item.resetTime - Date.now() : 0;
         
-        // SÜRESİ BİTEN HESABI TESPİT ET [YENİ]
         if(item.count === 3 && item.resetTime && diff <= 0) { 
-            item.count = 0; item.resetTime = null; item.wasWaiting = true; // Müsaite geçti işareti
+            item.count = 0; item.resetTime = null; item.wasWaiting = true;
             isWaiting = false; save(); 
         }
 
-        // MÜSAİT YAZISI YEŞİL OLDU
-        // Sadece süreden gelenler yanıp söner (ready-alert)
         let readyClass = item.wasWaiting ? 'ready-alert' : '';
-        let statusHtml = `<div><span class="${readyClass} text-[10px] font-bold border border-emerald-500/20 px-4 py-1.5 rounded-full bg-emerald-500/5 text-emerald-500 transition-all">MÜSAİT</span></div>`;
+        let statusHtml = `<div><span class="${readyClass} text-[10px] font-bold border border-emerald-500/20 px-4 py-1.5 rounded-full bg-emerald-500/5 text-emerald-500">MÜSAİT</span></div>`;
         
         if(isWaiting) {
             const d = Math.floor(diff/86400000), h = Math.floor((diff/3600000)%24), m = Math.floor((diff/60000)%60);
@@ -268,13 +257,13 @@ function render() {
         
         tbody.innerHTML += `
             <tr class="border-b border-white/[0.02] hover:bg-white/[0.01] transition">
-                <td class="p-4"><div class="font-bold text-sm truncate">${item.name}</div><div class="text-[10px] text-gray-500 truncate uppercase">${item.reason}</div></td>
-                <td class="p-4 text-center text-xl font-bold opacity-10 italic select-none">${item.count}/3</td>
+                <td class="p-4 text-left"><div class="font-bold text-sm truncate text-white">${item.name}</div><div class="text-[10px] text-gray-500 truncate uppercase">${item.reason}</div></td>
+                <td class="p-4 text-center text-xl font-bold opacity-10 italic text-white">${item.count}/3</td>
                 <td class="p-4 text-center">${statusHtml}</td>
                 <td class="p-4 text-right flex justify-end gap-2">
-                    <button onclick="sendAppeal(${item.id})" class="bg-blue-600 hover:bg-blue-500 px-5 py-2 rounded-xl text-[10px] font-bold ${isWaiting ? 'opacity-10 cursor-not-allowed':''}">İTİRAZ</button>
-                    <button onclick="openEdit(${item.id})" class="text-gray-500 hover:text-white p-2 text-lg">⚙️</button>
-                    <button onclick="deleteRow(${item.id})" class="text-gray-900 hover:text-red-500 p-2 text-lg">🗑️</button>
+                    <button onclick="sendAppeal(${item.id})" class="bg-blue-600 hover:bg-blue-500 px-5 py-2 rounded-xl text-[10px] font-bold text-white ${isWaiting ? 'opacity-10 cursor-not-allowed':''}">İTİRAZ</button>
+                    <button onclick="openEdit(${item.id})" class="text-gray-500 hover:text-white p-2">⚙️</button>
+                    <button onclick="deleteRow(${item.id})" class="text-gray-900 hover:text-red-500 p-2">🗑️</button>
                 </td>
             </tr>`;
     });
@@ -284,7 +273,7 @@ function render() {
 function exportData() {
     const blob = new Blob([JSON.stringify({data, templates})], {type:"application/json"});
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-    a.download = `astaroth_v58.json`; a.click();
+    a.download = `astaroth_safe.json`; a.click();
 }
 
 function importData(e) {
@@ -295,13 +284,13 @@ function importData(e) {
         try {
             const imp = JSON.parse(evt.target.result);
             if (imp.data) { data = imp.data; templates = imp.templates || templates; save(); render(); renderTemplates(); }
-        } catch (err) { alert('Hatalı JSON!'); }
+        } catch (err) { alert('Hata!'); }
     };
     reader.readAsText(file);
 }
 
 setInterval(() => { document.getElementById('liveClock').innerText = new Date().toLocaleTimeString('tr-TR'); }, 1000);
-setInterval(render, 15000); // 15 saniyede bir otomatik render
+setInterval(render, 30000); 
 renderTemplates(); render();
 </script>
 </body>
