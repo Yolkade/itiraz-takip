@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Astaroth - Full Control Edition v5.1</title>
+  <title>Astaroth - Precision Alert v5.2</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@1,900&family=Poppins:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap');
@@ -20,19 +20,20 @@
     .aura-ready { filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.6)); }
     .aura-waiting { filter: drop-shadow(0 0 15px rgba(59, 130, 246, 0.4)); }
 
-    @keyframes pulse-green {
-      0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
-      70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    /* SADECE SÜRESİ DOLANLAR İÇİN PARLAMA EFEKTİ */
+    @keyframes pulse-alert {
+      0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6); transform: scale(1); }
+      70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); transform: scale(1.02); }
+      100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); transform: scale(1); }
     }
-    .ready-badge { animation: pulse-green 2s infinite; }
+    .needs-attention { animation: pulse-alert 1.5s infinite; border: 1px solid #10b981 !important; background: rgba(16, 185, 129, 0.2) !important; }
 
     .progress-container { width: 100%; height: 4px; background: rgba(255,255,255,0.05); border-radius: 2px; margin-top: 4px; }
     .progress-bar { height: 100%; background: #f97316; transition: width 1s linear; }
 
     .stats-panel { position: fixed; bottom: 20px; left: 20px; padding: 12px 18px; border-radius: 20px; background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(59, 130, 246, 0.2); z-index: 100; }
     .btn-click:active { transform: scale(0.95); }
-    .copy-toast { position: fixed; top: 20px; right: 20px; background: #10b981; color: white; padding: 10px 20px; border-radius: 12px; transform: translateY(-100px); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 1000; font-weight: bold; }
+    .copy-toast { position: fixed; top: 20px; right: 20px; background: #10b981; color: white; padding: 10px 20px; border-radius: 12px; transform: translateY(-100px); transition: 0.4s; z-index: 1000; font-weight: bold; }
     
     .filter-btn { transition: all 0.3s; border: 1px solid rgba(255,255,255,0.05); }
     .filter-btn.active { background: #3b82f6; border-color: #60a5fa; color: white; }
@@ -40,7 +41,7 @@
 </head>
 <body class="p-4 md:p-8 text-sm">
 
-  <div id="copyToast" class="copy-toast">Kopyalandı! 📋</div>
+  <div id="copyToast" class="copy-toast">İşlem Başarılı! 📋</div>
 
   <div class="stats-panel glass space-y-2">
     <div class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-white"></div><span id="totalCount" class="mono">0</span></div>
@@ -57,18 +58,18 @@
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
       <div class="lg:col-span-4 space-y-6">
         <div class="glass p-6 rounded-3xl">
-            <h2 class="text-[10px] font-bold mb-4 text-blue-400 uppercase tracking-widest">👤 Yeni Kayıt</h2>
+            <h2 class="text-[10px] font-bold mb-4 text-blue-400 uppercase tracking-widest">👤 Yeni Hesap Kaydı</h2>
             <div class="space-y-3">
-              <input id="name" placeholder="Hesap Adı" class="w-full p-4 rounded-2xl bg-gray-950/50 border border-gray-800 outline-none" />
+              <input id="name" placeholder="Hesap Adı/ID" class="w-full p-4 rounded-2xl bg-gray-950/50 border border-gray-800 outline-none focus:border-blue-500 transition" />
               <select id="reasonSelect" class="w-full p-4 rounded-2xl bg-gray-950/50 border border-gray-800 outline-none cursor-pointer"></select>
-              <button onclick="addRow()" class="btn-click w-full bg-blue-600 hover:bg-blue-500 py-4 rounded-2xl font-black transition uppercase">Ekle</button>
+              <button onclick="addRow()" class="btn-click w-full bg-blue-600 hover:bg-blue-500 py-4 rounded-2xl font-black transition uppercase tracking-widest">Kaydet</button>
             </div>
         </div>
 
         <div class="glass p-6 rounded-3xl">
-          <h2 class="text-[10px] font-bold mb-4 text-emerald-400 uppercase tracking-widest">📝 Taslaklar</h2>
+          <h2 class="text-[10px] font-bold mb-4 text-emerald-400 uppercase tracking-widest text-center">Metin Taslakları</h2>
           <div class="flex gap-2 mb-4">
-            <input id="newTemplate" placeholder="Metin..." class="flex-1 p-3 rounded-xl bg-gray-950/50 border border-gray-800 text-xs" />
+            <input id="newTemplate" placeholder="Metin yaz..." class="flex-1 p-3 rounded-xl bg-gray-950/50 border border-gray-800 text-xs outline-none" />
             <button onclick="addTemplate()" class="bg-emerald-600 px-5 rounded-xl font-bold">+</button>
           </div>
           <div id="templateList" class="max-h-60 overflow-y-auto space-y-2 pr-2"></div>
@@ -76,16 +77,15 @@
       </div>
 
       <div class="lg:col-span-8">
-        <div class="glass rounded-[2rem] overflow-hidden shadow-2xl">
+        <div class="glass rounded-[2rem] overflow-hidden">
           <div class="p-5 bg-gray-950/30 border-b border-white/5 space-y-4">
             <div class="flex flex-wrap gap-2">
-                <button id="filterAll" onclick="setFilter('all')" class="filter-btn active text-[10px] font-bold px-4 py-2 rounded-xl bg-gray-800">HEPSİ</button>
-                <button id="filterReady" onclick="setFilter('ready')" class="filter-btn text-[10px] font-bold px-4 py-2 rounded-xl bg-gray-800 text-emerald-500">✨ MÜSAİTLER</button>
-                <button id="filterWaiting" onclick="setFilter('waiting')" class="filter-btn text-[10px] font-bold px-4 py-2 rounded-xl bg-gray-800 text-orange-500">⏳ BEKLEYENLER</button>
+                <button id="filterAll" onclick="setFilter('all')" class="filter-btn active text-[10px] font-bold px-4 py-2 rounded-xl bg-gray-800 uppercase">Hepsi</button>
+                <button id="filterReady" onclick="setFilter('ready')" class="filter-btn text-[10px] font-bold px-4 py-2 rounded-xl bg-gray-800 text-emerald-500 uppercase tracking-wider">İtirazı Gelenler</button>
             </div>
             
             <div class="flex items-center justify-between gap-4">
-                <input id="search" oninput="render()" placeholder="Ara..." class="bg-transparent outline-none flex-1" />
+                <input id="search" oninput="render()" placeholder="Listede ara..." class="bg-transparent outline-none flex-1" />
                 <div class="flex gap-2">
                     <button onclick="exportData()" class="text-[10px] font-bold bg-gray-800 px-4 py-2 rounded-xl">YEDEK</button>
                     <input type="file" id="importFile" class="hidden" onchange="importData(event)" accept=".json" />
@@ -96,10 +96,10 @@
           <table class="w-full text-left">
             <thead class="text-[10px] uppercase text-gray-500 bg-black/10">
               <tr>
-                <th class="p-6">HESAP</th>
+                <th class="p-6">HESAP BİLGİSİ</th>
                 <th class="p-6 text-center">HAK</th>
                 <th class="p-6 text-center">DURUM</th>
-                <th class="p-6 text-right">EYLEM</th>
+                <th class="p-6 text-right">KONTROL</th>
               </tr>
             </thead>
             <tbody id="tableBody" class="divide-y divide-white/5"></tbody>
@@ -111,25 +111,25 @@
 
   <div id="editModal" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/90 backdrop-blur-xl">
     <div class="bg-[#0f172a] border border-blue-500/20 w-full max-w-lg rounded-[2.5rem] p-10 space-y-6 shadow-2xl">
-        <div class="flex justify-between items-center"><h3 class="text-xl font-bold text-blue-400">Veriyi Güncelle</h3><button onclick="closeEdit()" class="text-3xl text-gray-500">&times;</button></div>
+        <div class="flex justify-between items-center"><h3 class="text-xl font-bold text-blue-400 italic">Düzenleme Paneli</h3><button onclick="closeEdit()" class="text-3xl text-gray-500 hover:text-white transition">&times;</button></div>
         <div class="space-y-4">
-            <div><label class="text-[10px] ml-2 text-gray-500 uppercase">Hesap Adı</label><input id="editName" class="w-full p-4 rounded-2xl bg-gray-900 border border-gray-800" /></div>
+            <div><label class="text-[10px] ml-2 text-gray-500 uppercase">Hesap İsmi</label><input id="editName" class="w-full p-4 rounded-2xl bg-gray-900 border border-gray-800 outline-none focus:border-blue-500/50" /></div>
             <div class="grid grid-cols-2 gap-4">
-                <div><label class="text-[10px] ml-2 text-gray-500 uppercase">İtiraz Hakkı</label><input id="editCount" type="number" min="0" max="3" class="w-full p-4 rounded-2xl bg-gray-900 border border-gray-800" /></div>
-                <div><label class="text-[10px] ml-2 text-gray-500 uppercase">Ekstra Dakika</label><input id="editMinutes" type="number" class="w-full p-4 rounded-2xl bg-gray-900 border border-gray-800" placeholder="Dakika ekle" /></div>
+                <div><label class="text-[10px] ml-2 text-gray-500 uppercase">İtiraz Hakkı</label><input id="editCount" type="number" min="0" max="3" class="w-full p-4 rounded-2xl bg-gray-900 border border-gray-800 outline-none" /></div>
+                <div><label class="text-[10px] ml-2 text-gray-500 uppercase">Süre Uzat (+ ) / Kısalt (-)</label><input id="editMinutes" type="number" class="w-full p-4 rounded-2xl bg-gray-900 border border-gray-800 outline-none" placeholder="Örn: 60 veya -60" /></div>
             </div>
-            <div><label class="text-[10px] ml-2 text-gray-500 uppercase">Manuel Zaman Ayarı (Zaman Atlama)</label><input id="editTime" type="datetime-local" class="w-full p-4 rounded-2xl bg-gray-900 border border-gray-800 text-sm" /></div>
+            <div><label class="text-[10px] ml-2 text-gray-500 uppercase">Zaman Atlama (Manuel Tarih Seçimi)</label><input id="editTime" type="datetime-local" class="w-full p-4 rounded-2xl bg-gray-900 border border-gray-800 text-sm outline-none" /></div>
         </div>
         <div class="flex gap-3 pt-4">
-            <button onclick="closeEdit()" class="flex-1 py-4 rounded-2xl bg-gray-800 font-bold uppercase">İptal</button>
-            <button onclick="saveEdit()" class="flex-1 py-4 rounded-2xl bg-blue-600 font-bold shadow-lg uppercase">Güncelle</button>
+            <button onclick="closeEdit()" class="flex-1 py-4 rounded-2xl bg-gray-800 font-bold uppercase tracking-widest text-[11px]">İptal</button>
+            <button onclick="saveEdit()" class="flex-1 py-4 rounded-2xl bg-blue-600 font-bold shadow-lg uppercase tracking-widest text-[11px]">Değişiklikleri Kaydet</button>
         </div>
     </div>
   </div>
 
 <script>
 let data = JSON.parse(localStorage.getItem('astaroth_v5_db')) || [];
-let templates = JSON.parse(localStorage.getItem('astaroth_v5_tpl')) || ["Bakiye Sorunu", "Sistem Hatası"];
+let templates = JSON.parse(localStorage.getItem('astaroth_v5_tpl')) || ["Ödenmemiş Bakiye", "Sistem İhlali"];
 let currentFilter = 'all';
 let editingIndex = null;
 
@@ -182,7 +182,8 @@ function deleteTemplate(i) { templates.splice(i, 1); save(); renderTemplates(); 
 function addRow() {
     const n = document.getElementById('name').value.trim();
     if(!n) return;
-    data.push({ name: n, reason: document.getElementById('reasonSelect').value, count: 0, resetTime: null, id: Date.now() });
+    // wasWaiting: false -> Çünkü yeni eklenen hesap beklemeden gelmedi.
+    data.push({ name: n, reason: document.getElementById('reasonSelect').value, count: 0, resetTime: null, id: Date.now(), wasWaiting: false });
     document.getElementById('name').value = ''; save(); render();
 }
 
@@ -191,14 +192,14 @@ function sendAppeal(i) {
     const item = data.find(x => x.id === list[i].id);
     if(item.count < 3) {
         const template = templates.find(t => t.includes(item.reason)) || item.reason;
-        navigator.clipboard.writeText(template).then(() => showToast("Metin Kopyalandı! 🚀"));
+        navigator.clipboard.writeText(template).then(() => showToast("Kopyalandı ve Hak Düştü! 🚀"));
         item.count++;
+        item.wasWaiting = false; // İtiraz edilince parlama durumu sıfırlanır
         if(item.count === 3) item.resetTime = Date.now() + 604800000;
         save(); render();
     }
 }
 
-// DÜZENLEME FONKSİYONLARI (GERİ GELDİ)
 function openEdit(i) {
     const list = getProcessedData();
     const item = list[i];
@@ -222,14 +223,18 @@ function saveEdit() {
     const tVal = new Date(document.getElementById('editTime').value).getTime();
     
     if(item.count === 3) {
-        let currentBase = item.resetTime ? (item.resetTime - 604800000) : Date.now();
+        let currentReset = item.resetTime || (Date.now() + 604800000);
+        let currentBase = currentReset - 604800000;
+        
         if(Math.abs(tVal - currentBase) > 60000) {
             item.resetTime = tVal + 604800000;
-        } else if(mins > 0) {
-            item.resetTime = Date.now() + (mins * 60000);
+        } else if(mins !== 0) {
+            // SÜRE UZATMA VE KISALTMA (Pozitif veya Negatif)
+            item.resetTime = currentReset + (mins * 60000);
         }
     } else {
         item.resetTime = null;
+        item.wasWaiting = false;
     }
     save(); render(); closeEdit();
 }
@@ -238,7 +243,7 @@ function closeEdit() { document.getElementById('editModal').classList.add('hidde
 
 function deleteRow(i) {
     const list = getProcessedData();
-    if(confirm('Kayıt silinsin mi?')) { data = data.filter(x => x.id !== list[i].id); save(); render(); }
+    if(confirm('Kayıt kalıcı olarak silinsin mi?')) { data = data.filter(x => x.id !== list[i].id); save(); render(); }
 }
 
 function getProcessedData() {
@@ -246,7 +251,6 @@ function getProcessedData() {
     const q = document.getElementById('search').value.toLowerCase();
     if(q) list = list.filter(x => x.name.toLowerCase().includes(q));
     if(currentFilter === 'ready') list = list.filter(x => x.count < 3 || (x.resetTime && x.resetTime - Date.now() <= 0));
-    else if(currentFilter === 'waiting') list = list.filter(x => x.count === 3 && (x.resetTime - Date.now() > 0));
     return list;
 }
 
@@ -259,9 +263,18 @@ function render() {
         let isWaiting = item.count === 3;
         let diff = isWaiting ? item.resetTime - Date.now() : 0;
         
-        if(isWaiting && diff <= 0) { item.count = 0; item.resetTime = null; isWaiting = false; save(); }
+        // SÜRESİ BİTEN HESABI TESPİT ET
+        if(isWaiting && diff <= 0) { 
+            item.count = 0; 
+            item.resetTime = null; 
+            item.wasWaiting = true; // Parlama için işaretle
+            isWaiting = false; 
+            save(); 
+        }
 
-        let statusHtml = `<div><span class="ready-badge text-[10px] text-emerald-500 font-bold border border-emerald-500/20 bg-emerald-500/10 px-4 py-1.5 rounded-full uppercase">✨ READY</span></div>`;
+        // PARLAMA KONTROLÜ (Sadece wasWaiting true ise parlar)
+        let readyClass = item.wasWaiting ? 'needs-attention' : '';
+        let statusHtml = `<div><span class="${readyClass} text-[10px] text-emerald-500 font-bold border border-emerald-500/20 bg-emerald-500/10 px-4 py-1.5 rounded-full uppercase tracking-widest transition-all">READY</span></div>`;
         
         if(isWaiting) {
             const d = Math.floor(diff/86400000), h = Math.floor((diff/3600000)%24), m = Math.floor((diff/60000)%60);
@@ -276,7 +289,7 @@ function render() {
                 <td class="p-6 text-center">${statusHtml}</td>
                 <td class="p-6 text-right flex justify-end gap-3">
                     <button onclick="sendAppeal(${i})" class="btn-click bg-blue-600 px-6 py-2.5 rounded-xl text-[10px] font-black ${isWaiting ? 'opacity-10 cursor-not-allowed':''}">İTİRAZ</button>
-                    <button onclick="openEdit(${i})" class="btn-click bg-gray-900 border border-gray-800 p-2.5 rounded-xl text-gray-500 hover:text-white">⚙️</button>
+                    <button onclick="openEdit(${i})" class="btn-click bg-gray-900 border border-gray-800 p-2.5 rounded-xl text-gray-500 hover:text-white transition">⚙️</button>
                     <button onclick="deleteRow(${i})" class="btn-click p-2.5 text-gray-700 hover:text-red-500">🗑️</button>
                 </td>
             </tr>`;
@@ -287,7 +300,7 @@ function render() {
 function exportData() {
     const blob = new Blob([JSON.stringify({data, templates})], {type:"application/json"});
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-    a.download = `astaroth_v5.1_backup.json`; a.click();
+    a.download = `astaroth_v5.2.json`; a.click();
 }
 
 function importData(e) {
@@ -298,7 +311,7 @@ function importData(e) {
         try {
             const imp = JSON.parse(evt.target.result);
             if (imp.data) { data = imp.data; templates = imp.templates || templates; save(); render(); renderTemplates(); }
-        } catch (err) { alert('Hatalı dosya!'); }
+        } catch (err) { alert('Hata!'); }
     };
     reader.readAsText(file);
 }
