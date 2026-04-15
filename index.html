@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Astaroth v5.9.1 - Shadow Protocol</title>
   
-  <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAABy0lEQVR4nO2YMW7CQBBFpxshIbeInAAnQEMFpE6SInUC7pAm6SInSJE6SUnp6SInSInI9YVAYv9shmXv7NoisSArP2m1O7OfZ707Y8fG0v5LAr97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An97An+7K/EDnK8v60EwHh0AAAAASUVORK5CYII=">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2303060e'/><path d='M25 75 L45 25 L55 25 L75 75 M33 55 L67 55' fill='none' stroke='%233b82f6' stroke-width='8' stroke-linecap='round' stroke-linejoin='round'/><path d='M25 75 L45 25 L55 25 L75 75 M33 55 L67 55' fill='none' stroke='white' stroke-width='2' stroke-opacity='0.5'/></svg>">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -132,6 +132,7 @@
   </div>
 
 <script>
+// Uygulama Mantığı
 let data = JSON.parse(localStorage.getItem('astar_db_v59')) || [];
 let templates = JSON.parse(localStorage.getItem('astar_tpl_v59')) || ["Ödenmemiş Bakiye", "Sistemleri Atlama", "Kabul Edilemez İş Uygulamaları"];
 let currentFilter = 'all';
@@ -221,8 +222,6 @@ function saveEdit() {
     } else { item.resetTime = null; item.wasWaiting = false; }
     save(); render(); closeEdit();
 }
-
-function closeEdit() { document.getElementById('editModal').classList.add('hidden'); }
 
 function deleteRow(id) {
     if(confirm('Hesap silinsin mi?')) { data = data.filter(x => x.id !== id); save(); render(); }
