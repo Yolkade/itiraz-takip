@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Astaroth - Ultimate Edition v4.8</title>
+  <title>Astaroth - Smart Speed Edition v5.0</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@1,900&family=Poppins:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap');
@@ -11,7 +11,6 @@
     .glass { background: rgba(17, 24, 39, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(75, 85, 99, 0.3); }
     .mono { font-family: 'JetBrains Mono', monospace; }
     
-    /* 5. FİKİR: AURA GLOW */
     .astaroth-logo {
         font-family: 'Kanit', sans-serif; font-size: 3.5rem; font-style: italic; font-weight: 900;
         letter-spacing: -2px; text-transform: uppercase; transition: all 0.5s ease;
@@ -21,50 +20,58 @@
     .aura-ready { filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.6)); }
     .aura-waiting { filter: drop-shadow(0 0 15px rgba(59, 130, 246, 0.4)); }
 
-    /* 2. FİKİR: PROGRESS BAR */
-    .progress-container { width: 100%; height: 4px; background: rgba(255,255,255,0.05); border-radius: 2px; margin-top: 4px; overflow: hidden; }
+    @keyframes pulse-green {
+      0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+      70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+    .ready-badge { animation: pulse-green 2s infinite; }
+
+    .progress-container { width: 100%; height: 4px; background: rgba(255,255,255,0.05); border-radius: 2px; margin-top: 4px; }
     .progress-bar { height: 100%; background: #f97316; transition: width 1s linear; }
 
-    .stats-panel {
-        position: fixed; bottom: 20px; left: 20px; padding: 12px 18px; border-radius: 20px;
-        background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(59, 130, 246, 0.2); z-index: 100;
-    }
+    .stats-panel { position: fixed; bottom: 20px; left: 20px; padding: 12px 18px; border-radius: 20px; background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(59, 130, 246, 0.2); z-index: 100; }
     .btn-click:active { transform: scale(0.95); }
-    .copy-toast { position: fixed; top: 20px; right: 20px; background: #10b981; color: white; padding: 10px 20px; border-radius: 10px; transform: translateY(-100px); transition: 0.3s; z-index: 1000; font-weight: bold; }
+    .copy-toast { position: fixed; top: 20px; right: 20px; background: #10b981; color: white; padding: 10px 20px; border-radius: 12px; transform: translateY(-100px); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 1000; font-weight: bold; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5); }
+    
+    .filter-btn { transition: all 0.3s; border: 1px solid rgba(255,255,255,0.05); }
+    .filter-btn.active { background: #3b82f6; border-color: #60a5fa; color: white; box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
   </style>
 </head>
-<body class="p-4 md:p-8">
+<body class="p-4 md:p-8 text-sm">
 
-  <div id="copyToast" class="copy-toast">Kopyalandı! ✅</div>
+  <div id="copyToast" class="copy-toast">Metin Kopyalandı! 📋</div>
 
   <div class="stats-panel glass space-y-2">
-    <div class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-white"></div><span id="totalCount" class="mono text-sm">0</span></div>
-    <div class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-orange-500"></div><span id="waitingCount" class="mono text-orange-500 text-sm">0</span></div>
-    <div class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-emerald-500"></div><span id="readyCount" class="mono text-emerald-500 text-sm">0</span></div>
+    <div class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-white"></div><span id="totalCount" class="mono">0</span></div>
+    <div class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-orange-500"></div><span id="waitingCount" class="mono text-orange-500">0</span></div>
+    <div class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-emerald-500"></div><span id="readyCount" class="mono text-emerald-500">0</span></div>
   </div>
 
   <div class="max-w-7xl mx-auto pb-24">
     <header class="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
       <div id="logo" class="astaroth-logo aura-waiting">ASTAROTH</div>
-      <div id="liveClock" class="text-2xl font-bold mono bg-gray-900 px-6 py-2 rounded-2xl border border-blue-900/30 text-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.2)]">00:00:00</div>
+      <div id="liveClock" class="text-2xl font-bold mono bg-gray-900 px-6 py-2 rounded-2xl border border-blue-900/30 text-blue-400">00:00:00</div>
     </header>
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
       <div class="lg:col-span-4 space-y-6">
         <div class="glass p-6 rounded-3xl">
-          <h2 class="text-sm font-bold mb-4 text-blue-400 uppercase tracking-widest">👤 Hesap Tanımla</h2>
-          <div class="space-y-3">
-            <input id="name" placeholder="Hesap Adı/ID" class="w-full p-4 rounded-2xl bg-gray-950/50 border border-gray-800 outline-none focus:border-blue-500 transition" />
-            <select id="reasonSelect" class="w-full p-4 rounded-2xl bg-gray-950/50 border border-gray-800 outline-none cursor-pointer"></select>
-            <button onclick="addRow()" class="btn-click w-full bg-blue-600 hover:bg-blue-500 py-4 rounded-2xl font-black transition shadow-lg shadow-blue-900/20">SİSTEME KAYDET</button>
-          </div>
+            <h2 class="text-[10px] font-bold mb-4 text-blue-400 uppercase tracking-[0.2em]">👤 Yeni Kayıt</h2>
+            <div class="space-y-3">
+              <input id="name" placeholder="Hesap Adı" class="w-full p-4 rounded-2xl bg-gray-950/50 border border-gray-800 outline-none focus:border-blue-500/50 transition" />
+              <select id="reasonSelect" class="w-full p-4 rounded-2xl bg-gray-950/50 border border-gray-800 outline-none"></select>
+              <button onclick="addRow()" class="btn-click w-full bg-blue-600 hover:bg-blue-500 py-4 rounded-2xl font-black transition uppercase">Sisteme İşle</button>
+            </div>
         </div>
 
         <div class="glass p-6 rounded-3xl">
-          <h2 class="text-sm font-bold mb-4 text-emerald-400 uppercase tracking-widest font-mono">📝 İtiraz Kalıpları</h2>
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-[10px] font-bold text-emerald-400 uppercase tracking-[0.2em]">📝 Not Taslakları</h2>
+          </div>
           <div class="flex gap-2 mb-4">
-            <input id="newTemplate" placeholder="Metin yaz..." class="flex-1 p-3 rounded-xl bg-gray-950/50 border border-gray-800 text-xs" />
-            <button onclick="addTemplate()" class="bg-emerald-600 px-5 rounded-xl font-bold hover:bg-emerald-500 transition">+</button>
+            <input id="newTemplate" placeholder="Yeni not..." class="flex-1 p-3 rounded-xl bg-gray-950/50 border border-gray-800 text-xs" />
+            <button onclick="addTemplate()" class="bg-emerald-600 px-5 rounded-xl font-bold">+</button>
           </div>
           <div id="templateList" class="max-h-60 overflow-y-auto space-y-2 pr-2"></div>
         </div>
@@ -72,80 +79,60 @@
 
       <div class="lg:col-span-8">
         <div class="glass rounded-[2rem] overflow-hidden">
-          <div class="p-5 bg-gray-950/30 flex items-center justify-between border-b border-white/5">
-            <input id="search" oninput="render()" placeholder="Tabloda ara..." class="bg-transparent outline-none text-sm w-1/2" />
-            <div class="flex gap-2">
-                <button onclick="exportData()" class="text-[10px] font-bold bg-gray-800 px-4 py-2 rounded-xl hover:bg-gray-700 transition">YEDEK AL</button>
-                <input type="file" id="importFile" class="hidden" onchange="importData(event)" accept=".json" />
-                <button onclick="document.getElementById('importFile').click()" class="text-[10px] font-bold bg-blue-900/20 text-blue-400 px-4 py-2 rounded-xl border border-blue-500/20 hover:bg-blue-900/40 transition">YÜKLE</button>
+          <div class="p-5 bg-gray-950/30 border-b border-white/5 space-y-4">
+            <div class="flex flex-wrap gap-2">
+                <button id="filterAll" onclick="setFilter('all')" class="filter-btn active text-[10px] font-bold px-4 py-2 rounded-xl bg-gray-800">HEPSİ</button>
+                <button id="filterReady" onclick="setFilter('ready')" class="filter-btn text-[10px] font-bold px-4 py-2 rounded-xl bg-gray-800 text-emerald-500">✨ SADECE MÜSAİTLER</button>
+                <button id="filterWaiting" onclick="setFilter('waiting')" class="filter-btn text-[10px] font-bold px-4 py-2 rounded-xl bg-gray-800 text-orange-500">⏳ BEKLEYENLER</button>
+            </div>
+            
+            <div class="flex items-center justify-between gap-4">
+                <input id="search" oninput="render()" placeholder="İsimle ara..." class="bg-transparent outline-none flex-1" />
+                <div class="flex gap-2">
+                    <button onclick="exportData()" class="text-[10px] font-bold bg-gray-800 px-4 py-2 rounded-xl">YEDEK AL</button>
+                    <input type="file" id="importFile" class="hidden" onchange="importData(event)" accept=".json" />
+                    <button onclick="document.getElementById('importFile').click()" class="text-[10px] font-bold bg-blue-900/20 text-blue-400 px-4 py-2 rounded-xl border border-blue-500/20">YÜKLE</button>
+                </div>
             </div>
           </div>
-          <table class="w-full text-left">
-            <thead class="text-[10px] uppercase text-gray-500 bg-black/10">
-              <tr>
-                <th class="p-6">HESAP BİLGİSİ</th>
-                <th class="p-6 text-center">İTİRAZ</th>
-                <th class="p-6 text-center cursor-pointer group" onclick="toggleSort()">
-                    <span class="group-hover:text-blue-400 transition">DURUM / KALAN SÜRE</span> <span id="sortIcon">↕️</span>
-                </th>
-                <th class="p-6 text-right">KONTROL</th>
-              </tr>
-            </thead>
-            <tbody id="tableBody" class="divide-y divide-white/5"></tbody>
-          </table>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead class="text-[10px] uppercase text-gray-500 bg-black/10">
+                <tr>
+                  <th class="p-6">HESAP DETAYI</th>
+                  <th class="p-6 text-center">HAK</th>
+                  <th class="p-6 text-center">DURUM SİNYALİ</th>
+                  <th class="p-6 text-right">EYLEM</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody" class="divide-y divide-white/5"></tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div id="editModal" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/90 backdrop-blur-xl">
-    <div class="bg-[#0f172a] border border-blue-500/20 w-full max-w-lg rounded-[2.5rem] p-10 space-y-6 shadow-2xl">
-        <div class="flex justify-between items-center"><h3 class="text-xl font-bold text-blue-400">Veriyi Güncelle</h3><button onclick="closeEdit()" class="text-3xl text-gray-500">&times;</button></div>
-        <div class="space-y-4">
-            <input id="editName" class="w-full p-4 rounded-2xl bg-gray-900 border border-gray-800" />
-            <div class="grid grid-cols-2 gap-4">
-                <div><label class="text-[10px] ml-2 text-gray-500 uppercase">Hak</label><input id="editCount" type="number" class="w-full p-4 rounded-2xl bg-gray-900 border border-gray-800" /></div>
-                <div><label class="text-[10px] ml-2 text-gray-500 uppercase">Dakika</label><input id="editMinutes" type="number" class="w-full p-4 rounded-2xl bg-gray-900 border border-gray-800" /></div>
-            </div>
-            <input id="editTime" type="datetime-local" class="w-full p-4 rounded-2xl bg-gray-900 border border-gray-800 text-sm" />
-        </div>
-        <div class="flex gap-3 pt-4">
-            <button onclick="closeEdit()" class="flex-1 py-4 rounded-2xl bg-gray-800 font-bold">KAPAT</button>
-            <button onclick="saveEdit()" class="flex-1 py-4 rounded-2xl bg-blue-600 font-bold shadow-lg shadow-blue-900/40">KAYDET</button>
-        </div>
-    </div>
-  </div>
-
 <script>
-let data = JSON.parse(localStorage.getItem('astaroth_db')) || [];
-let templates = JSON.parse(localStorage.getItem('astaroth_tpl')) || ["Bakiye Sorunu", "Sistem İhlali"];
-let sortMode = 0;
-let editingIndex = null;
-
-// 4. FİKİR: SESLİ BİLDİRİM
-const playSuccess = () => { 
-    const context = new AudioContext();
-    const osc = context.createOscillator();
-    const gain = context.createGain();
-    osc.connect(gain); gain.connect(context.destination);
-    osc.type = 'sine'; osc.frequency.setValueAtTime(880, context.currentTime);
-    gain.gain.setValueAtTime(0.1, context.currentTime);
-    osc.start(); osc.stop(context.currentTime + 0.1);
-};
+let data = JSON.parse(localStorage.getItem('astaroth_v5_db')) || [];
+let templates = JSON.parse(localStorage.getItem('astaroth_v5_tpl')) || ["Ödenmemiş Bakiye Nedeniyle İtiraz", "Sistem İhlali Yanlışlığı"];
+let currentFilter = 'all';
 
 const save = () => {
-    localStorage.setItem('astaroth_db', JSON.stringify(data));
-    localStorage.setItem('astaroth_tpl', JSON.stringify(templates));
+    localStorage.setItem('astaroth_v5_db', JSON.stringify(data));
+    localStorage.setItem('astaroth_v5_tpl', JSON.stringify(templates));
     updateStats();
 };
 
-// 1. FİKİR: HIZLI KOPYALAMA
+function showToast(msg) {
+    const t = document.getElementById('copyToast');
+    t.innerText = msg;
+    t.style.transform = 'translateY(0)';
+    setTimeout(() => t.style.transform = 'translateY(-100px)', 2500);
+}
+
 function copyToClipboard(text) {
-    navigator.clipboard.writeText(text).then(() => {
-        const t = document.getElementById('copyToast');
-        t.style.transform = 'translateY(0)';
-        setTimeout(() => t.style.transform = 'translateY(-100px)', 2000);
-    });
+    navigator.clipboard.writeText(text).then(() => showToast("Panoya Kopyalandı! 📋"));
 }
 
 function updateStats() {
@@ -155,11 +142,15 @@ function updateStats() {
     document.getElementById('totalCount').innerText = total;
     document.getElementById('waitingCount').innerText = waiting;
     document.getElementById('readyCount').innerText = ready;
-    
-    // 5. FİKİR: LOGO AURA GÜNCELLEME
     const logo = document.getElementById('logo');
-    if(ready > 0) { logo.className = 'astaroth-logo aura-ready'; }
-    else { logo.className = 'astaroth-logo aura-waiting'; }
+    logo.className = ready > 0 ? 'astaroth-logo aura-ready' : 'astaroth-logo aura-waiting';
+}
+
+function setFilter(f) {
+    currentFilter = f;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('filter' + f.charAt(0).toUpperCase() + f.slice(1)).classList.add('active');
+    render();
 }
 
 function renderTemplates() {
@@ -168,9 +159,9 @@ function renderTemplates() {
     list.innerHTML = ''; select.innerHTML = '';
     templates.forEach((t, i) => {
         list.innerHTML += `
-            <div class="flex items-center gap-2 group bg-gray-900/40 p-3 rounded-2xl border border-white/5 hover:border-emerald-500/30 transition">
+            <div class="flex items-center gap-2 bg-gray-900/40 p-3 rounded-2xl border border-white/5 group hover:border-emerald-500/30 transition">
                 <span class="flex-1 text-[11px] truncate">${t}</span>
-                <button onclick="copyToClipboard('${t}')" class="text-emerald-500 hover:scale-110 transition p-1">📋</button>
+                <button onclick="copyToClipboard('${t}')" class="text-emerald-500 opacity-50 group-hover:opacity-100 transition">📋</button>
                 <button onclick="deleteTemplate(${i})" class="text-red-900 hover:text-red-500 transition px-1">✕</button>
             </div>`;
         select.innerHTML += `<option value="${t}">${t}</option>`;
@@ -188,66 +179,41 @@ function addRow() {
     const n = document.getElementById('name').value.trim();
     if(!n) return;
     data.push({ name: n, reason: document.getElementById('reasonSelect').value, count: 0, resetTime: null, id: Date.now() });
-    document.getElementById('name').value = '';
-    save(); render();
+    document.getElementById('name').value = ''; save(); render();
 }
 
-function toggleSort() {
-    sortMode = (sortMode + 1) % 3;
-    document.getElementById('sortIcon').innerText = ['↕️', '✅', '⏳'][sortMode];
-    render();
-}
-
+// 4. FİKİR: AKILLI KOPYALAMA SİSTEMİ
 function sendAppeal(i) {
     const list = getProcessedData();
     const item = data.find(x => x.id === list[i].id);
+    
     if(item.count < 3) {
+        // Otomatik metin kopyalama
+        const template = templates.find(t => t.includes(item.reason)) || item.reason;
+        navigator.clipboard.writeText(template).then(() => {
+            showToast("Metin Kopyalandı ve Hak Düştü! 🚀");
+        });
+
         item.count++;
         if(item.count === 3) item.resetTime = Date.now() + 604800000;
         save(); render();
     }
 }
 
-function openEdit(i) {
-    const list = getProcessedData();
-    const item = list[i];
-    editingIndex = data.findIndex(x => x.id === item.id);
-    document.getElementById('editName').value = item.name;
-    document.getElementById('editCount').value = item.count;
-    document.getElementById('editMinutes').value = item.resetTime ? Math.round((item.resetTime - Date.now())/60000) : 0;
-    let base = item.resetTime ? new Date(item.resetTime - 604800000) : new Date();
-    const tz = base.getTimezoneOffset() * 60000;
-    document.getElementById('editTime').value = new Date(base - tz).toISOString().slice(0, 16);
-    document.getElementById('editModal').classList.remove('hidden');
-}
-
-function saveEdit() {
-    const item = data[editingIndex];
-    item.name = document.getElementById('editName').value;
-    item.count = parseInt(document.getElementById('editCount').value);
-    const mins = parseInt(document.getElementById('editMinutes').value);
-    const tVal = new Date(document.getElementById('editTime').value).getTime();
-    if(item.count === 3) {
-        let b = item.resetTime ? (item.resetTime - 604800000) : 0;
-        if(Math.abs(tVal - b) > 60000) item.resetTime = tVal + 604800000;
-        else if(mins > 0) item.resetTime = Date.now() + (mins * 60000);
-    } else { item.resetTime = null; }
-    save(); render(); closeEdit();
-}
-
-function closeEdit() { document.getElementById('editModal').classList.add('hidden'); }
-
 function deleteRow(i) {
     const list = getProcessedData();
-    if(confirm('Veri kalıcı olarak silinsin mi?')) { data = data.filter(x => x.id !== list[i].id); save(); render(); }
+    if(confirm('Kayıt silinsin mi?')) { data = data.filter(x => x.id !== list[i].id); save(); render(); }
 }
 
 function getProcessedData() {
     let list = [...data];
     const q = document.getElementById('search').value.toLowerCase();
+    
     if(q) list = list.filter(x => x.name.toLowerCase().includes(q));
-    if(sortMode === 1) list.sort((a, b) => (a.count === 3) - (b.count === 3));
-    else if(sortMode === 2) list.sort((a, b) => { if(a.count < 3) return 1; if(b.count < 3) return -1; return a.resetTime - b.resetTime; });
+    
+    if(currentFilter === 'ready') list = list.filter(x => x.count < 3 || (x.resetTime && x.resetTime - Date.now() <= 0));
+    else if(currentFilter === 'waiting') list = list.filter(x => x.count === 3 && (x.resetTime - Date.now() > 0));
+    
     return list;
 }
 
@@ -255,35 +221,37 @@ function render() {
     const tbody = document.getElementById('tableBody');
     const list = getProcessedData();
     tbody.innerHTML = '';
+    
     list.forEach((item, i) => {
-        let statusHtml = `<div><span class="text-[10px] text-emerald-500 font-bold border border-emerald-500/20 bg-emerald-500/10 px-4 py-1.5 rounded-full">MÜSAİT</span></div>`;
+        let isWaiting = item.count === 3;
+        let diff = isWaiting ? item.resetTime - Date.now() : 0;
         
-        if(item.count === 3) {
-            const diff = item.resetTime - Date.now();
-            if(diff <= 0) { 
-                // 3. FİKİR: OTOMATİK SIFIRLAMA
-                item.count = 0; item.resetTime = null; 
-                playSuccess(); // SESLİ BİLDİRİM
-                save(); 
-            } else {
-                const d = Math.floor(diff/86400000), h = Math.floor((diff/3600000)%24), m = Math.floor((diff/60000)%60), s = Math.floor((diff/1000)%60);
-                const perc = (diff / 604800000) * 100;
-                statusHtml = `
-                    <div class="flex flex-col items-center">
-                        <span class="mono text-orange-500 font-bold text-sm">${d}g ${h}:${m}:${s}</span>
-                        <div class="progress-container"><div class="progress-bar" style="width: ${perc}%"></div></div>
-                    </div>`;
-            }
+        if(isWaiting && diff <= 0) {
+            item.count = 0; item.resetTime = null; isWaiting = false; save();
+        }
+
+        let statusHtml = `<div><span class="ready-badge text-[10px] text-emerald-500 font-bold border border-emerald-500/20 bg-emerald-500/10 px-4 py-1.5 rounded-full uppercase tracking-widest">✨ READY</span></div>`;
+        
+        if(isWaiting) {
+            const d = Math.floor(diff/86400000), h = Math.floor((diff/3600000)%24), m = Math.floor((diff/60000)%60);
+            const perc = (diff / 604800000) * 100;
+            statusHtml = `
+                <div class="flex flex-col items-center">
+                    <span class="mono text-orange-500 font-bold text-xs">${d}g ${h}s ${m}d</span>
+                    <div class="progress-container"><div class="progress-bar" style="width: ${perc}%"></div></div>
+                </div>`;
         }
         
         tbody.innerHTML += `
-            <tr class="hover:bg-blue-500/[0.02] transition-colors">
-                <td class="p-6 font-bold text-sm">${item.name}<div class="text-[10px] text-gray-500 font-normal mt-1">${item.reason}</div></td>
-                <td class="p-6 text-center font-black text-2xl italic text-gray-800">${item.count}/3</td>
+            <tr class="hover:bg-blue-500/[0.03] transition-colors border-b border-white/[0.02]">
+                <td class="p-6">
+                    <div class="font-bold text-sm text-white">${item.name}</div>
+                    <div class="text-[10px] text-gray-500 mt-1">${item.reason}</div>
+                </td>
+                <td class="p-6 text-center font-black text-2xl italic text-gray-800/50">${item.count}/3</td>
                 <td class="p-6 text-center">${statusHtml}</td>
                 <td class="p-6 text-right flex justify-end gap-3">
-                    <button onclick="sendAppeal(${i})" class="btn-click bg-blue-600 px-5 py-2.5 rounded-xl text-[10px] font-black ${item.count >= 3 ? 'opacity-10 cursor-not-allowed':''}">İTİRAZ</button>
-                    <button onclick="openEdit(${i})" class="btn-click bg-gray-900 border border-gray-800 p-2.5 rounded-xl text-gray-500 hover:text-white transition">⚙️</button>
+                    <button onclick="sendAppeal(${i})" class="btn-click bg-blue-600 hover:bg-blue-500 px-6 py-2.5 rounded-xl text-[10px] font-black shadow-lg shadow-blue-900/20 ${isWaiting ? 'opacity-10 cursor-not-allowed':''}">İTİRAZ ET</button>
                     <button onclick="deleteRow(${i})" class="btn-click p-2.5 text-gray-700 hover:text-red-500 transition">🗑️</button>
                 </td>
             </tr>`;
@@ -294,7 +262,7 @@ function render() {
 function exportData() {
     const blob = new Blob([JSON.stringify({data, templates})], {type:"application/json"});
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-    a.download = `astaroth_v4.8_backup.json`; a.click();
+    a.download = `astaroth_v5_final.json`; a.click();
 }
 
 function importData(e) {
@@ -304,8 +272,8 @@ function importData(e) {
     reader.onload = (evt) => {
         try {
             const imp = JSON.parse(evt.target.result);
-            if (imp.data) { data = imp.data; templates = imp.templates || templates; save(); render(); renderTemplates(); alert('Veritabanı senkronize edildi!'); }
-        } catch (err) { alert('Hata!'); }
+            if (imp.data) { data = imp.data; templates = imp.templates || templates; save(); render(); renderTemplates(); }
+        } catch (err) { alert('Hatalı dosya!'); }
     };
     reader.readAsText(file);
 }
