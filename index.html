@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>İtiraz Takip Paneli</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6">
+  <div class="max-w-5xl mx-auto">
+
+    <div class="flex justify-between items-center mb-4">
+      <h1 class="text-2xl font-bold text-gray-800">İtiraz Takip Paneli</h1>
+    </div>
+
+    <div class="bg-white p-4 rounded-2xl shadow-sm mb-4">
+      <input id="search" oninput="render()" placeholder="Listede ara... (Hızlı odak için F3)" class="border p-2 w-full rounded-lg focus:ring-2 focus:ring-blue-400 outline-none" />
+    </div>
+
+    <div class="bg-white p-4 rounded-2xl shadow-sm mb-4 flex flex-wrap gap-2">
+      <button onclick="exportData()" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition">Yedek İndir (.json)</button>
+      <input type="file" id="importFile" class="hidden" onchange="importData(event)" />
+      <button onclick="document.getElementById('importFile').click()" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg transition">Yedek Yükle</button>
+    </div>
+
+    <div class="bg-white p-4 rounded-2xl shadow-sm mb-6 flex flex-wrap gap-2">
+      <input id="name" placeholder="Hesap Adı / ID" class="border p-2 flex-1 min-w-[200px] rounded-lg" />
+      <input id="reason" placeholder="İtiraz Nedeni" class="border p-2 flex-1 min-w-[200px] rounded-lg" />
+      <button onclick="addRow()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-bold transition">Listeye Ekle</button>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full bg-white rounded-2xl shadow-sm overflow-hidden">
+        <thead>
+          <tr class="bg-gray-200 text-gray-700">
+            <th class="p-3 text-left">Hesap</th>
+            <th class="p-3 text-left">Neden</th>
+            <th class="p-3 text-center">İtiraz Sayısı</th>
+            <th class="p-3 text-left">Durum / Kalan Süre</th>
+            <th class="p-3 text-center">Aksiyonlar</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody" class="divide-y divide-gray-100"></tbody>
+      </table>
+    </div>
+
+  </div>
+
+<script>
+let data = JSON.parse(localStorage.getItem('itirazData')) || [];
+
+function saveData() {
+  localStorage.setItem('itirazData', JSON.stringify(data));
+}
+
+function addRow() {
+  const nameInput = document.getElementById('name');
+  const reasonInput = document.getElementById('reason');
+  const name = nameInput.value.trim();
+  const reason = reasonInput.value.trim();
+
+  if (!name) return alert('Lütfen bir hesap adı girin!');
+
+  data.push({ name, reason, count: 0, resetTime: null });
+  nameInput.value = '';
+  reasonInput.value = '';
+  saveData();
+  render();
+}
+
+function sendAppeal(index) {
+  // Filtrelenmiş listedeki index'i gerçek veri listesindeki objeyle eşleştir
+  const item = filteredData()[index];
+  if (item.count >= 3) return;
+
+  item.count++;
+  if (item.count === 3) {
+    // 7 gün bekleme süresi ekle
+    item.resetTime = Date.now() + 7*24*60*60*1000;
+  }
+
+  saveData();
+  render();
+}
+
+function deleteRow(index) {
+  if(!confirm('Bu kaydı silmek istediğine emin misin?')) return;
+  const item = filteredData()[index];
+  data = data.filter(d => d !== item);
+  saveData();
+  render();
+}
+
+function getRemaining(time) {
+  const diff = time - Date.now();
+  if (diff <= 0) return 'Hazır';
+  const days = Math.floor(diff/(1000*60*60*24));
+  const hours = Math.floor((diff/(1000*60*60))%24);
+  const minutes = Math.floor((diff/(1000*60))%60);
+  return `${days}g ${hours}s ${minutes}d`;
+}
+
+function filteredData() {
+  const q = document.getElementById('search').value.toLowerCase();
+  return data.filter(x => 
+    x.name.toLowerCase().includes(q) || 
+    x.reason.toLowerCase().includes(q)
+  );
+}
+
+function highlight(text, q) {
+  if (!q) return text;
+  const r = new RegExp(`(${q})`, 'gi');
+  return text.replace(r, '<mark class="bg-yellow-200">$1</mark>');
+}
+
+function render() {
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = '';
+
+  const q = document.getElementById('search').value;
+  const list = filteredData();
+
+  if(list.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-gray-400">Kayıt bulunamadı.</td></tr>';
+    return;
+  }
+
+  list.forEach((item, i) => {
+    let status = '<span class="text-green-600 font-medium">Kullanılabilir</span>';
+    let btnClass = "bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded shadow-sm transition";
+    
+    if(item.count >= 3) {
+      const remaining = getRemaining(item.resetTime);
+      if(remaining === 'Hazır') {
+        item.count = 0;
+        item.resetTime = null;
+        saveData();
+      } else {
+        status = `<span class="text-red-500 font-bold">${remaining}</span>`;
+        btnClass = "bg-gray-300 text-gray-500 px-3 py-1 rounded cursor-not-allowed";
+      }
+    }
+
+    tbody.innerHTML += `
+    <tr class="hover:bg-gray-50 transition">
+      <td class="p-3 font-medium text-gray-700">${highlight(item.name, q)}</td>
+      <td class="p-3 text-gray-600">${highlight(item.reason, q)}</td>
+      <td class="p-3 text-center font-bold">${item.count}/3</td>
+      <td class="p-3">${status}</td>
+      <td class="p-3 text-center flex justify-center gap-2">
+        <button onclick="sendAppeal(${i})" class="${btnClass}">İtiraz Et</button>
+        <button onclick="deleteRow(${i})" class="bg-red-100 text-red-600 hover:bg-red-600 hover:text-white px-3 py-1 rounded transition">Sil</button>
+      </td>
+    </tr>`;
+  });
+}
+
+// 💾 YEDEK AL (JSON)
+function exportData(){
+  if(data.length === 0) return alert('Yedeklenecek veri yok!');
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:"application/json"});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `itiraz_takip_yedek_${new Date().toLocaleDateString()}.json`;
+  a.click();
+}
+
+// 📂 YEDEK YÜKLE
+function importData(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(evt){
+    try {
+      const imported = JSON.parse(evt.target.result);
+      if(Array.isArray(imported)) {
+        data = imported;
+        saveData();
+        render();
+        alert('Yedek başarıyla yüklendi!');
+      }
+    } catch(err) {
+      alert('Hatalı yedek dosyası!');
+    }
+  };
+  reader.readAsText(file);
+}
+
+// F3 Arama Odaklama
+window.addEventListener('keydown', e => {
+  if(e.key === 'F3' || (e.ctrlKey && e.key === 'f')) {
+    e.preventDefault();
+    document.getElementById('search').focus();
+  }
+});
+
+// İlk çalıştırma
+render();
+// Her dakika durumları (kalan süreleri) güncelle
+setInterval(render, 60000);
+</script>
+
+</body>
+</html>
