@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>İtiraz Kontrol Merkezi - Full Yönetim</title>
+  <title>İtiraz Kontrol Merkezi - Pro Panel v4.1</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap');
@@ -19,14 +19,12 @@
 
   <div class="max-w-7xl mx-auto">
     <header class="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
-      <h1 class="text-3xl font-black tracking-tighter italic text-blue-500">CONTROL PANEL <span class="text-white text-xs">v3.0</span></h1>
-      <div id="liveClock" class="text-2xl font-bold mono bg-gray-900 px-6 py-2 rounded-2xl border border-blue-900/30 shadow-lg shadow-blue-500/10">00:00:00</div>
+      <h1 class="text-3xl font-black tracking-tighter italic text-blue-500">CONTROL PANEL <span class="text-white text-xs">v4.1</span></h1>
+      <div id="liveClock" class="text-2xl font-bold mono bg-gray-900 px-6 py-2 rounded-2xl border border-blue-900/30 shadow-lg shadow-blue-500/10 text-blue-400">00:00:00</div>
     </header>
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-      
       <div class="lg:col-span-4 space-y-6">
-        
         <div class="glass p-6 rounded-3xl shadow-2xl">
           <h2 class="text-lg font-bold mb-4 text-blue-400 flex items-center gap-2">👤 Yeni Hesap</h2>
           <div class="space-y-3">
@@ -40,21 +38,23 @@
           <h2 class="text-lg font-bold mb-4 text-emerald-400 flex items-center gap-2">📝 Not Taslakları</h2>
           <div class="space-y-3">
             <div class="flex gap-2">
-              <input id="newTemplate" placeholder="Yeni not metni..." class="flex-1 p-2 rounded-lg text-xs" />
+              <input id="newTemplate" placeholder="Yeni taslak..." class="flex-1 p-2 rounded-lg text-xs" />
               <button onclick="addTemplate()" class="bg-emerald-600 px-4 rounded-lg text-xs font-bold">+</button>
             </div>
-            <div id="templateList" class="max-h-48 overflow-y-auto space-y-2 custom-scrollbar pr-2">
-              </div>
+            <div id="templateList" class="max-h-48 overflow-y-auto space-y-2 custom-scrollbar pr-2"></div>
           </div>
         </div>
-
       </div>
 
       <div class="lg:col-span-8">
         <div class="glass rounded-3xl shadow-2xl overflow-hidden">
-          <div class="p-4 bg-gray-900/50 flex justify-between gap-4">
-            <input id="search" oninput="render()" placeholder="Hızlı ara..." class="bg-transparent border-none w-full p-1 text-sm" />
-            <button onclick="exportData()" class="text-xs bg-gray-800 px-3 py-1 rounded-lg">Yedek Al</button>
+          <div class="p-4 bg-gray-900/50 flex flex-wrap justify-between gap-4">
+            <input id="search" oninput="render()" placeholder="Listede hızlı ara..." class="bg-transparent border-none flex-1 min-w-[200px] p-1 text-sm outline-none" />
+            <div class="flex gap-2">
+                <button onclick="exportData()" class="text-[10px] font-bold bg-gray-800 px-3 py-1.5 rounded-lg hover:bg-gray-700 transition border border-white/5">YEDEK AL</button>
+                <input type="file" id="importFile" class="hidden" onchange="importData(event)" />
+                <button onclick="document.getElementById('importFile').click()" class="text-[10px] font-bold bg-blue-900/30 text-blue-400 px-3 py-1.5 rounded-lg hover:bg-blue-900/50 transition border border-blue-500/20">YEDEK YÜKLE</button>
+            </div>
           </div>
           <div class="overflow-x-auto">
             <table class="w-full text-left">
@@ -63,7 +63,7 @@
                   <th class="p-5">Hesap / Not</th>
                   <th class="p-5 text-center">İtiraz</th>
                   <th class="p-5">Geri Sayım</th>
-                  <th class="p-5 text-right">İşlem</th>
+                  <th class="p-5 text-right">Eylemler</th>
                 </tr>
               </thead>
               <tbody id="tableBody" class="divide-y divide-white/5"></tbody>
@@ -71,71 +71,66 @@
           </div>
         </div>
       </div>
-
     </div>
   </div>
 
-  <div id="editModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
-    <div class="bg-[#111827] border border-gray-700 w-full max-w-2xl rounded-[2.5rem] shadow-2xl overflow-hidden">
+  <div id="editModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/95 backdrop-blur-xl">
+    <div class="bg-[#111827] border border-gray-700 w-full max-w-2xl rounded-[2.5rem] shadow-2xl overflow-hidden animate-in zoom-in duration-200">
       <div class="p-8 border-b border-white/5 bg-white/5 flex justify-between items-center">
-        <h3 class="text-xl font-bold">Kayıt Düzenle</h3>
-        <button onclick="closeEdit()" class="text-2xl text-gray-500 hover:text-white">&times;</button>
+        <h3 class="text-xl font-bold">Kaydı Düzenle</h3>
+        <button onclick="closeEdit()" class="text-3xl text-gray-500 hover:text-white transition">&times;</button>
       </div>
 
-      <div class="p-8 grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-        <div class="space-y-4">
+      <div class="p-8 grid grid-cols-1 md:grid-cols-2 gap-8 text-sm">
+        <div class="space-y-5">
           <div>
-            <label class="text-xs text-blue-400 font-bold mb-1 block uppercase">Hesap Bilgileri</label>
-            <input id="editName" class="w-full p-3 rounded-xl mb-2" />
-            <input id="editReason" class="w-full p-3 rounded-xl" />
+            <label class="text-xs text-blue-400 font-bold mb-2 block uppercase tracking-widest">Hesap Detayları</label>
+            <input id="editName" placeholder="Hesap Adı" class="w-full p-4 rounded-xl mb-3" />
+            <input id="editReason" placeholder="İtiraz Nedeni" class="w-full p-4 rounded-xl" />
           </div>
           <div>
-            <label class="text-xs text-orange-400 font-bold mb-1 block uppercase">İtiraz Hakkı (0-3)</label>
-            <input id="editCount" type="number" min="0" max="3" class="w-full p-3 rounded-xl" />
+            <label class="text-xs text-orange-400 font-bold mb-2 block uppercase tracking-widest">İtiraz Sayısı (0 - 3)</label>
+            <input id="editCount" type="number" min="0" max="3" class="w-full p-4 rounded-xl font-bold text-lg" />
           </div>
         </div>
 
-        <div class="bg-blue-900/20 p-5 rounded-3xl border border-blue-500/20 space-y-4">
-          <label class="text-xs text-emerald-400 font-bold block uppercase">⏱️ Zaman Ayarı</label>
-          <input id="editTime" type="datetime-local" class="w-full p-3 rounded-xl bg-black" />
-          <p class="text-[10px] text-gray-500 italic">İtirazın yapıldığı anı seçin, sistem 7 günü o andan başlatır.</p>
-          <hr class="border-white/5">
-          <input id="editMinutes" type="number" placeholder="Veya manuel kalan dakika..." class="w-full p-3 rounded-xl" />
+        <div class="bg-blue-600/5 p-6 rounded-[2rem] border border-blue-500/20 space-y-4">
+          <label class="text-xs text-blue-400 font-bold block uppercase tracking-widest italic">⏱️ Akıllı Zamanlayıcı</label>
+          <input id="editTime" type="datetime-local" class="w-full p-3 rounded-xl bg-gray-950 font-mono text-xs" />
+          <div class="border-t border-white/5 pt-4">
+             <input id="editMinutes" type="number" placeholder="Manuel kalan dakika..." class="w-full p-3 rounded-xl text-xs" />
+          </div>
         </div>
       </div>
 
       <div class="p-8 bg-black/20 flex gap-4">
-        <button onclick="closeEdit()" class="flex-1 py-4 rounded-2xl font-bold bg-gray-800">İptal</button>
-        <button onclick="saveEdit()" class="flex-1 py-4 rounded-2xl font-bold bg-blue-600">Güncelle</button>
+        <button onclick="closeEdit()" class="flex-1 py-4 rounded-2xl font-bold bg-gray-800">İPTAL</button>
+        <button onclick="saveEdit()" class="flex-1 py-4 rounded-2xl font-bold bg-blue-600">KAYDET</button>
       </div>
     </div>
   </div>
 
 <script>
-let data = JSON.parse(localStorage.getItem('itiraz_full_v3')) || [];
-let templates = JSON.parse(localStorage.getItem('itiraz_templates_v3')) || [
+let data = JSON.parse(localStorage.getItem('itiraz_final_v4')) || [];
+let templates = JSON.parse(localStorage.getItem('itiraz_templates_v4')) || [
   "Ödenmemiş Bakiye", "Sistemleri Atlama", "Kabul Edilemez İş Uygulamaları", "Şüpheli Ödeme", "Doğrulama"
 ];
 let editingIndex = null;
 
 const saveData = () => {
-  localStorage.setItem('itiraz_full_v3', JSON.stringify(data));
-  localStorage.setItem('itiraz_templates_v3', JSON.stringify(templates));
+  localStorage.setItem('itiraz_final_v4', JSON.stringify(data));
+  localStorage.setItem('itiraz_templates_v4', JSON.stringify(templates));
 };
 
-// TASLAK YÖNETİMİ
 function renderTemplates() {
   const list = document.getElementById('templateList');
   const select = document.getElementById('reasonSelect');
-  list.innerHTML = '';
-  select.innerHTML = '';
-  
+  list.innerHTML = ''; select.innerHTML = '';
   templates.forEach((t, i) => {
-    list.innerHTML += `
-      <div class="flex justify-between items-center bg-gray-800/50 p-2 rounded-lg text-[10px]">
-        <span class="truncate pr-2">${t}</span>
-        <button onclick="deleteTemplate(${i})" class="text-red-500 font-bold">Sil</button>
-      </div>`;
+    list.innerHTML += `<div class="flex justify-between items-center bg-gray-800/40 p-2 rounded-lg text-[10px] border border-white/5">
+      <span class="truncate pr-2">${t}</span>
+      <button onclick="deleteTemplate(${i})" class="text-red-900 hover:text-red-500 font-bold">SİL</button>
+    </div>`;
     select.innerHTML += `<option value="${t}">${t}</option>`;
   });
 }
@@ -147,11 +142,10 @@ function addTemplate() {
 
 function deleteTemplate(i) { templates.splice(i, 1); saveData(); renderTemplates(); }
 
-// TABLO İŞLEMLERİ
 function addRow() {
   const n = document.getElementById('name').value.trim();
   const r = document.getElementById('reasonSelect').value;
-  if(!n) return alert('İsim girin!');
+  if(!n) return;
   data.push({ name: n, reason: r, count: 0, resetTime: null });
   document.getElementById('name').value = '';
   saveData(); render();
@@ -166,20 +160,16 @@ function sendAppeal(i) {
   }
 }
 
-// EDİT MODAL
 function openEdit(i) {
   const item = filteredData()[i];
   editingIndex = data.indexOf(item);
   document.getElementById('editName').value = item.name;
   document.getElementById('editReason').value = item.reason;
   document.getElementById('editCount').value = item.count;
-  
-  // Zamanı yükle
   let base = item.resetTime ? new Date(item.resetTime - 604800000) : new Date();
   const tz = base.getTimezoneOffset() * 60000;
   document.getElementById('editTime').value = new Date(base - tz).toISOString().slice(0, 16);
   document.getElementById('editMinutes').value = item.resetTime ? Math.round((item.resetTime - Date.now())/60000) : 0;
-  
   document.getElementById('editModal').classList.remove('hidden');
 }
 
@@ -188,22 +178,13 @@ function saveEdit() {
   item.name = document.getElementById('editName').value;
   item.reason = document.getElementById('editReason').value;
   item.count = parseInt(document.getElementById('editCount').value);
-  
   const timeVal = new Date(document.getElementById('editTime').value).getTime();
   const minsVal = parseInt(document.getElementById('editMinutes').value);
-
   if(item.count === 3) {
-    // Eğer saat değiştirildiyse saati baz al, yoksa dakikayı baz al
     let oldBase = item.resetTime ? (item.resetTime - 604800000) : 0;
-    if(Math.abs(timeVal - oldBase) > 60000) {
-      item.resetTime = timeVal + 604800000;
-    } else if(minsVal > 0) {
-      item.resetTime = Date.now() + (minsVal * 60000);
-    }
-  } else {
-    item.resetTime = null;
-  }
-  
+    if(Math.abs(timeVal - oldBase) > 60000) item.resetTime = timeVal + 604800000;
+    else if(minsVal > 0) item.resetTime = Date.now() + (minsVal * 60000);
+  } else { item.resetTime = null; }
   saveData(); render(); closeEdit();
 }
 
@@ -223,35 +204,54 @@ function render() {
   const list = filteredData();
   tbody.innerHTML = '';
   list.forEach((item, i) => {
-    let status = '<span class="text-[10px] text-emerald-500 font-bold border border-emerald-900 bg-emerald-950/20 px-2 py-1 rounded">MÜSAİT</span>';
+    let status = '<span class="text-[10px] text-emerald-500 font-bold border border-emerald-900 bg-emerald-950/20 px-3 py-1 rounded-full uppercase tracking-tighter">Müsait</span>';
     if(item.count === 3) {
       const diff = item.resetTime - Date.now();
       if(diff <= 0) { item.count = 0; item.resetTime = null; saveData(); }
       else {
         const d = Math.floor(diff/86400000), h = Math.floor((diff/3600000)%24), m = Math.floor((diff/60000)%60), s = Math.floor((diff/1000)%60);
-        status = `<span class="mono text-orange-500 font-bold text-sm">${d}g ${h}:${m}:${s}</span>`;
+        status = `<span class="mono text-orange-500 font-bold text-base">${d}g ${h}:${m}:${s}</span>`;
       }
     }
     tbody.innerHTML += `
-      <tr class="hover:bg-white/5 transition">
+      <tr class="hover:bg-white/5 transition-colors group">
         <td class="p-5">
-          <div class="font-bold text-sm">${item.name}</div>
-          <div class="text-[10px] text-gray-500">${item.reason}</div>
+          <div class="font-bold text-sm group-hover:text-blue-400 transition">${item.name}</div>
+          <div class="text-[10px] text-gray-500 font-medium">${item.reason}</div>
         </td>
-        <td class="p-5 text-center font-bold italic text-gray-600">${item.count}/3</td>
+        <td class="p-5 text-center font-bold text-xl text-gray-700 italic">${item.count}/3</td>
         <td class="p-5">${status}</td>
-        <td class="p-5 text-right flex justify-end gap-2">
-          <button onclick="sendAppeal(${i})" class="bg-blue-600 px-3 py-1.5 rounded-lg text-xs font-bold ${item.count >= 3 ? 'opacity-20 cursor-not-allowed':''}">İtiraz</button>
-          <button onclick="openEdit(${i})" class="bg-gray-800 p-1.5 rounded-lg">⚙️</button>
-          <button onclick="deleteRow(${i})" class="text-gray-700 p-1.5 hover:text-red-500">🗑️</button>
+        <td class="p-5 text-right flex justify-end gap-3">
+          <button onclick="sendAppeal(${i})" class="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-xl text-xs font-bold transition ${item.count >= 3 ? 'opacity-10 cursor-not-allowed':''}">İTİRAZ ET</button>
+          <button onclick="openEdit(${i})" class="bg-gray-800 hover:bg-gray-700 px-3 py-2 rounded-xl text-[10px] font-bold text-gray-300 border border-white/5 transition uppercase">Düzenle</button>
+          <button onclick="deleteRow(${i})" class="text-gray-700 hover:text-red-500 p-2 transition">🗑️</button>
         </td>
       </tr>`;
   });
 }
 
+// YEDEKLEME FONKSİYONLARI
 function exportData() {
   const blob = new Blob([JSON.stringify({data, templates})], {type:"application/json"});
   const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `itiraz_panel_yedek.json`; a.click();
+}
+
+function importData(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (evt) => {
+    try {
+      const imported = JSON.parse(evt.target.result);
+      if (imported.data && Array.isArray(imported.data)) {
+        data = imported.data;
+        if (imported.templates) templates = imported.templates;
+        saveData(); render(); renderTemplates();
+        alert('Yedek başarıyla yüklendi!');
+      } else { alert('Hatalı yedek dosyası formatı!'); }
+    } catch (err) { alert('Dosya okunurken bir hata oluştu!'); }
+  };
+  reader.readAsText(file);
 }
 
 setInterval(() => { document.getElementById('liveClock').innerText = new Date().toLocaleTimeString('tr-TR'); }, 1000);
