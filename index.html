@@ -38,13 +38,13 @@
     .filter-btn { transition: 0.3s; border: 1px solid rgba(255,255,255,0.05); color: #64748b; font-size: 11px; }
     .filter-btn.active { background: #1d4ed8; color: white; border-color: #3b82f6; }
     
-    /* Müsaitler Özel Renk */
-    #filterReady.active { background: #10b981; border-color: #10b981; color: white; }
+    /* Müsaitler Butonu Yeşil Modu */
+    #filterReady.active { background: #10b981 !important; border-color: #10b981 !important; color: white !important; }
     #filterReady { color: #10b981; border-color: rgba(16, 185, 129, 0.2); }
 
     /* Klasör Stilleri */
-    .folder-wrapper { display: flex; align-items: center; background: rgba(255,255,255,0.03); border-radius: 12px; padding: 2px 8px; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; }
-    .folder-btn { padding: 6px 12px; font-size: 10px; font-weight: bold; color: #64748b; transition: 0.3s; }
+    .folder-wrapper { display: flex; align-items: center; background: rgba(255,255,255,0.03); border-radius: 12px; padding: 2px 8px; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; cursor: pointer; }
+    .folder-btn { padding: 6px 12px; font-size: 10px; font-weight: bold; color: #64748b; transition: 0.3s; background: none; border: none; }
     .folder-btn.active { color: #3b82f6; }
     .folder-delete { color: #444; font-size: 14px; cursor: pointer; padding-left: 5px; }
     .folder-delete:hover { color: #ef4444; }
@@ -56,19 +56,13 @@
     #status-header { cursor: pointer; transition: color 0.2s; }
     #status-header:hover { color: #3b82f6; }
 
-    /* Sağ Tık Renk Menüsü */
-    #contextMenu { position: absolute; z-index: 1000; background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); display: none; }
-    .color-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-    .color-opt { width: 20px; height: 20px; border-radius: 4px; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); }
+    /* Renk Seçici Gizli Input */
+    #folderColorPicker { position: absolute; visibility: hidden; width: 0; height: 0; }
   </style>
 </head>
 <body class="p-4 md:p-6 text-sm">
 
-  <div id="contextMenu">
-    <div class="text-[9px] uppercase text-gray-500 mb-2 font-bold tracking-widest text-center">Renk Seç</div>
-    <div class="color-grid">
-        <div class="color-opt" style="background: #3b82f6" onclick="setFolderColor('#3b82f6')"></div> <div class="color-opt" style="background: #a855f7" onclick="setFolderColor('#a855f7')"></div> <div class="color-opt" style="background: #ec4899" onclick="setFolderColor('#ec4899')"></div> <div class="color-opt" style="background: #ef4444" onclick="setFolderColor('#ef4444')"></div> <div class="color-opt" style="background: #f97316" onclick="setFolderColor('#f97316')"></div> <div class="color-opt" style="background: #eab308" onclick="setFolderColor('#eab308')"></div> <div class="color-opt" style="background: #10b981" onclick="setFolderColor('#10b981')"></div> <div class="color-opt" style="background: #64748b" onclick="setFolderColor('')"></div> </div>
-  </div>
+  <input type="color" id="folderColorPicker" onchange="applyFolderColor(this.value)">
 
   <div class="stats-overlay space-y-3">
     <div class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-white shadow-[0_0_8px_#fff]"></div><span id="totalCount" class="mono-timer font-bold">0</span></div>
@@ -169,7 +163,7 @@ let currentFilter = 'all';
 let currentFolderId = 'all';
 let editingIndex = null;
 let currentSortMode = 'none';
-let contextFolderTarget = null;
+let contextFolderId = null;
 
 const save = () => {
     localStorage.setItem('astar_db_v59', JSON.stringify(data));
@@ -187,7 +181,7 @@ function updateStats() {
     document.getElementById('readyCount').innerText = ready;
 }
 
-// Klasör Fonksiyonları
+// Klasör İşlemleri
 function createNewFolder() {
     const name = prompt("Yeni klasör adı:");
     if(name && name.trim()) {
@@ -200,13 +194,11 @@ function createNewFolder() {
 
 function deleteFolder(id) {
     if(id === 'all') return;
-    if(confirm('Klasörü ve içindeki tüm kayıtları silmek istediğinize emin misiniz?')) {
+    if(confirm('Klasörü ve içindeki kayıtları silmek istediğinize emin misiniz?')) {
         data = data.filter(item => item.folderId !== id);
         folders = folders.filter(f => f.id !== id);
         currentFolderId = 'all';
-        save();
-        renderFolders();
-        render();
+        save(); renderFolders(); render();
     }
 }
 
@@ -216,41 +208,44 @@ function switchFolder(id) {
     render();
 }
 
+function openColorPicker(e, id) {
+    e.preventDefault();
+    contextFolderId = id;
+    const picker = document.getElementById('folderColorPicker');
+    const folder = folders.find(f => f.id === id);
+    picker.value = folder.color || '#3b82f6';
+    picker.click();
+}
+
+function applyFolderColor(color) {
+    const folder = folders.find(f => f.id === contextFolderId);
+    if(folder) {
+        folder.color = color;
+        save();
+        renderFolders();
+    }
+}
+
 function renderFolders() {
     const container = document.getElementById('folderList');
     container.innerHTML = folders.map(f => {
-        const customStyle = f.color ? `style="border-color: ${f.color}44; background: ${f.color}11;"` : '';
-        const btnStyle = f.color ? `style="color: ${f.color};"` : '';
+        const isActive = currentFolderId === f.id;
+        const color = f.color || (isActive ? '#3b82f6' : 'transparent');
+        const borderColor = f.color ? `${f.color}88` : (isActive ? '#3b82f688' : 'rgba(255,255,255,0.05)');
+        const bg = f.color ? `${f.color}15` : (isActive ? 'rgba(59,130,246,0.1)' : 'rgba(255,255,255,0.03)');
+        const textColor = f.color || (isActive ? '#3b82f6' : '#64748b');
+
         return `
-        <div class="folder-wrapper ${currentFolderId === f.id ? 'border-blue-500/50 bg-blue-500/5' : ''}" ${customStyle} oncontextmenu="showContextMenu(event, '${f.id}')">
-            <button onclick="switchFolder('${f.id}')" class="folder-btn ${currentFolderId === f.id ? 'active' : ''}" ${btnStyle}>${f.name}</button>
+        <div class="folder-wrapper" 
+             style="border: 1px solid ${borderColor}; background: ${bg};"
+             oncontextmenu="openColorPicker(event, '${f.id}')">
+            <button onclick="switchFolder('${f.id}')" 
+                    class="folder-btn ${isActive ? 'active' : ''}" 
+                    style="color: ${textColor};">${f.name}</button>
             ${f.id !== 'all' ? `<span onclick="deleteFolder('${f.id}')" class="folder-delete">&times;</span>` : ''}
         </div>
     `}).join('');
 }
-
-// Sağ Tık Renk Menüsü Kontrolü
-function showContextMenu(e, id) {
-    e.preventDefault();
-    contextFolderTarget = id;
-    const menu = document.getElementById('contextMenu');
-    menu.style.display = 'block';
-    menu.style.left = e.pageX + 'px';
-    menu.style.top = e.pageY + 'px';
-}
-
-function setFolderColor(color) {
-    const f = folders.find(x => x.id === contextFolderTarget);
-    if(f) {
-        f.color = color;
-        save();
-        renderFolders();
-    }
-    document.getElementById('contextMenu').style.display = 'none';
-}
-
-// Menüyü kapatma
-window.onclick = () => document.getElementById('contextMenu').style.display = 'none';
 
 function setFilter(f) {
     currentFilter = f;
@@ -262,11 +257,9 @@ function setFilter(f) {
 function toggleSort() {
     const icon = document.getElementById('status-sort-icon');
     if (currentSortMode === 'none' || currentSortMode === 'ready') {
-        currentSortMode = 'time';
-        icon.innerText = '⏳';
+        currentSortMode = 'time'; icon.innerText = '⏳';
     } else {
-        currentSortMode = 'ready';
-        icon.innerText = '✅';
+        currentSortMode = 'ready'; icon.innerText = '✅';
     }
     render();
 }
@@ -292,12 +285,8 @@ function addRow() {
     const n = document.getElementById('name').value.trim();
     if(!n) return;
     data.push({ 
-        name: n, 
-        reason: document.getElementById('reasonSelect').value, 
-        count: 0, 
-        resetTime: null, 
-        id: Date.now(), 
-        wasWaiting: false,
+        name: n, reason: document.getElementById('reasonSelect').value, 
+        count: 0, resetTime: null, id: Date.now(), wasWaiting: false,
         folderId: currentFolderId === 'all' ? 'all' : currentFolderId
     });
     document.getElementById('name').value = ''; save(); render();
@@ -306,8 +295,7 @@ function addRow() {
 function sendAppeal(id) {
     const item = data.find(x => x.id === id);
     if(item && item.count < 3) {
-        item.count++;
-        item.wasWaiting = false; 
+        item.count++; item.wasWaiting = false; 
         if(item.count === 3) item.resetTime = Date.now() + 604800000;
         save(); render();
     }
