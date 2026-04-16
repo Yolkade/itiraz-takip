@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Astaroth - Shadow Protocol</title>
   
-  <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAlCAYAAAAwYKuzAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAASFSURBVFhHvZi7bx1FFMa/c6+V2OHhgDENIEWCwhAJF9BAZaEghSAQUqBESCaW7aQMBqek4g9A4pWOggaBhSyooEOYOHRAYUgHSEi4ofBe73MozpmZM7Oze6+diM8azc45u2d+8ziz60vDk6cNAADEFchfygUBACl/Ss4fyUj4Y4oYMIYbAxbAdIAlNQY2MRganryPrQokCRa3nenogAmOTjEgUWLW0mAh1FHgtCYnpOH0/W4PUjxLGrzlU9eBrK0PQnx9t4gEUC9rCOdnTNutzcsPIC2TXNeULRQNp+dMN5yCiUBDoH44VhomDe7FgJ1woY0vU9BHkVGs/XAAQFMzD7g9GMPNz8/hm+3PcfbxBR6pwJEdOREAAwId2//Gm1fwxdZ2J+uAKw3nnYuLizjz6AIOCoOsBLLcYFQgaGcF3Zb/woUXMRwOuf9EoamZeXUOqqUlwvrlK9i8tgkigp2Aoiiwv7/v2saYwN/XvvuuU7h3djbw7+zsYHn5ErKDAz8zDMSzPzUz785BDwcAA6ysXcbVjc3gga+2vsS1d95S96kpH6OlpefwwcfXZe9xvN0bP2J9dQWjLAZkyRLH4k7LGsgKLgd5g6wA8kpm2w7G3p9YnqCAUBuDrDASj+u80nHacoCk+rKzWSnAUUnIcoOicTc5MCLCuD8QUDck8QxGsgcPS8mPeEBSBnZ0YWFVtd3YhusSKEqbbtwpadh4JlU8AqExPMhRIXFLIC/Vs1H/6F5iVlGDs85mXw4UlThjuHZsZWNH3bTj5TZeIA/bC1jVfCSMCpKgBnltN7iVwPVJIOumHe+wNF1HIACApk49yO9iuyRSExFeeG0dF5ff9ncb4Ldff8J325/y/cYApMYYs6vDGQDOPHYW519dCfx7v9zE+++uIj9MZ3Ev4LmL63j59Q22ufPMHXCt+jj+33++gU/eW0PRAdi7xGXFRwG/EfzRYNtxfRx/eg969QJWjRwJNuvsEXEH24elgQk+HsIyYK8t+iaeQRe09Nl3J9t8Kkifbb6uVx3XT51fwzOv+D0IIvz7zx/4c+8HHgsRByIJOKa+Z+4hPLLwrEowwl97u/j6o1VUeXoPdgACwABPPr+Gp1/aCB64dXML338m72eyGapTt1sPP7GEc5c+DGx/39rFt9fXUBUMGB86vAdlmfnr1n5QGkmScM8UlfFBjPElXhtd5J66Tu/BxvA+5DAUlIHQKPmgZd1gJN9vwZ5xfdpnFWiqSMyqYSgdj7M4MSgpPoslkOvTvknca8m+OxsVgCE9C69CWLyvbkwrHmdxYlBSVBZb+aUu5V3sjgg3g/HsWOiU/GzUdbi8WW6Ql+Esx0X90wSVwXwd2qWWhPC+lGz6dstvj37RcHrOIOhQapfZyhaAWvWBptQFlra7f9zRA+kuNaiVuxwHKgBpDlHbOf63Gdd23ghWK2Vrdxqq3z/5r1uBLbJHInlRTKb+G4/w+6C3+2Y35FhNOAIBhOpcfyF7gDass96m+kFpeOK0SQGFoNJOtVrQE2riGTwxy0vcA9P2i+1/0H+L5aWjIQdnYAAAAABJRU5ErkJggg==">
+  <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAlCAYAAAAwYKuzAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAASFSURBVFhHvZi7bx1FFMa/c6+V2OHhgDENIEWCwhAJF9BAZaEghSAQUqBESCaW7aQMBqek4g9A4pWOggaBhSyooEOYOHRAYUgHSEi4ofBe73MozpmZM7Oze6+diM8azc45u2d+8ziz60vDk6cNAADEFchfygUBACl/Ss4fyUj4Y4oYMIYbAxbAdIAlNQY2MRganryPrQokCRa3nenogAmOTjEgUWLW0mAh1FHgtCYnpOH0/W4PUjxLGrzlU9eBrK0PQnx9t4gEUC9rCOdnTNutzcsPIC2TXNeULRQNp+dMN5yCiUBDoH44VhomDe7FgJ1woY0vU9BHkVGs/XAAQFAvDzfg9GPU9BMf72AyYf3ZBR6pwJEdOREAAwId2//Gm1fwxdZ2J+uAKw3nnYuLizjz6AIOCoOsBLLcYFQgaGcF3Zb/woUXMRwOuf9EoamZeXUOqqUlwvrlK9i8tgkigp2Aoiiwv7/v2saYwN/XvvuuU7h3djbw7+zsYHn5ErKDAz8zDMSzPzUz785BDwcAA6ysXcbVjc3gga+2vsS1d95S96kpH6OlpefwwcfXZe9xvN0bP2J9dQWjLAZkyRLH4k7LGsgKLgd5g6wA8kpm2w7G3p9YnqCAUBuDrDASj+u80nHacoCk+rKzWSnAUUnIcoOicTc5MCLCuD8QUDck8QxGsgcPS8mPeEBSBnZ0YWFVtd3YhusSKEqbbtwpadh4JlU8AqExPMhRIXFLIC/Vs1H/6F5iVlGDs85mXw4UlThjuHZsZWNH3bTj5TZeIA/bC1jVfCSMCpKgBnltN7iVwPVJIOumHe+wNF1HIACApk49yO9iuyRSExFeeG0dF5ff9ncb4Ldff8J325/y/cYApMYYs6vDGQDOPHYW519dCfx7v9zE+++uIj9MZ3Ev4LmL63j59Q22ufPMHXCt+jj+33++gU/eW0PRAdi7xGXFRwG/EfzRYNtxfRx/eg969QJWjRwJNuvsEXEH24elgQk+HsIyYK8t+iaeQRe09Nl3J9t8Kkifbb6uVx3XT51fwzOv+D0IIvz7zx/4c+8HHgsRByIJOKa+Z+4hPLLwrEowwl97u/j6o1VUeXoPdgACwABPPr+Gp1/aCB64dXML338m72eyGapTt1sPP7GEc5c+DGx/39rFt9fXUBUMGB86vAdlmfnr1n5QGkmScM8UlfFBjPElXhtd5J66Tu/BxvA+5DAUlIHQKPmgZd1gJN9vwZ5xfdpnFWiqSMyqYSgdj7M4MSgpPoslkOvTvknca8m+OxsVgCE9C69CWLyvbkwrHmdxYlBSVBZb+aUu5V3sjgg3g/HsWOiU/GzUdbi8WW6Ql+Esx0X90wSVwXWDXWhPC+lGz6dstvj37RcHrOIOhQapfZyhaAWvWBptQFlra7f9zRA+kuNaiVuxwHKgBpDlHbOf63Gdd23ghWK2Vrdxqq3z/5r1uBLbJHInlRTKb+G4/w+6C3+2Y35FhNOAIBhOpcfyF7gDass96m+kFpeOK0SQGFoNJOtVrQE2riGTwxy0vcA9P2i+1/0H+L5aWjIQdnYAAAAABJRU5ErkJggg==">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -38,11 +38,17 @@
     .filter-btn { transition: 0.3s; border: 1px solid rgba(255,255,255,0.05); color: #64748b; font-size: 11px; }
     .filter-btn.active { background: #1d4ed8; color: white; border-color: #3b82f6; }
 
+    /* Klasör Stilleri */
+    .folder-wrapper { display: flex; align-items: center; background: rgba(255,255,255,0.03); border-radius: 12px; padding: 2px 8px; border: 1px solid rgba(255,255,255,0.05); }
+    .folder-btn { padding: 6px 12px; font-size: 10px; font-weight: bold; color: #64748b; transition: 0.3s; }
+    .folder-btn.active { color: #3b82f6; }
+    .folder-delete { color: #444; font-size: 14px; cursor: pointer; padding-left: 5px; }
+    .folder-delete:hover { color: #ef4444; }
+
     table { table-layout: fixed; width: 100%; }
     th, td { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     input[type="datetime-local"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
     
-    /* Yeni eklenen stil: Durum başlığı tıklanabilir */
     #status-header { cursor: pointer; transition: color 0.2s; }
     #status-header:hover { color: #3b82f6; }
   </style>
@@ -85,10 +91,14 @@
       <div class="lg:col-span-3">
         <div class="glass rounded-3xl overflow-hidden shadow-2xl">
           <div class="p-6 bg-black/20 border-b border-white/5 space-y-4">
-            <div class="flex gap-3">
+            <div class="flex flex-wrap gap-3 items-center">
                 <button id="filterAll" onclick="setFilter('all')" class="filter-btn active px-6 py-2 rounded-xl uppercase font-bold">HEPSİ</button>
                 <button id="filterReady" onclick="setFilter('ready')" class="filter-btn px-6 py-2 rounded-xl uppercase font-bold">MÜSAİTLER</button>
                 <button id="filterWaiting" onclick="setFilter('waiting')" class="filter-btn px-6 py-2 rounded-xl uppercase font-bold text-orange-400">SÜREDEKİLER</button>
+                <div class="h-6 w-[1px] bg-white/10 mx-2"></div>
+                <div id="folderList" class="flex gap-2 items-center overflow-x-auto">
+                    </div>
+                <button onclick="createNewFolder()" class="bg-emerald-600/20 text-emerald-500 border border-emerald-500/20 px-3 py-1.5 rounded-lg text-[10px] font-bold hover:bg-emerald-500/20 transition-all">+ KLASÖR</button>
             </div>
             <div class="flex items-center gap-4">
                 <input id="search" oninput="render()" placeholder="Ara..." class="bg-transparent border-b border-white/10 flex-1 py-1 outline-none focus:border-blue-500 text-lg text-white" />
@@ -122,6 +132,12 @@
         <div class="space-y-6">
             <div><label class="text-[10px] ml-2 text-gray-400 uppercase tracking-widest font-mono">Hesap Adı</label><input id="editName" class="w-full p-4 rounded-xl bg-black border border-white/5 outline-none text-white" /></div>
             <div><label class="text-[10px] ml-2 text-gray-400 uppercase tracking-widest font-mono">İtiraz Notu / Sebebi</label><input id="editReason" class="w-full p-4 rounded-xl bg-black border border-white/5 outline-none text-white" /></div>
+            
+            <div>
+                <label class="text-[10px] ml-2 text-emerald-400 uppercase tracking-widest font-mono">Klasör (Taşı)</label>
+                <select id="editFolder" class="w-full p-4 rounded-xl bg-black border border-white/5 outline-none text-white cursor-pointer"></select>
+            </div>
+
             <div class="grid grid-cols-2 gap-4">
                 <div><label class="text-[10px] ml-2 text-gray-400 uppercase tracking-widest font-mono">Hak (0-3)</label><input id="editCount" type="number" min="0" max="3" class="w-full p-4 rounded-xl bg-black border border-white/5 text-center text-white text-lg" /></div>
                 <div><label class="text-[10px] ml-2 text-gray-400 uppercase tracking-widest font-mono">Dakika (+/-)</label><input id="editMinutes" type="number" class="w-full p-4 rounded-xl bg-black border border-white/5 text-center text-white" /></div>
@@ -138,13 +154,16 @@
 <script>
 let data = JSON.parse(localStorage.getItem('astar_db_v59')) || [];
 let templates = JSON.parse(localStorage.getItem('astar_tpl_v59')) || ["Ödenmemiş Bakiye", "Sistemleri Atlama", "Kabul Edilemez İş Uygulamaları"];
+let folders = JSON.parse(localStorage.getItem('astar_folders_v59')) || [{id: 'all', name: 'GENEL'}];
 let currentFilter = 'all';
+let currentFolderId = 'all';
 let editingIndex = null;
-let currentSortMode = 'none'; // none -> time -> ready
+let currentSortMode = 'none';
 
 const save = () => {
     localStorage.setItem('astar_db_v59', JSON.stringify(data));
     localStorage.setItem('astar_tpl_v59', JSON.stringify(templates));
+    localStorage.setItem('astar_folders_v59', JSON.stringify(folders));
     updateStats();
 };
 
@@ -155,6 +174,45 @@ function updateStats() {
     document.getElementById('totalCount').innerText = total;
     document.getElementById('waitingCount').innerText = waiting;
     document.getElementById('readyCount').innerText = ready;
+}
+
+// Klasör Fonksiyonları
+function createNewFolder() {
+    const name = prompt("Yeni klasör adı:");
+    if(name && name.trim()) {
+        const id = 'f_' + Date.now();
+        folders.push({ id, name: name.toUpperCase() });
+        save();
+        renderFolders();
+    }
+}
+
+function deleteFolder(id) {
+    if(id === 'all') return;
+    if(confirm('Klasörü ve içindeki tüm kayıtları silmek istediğinize emin misiniz?')) {
+        data = data.filter(item => item.folderId !== id);
+        folders = folders.filter(f => f.id !== id);
+        currentFolderId = 'all';
+        save();
+        renderFolders();
+        render();
+    }
+}
+
+function switchFolder(id) {
+    currentFolderId = id;
+    renderFolders();
+    render();
+}
+
+function renderFolders() {
+    const container = document.getElementById('folderList');
+    container.innerHTML = folders.map(f => `
+        <div class="folder-wrapper ${currentFolderId === f.id ? 'border-blue-500/50 bg-blue-500/5' : ''}">
+            <button onclick="switchFolder('${f.id}')" class="folder-btn ${currentFolderId === f.id ? 'active' : ''}">${f.name}</button>
+            ${f.id !== 'all' ? `<span onclick="deleteFolder('${f.id}')" class="folder-delete">&times;</span>` : ''}
+        </div>
+    `).join('');
 }
 
 function setFilter(f) {
@@ -196,7 +254,16 @@ function deleteTemplate(i) { templates.splice(i, 1); save(); renderTemplates(); 
 function addRow() {
     const n = document.getElementById('name').value.trim();
     if(!n) return;
-    data.push({ name: n, reason: document.getElementById('reasonSelect').value, count: 0, resetTime: null, id: Date.now(), wasWaiting: false });
+    // Yeni kayıt o an seçili olan klasöre (Genel değilse) eklenir
+    data.push({ 
+        name: n, 
+        reason: document.getElementById('reasonSelect').value, 
+        count: 0, 
+        resetTime: null, 
+        id: Date.now(), 
+        wasWaiting: false,
+        folderId: currentFolderId === 'all' ? 'all' : currentFolderId
+    });
     document.getElementById('name').value = ''; save(); render();
 }
 
@@ -217,6 +284,11 @@ function openEdit(id) {
     document.getElementById('editReason').value = item.reason; 
     document.getElementById('editCount').value = item.count;
     document.getElementById('editMinutes').value = 0;
+    
+    // Klasör seçim listesini güncelle
+    const fSelect = document.getElementById('editFolder');
+    fSelect.innerHTML = folders.map(f => `<option value="${f.id}" ${item.folderId === f.id ? 'selected' : ''}>${f.name}</option>`).join('');
+
     let base = item.resetTime ? new Date(item.resetTime - 604800000) : new Date();
     const tz = base.getTimezoneOffset() * 60000;
     document.getElementById('editTime').value = new Date(base - tz).toISOString().slice(0, 16);
@@ -228,6 +300,8 @@ function saveEdit() {
     item.name = document.getElementById('editName').value;
     item.reason = document.getElementById('editReason').value; 
     item.count = parseInt(document.getElementById('editCount').value);
+    item.folderId = document.getElementById('editFolder').value;
+    
     const mins = parseInt(document.getElementById('editMinutes').value);
     const tVal = new Date(document.getElementById('editTime').value).getTime();
     if(item.count === 3) {
@@ -249,6 +323,11 @@ function render() {
     const tbody = document.getElementById('tableBody');
     let list = [...data];
     const q = document.getElementById('search').value.toLowerCase();
+    
+    // Klasör Filtreleme
+    if(currentFolderId !== 'all') {
+        list = list.filter(x => x.folderId === currentFolderId);
+    }
     
     if(q) list = list.filter(x => x.name.toLowerCase().includes(q));
     if(currentFilter === 'ready') list = list.filter(x => x.count < 3 || (x.resetTime && x.resetTime - Date.now() <= 0));
@@ -309,9 +388,9 @@ function render() {
 }
 
 function exportData() {
-    const blob = new Blob([JSON.stringify({data, templates})], {type:"application/json"});
+    const blob = new Blob([JSON.stringify({data, templates, folders})], {type:"application/json"});
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-    a.download = `astaroth_HD_icons.json`; a.click();
+    a.download = `astaroth_data.json`; a.click();
 }
 
 function importData(e) {
@@ -321,7 +400,12 @@ function importData(e) {
     reader.onload = (evt) => {
         try {
             const imp = JSON.parse(evt.target.result);
-            if (imp.data) { data = imp.data; templates = imp.templates || templates; save(); render(); renderTemplates(); }
+            if (imp.data) { 
+                data = imp.data; 
+                templates = imp.templates || templates; 
+                folders = imp.folders || folders;
+                save(); render(); renderTemplates(); renderFolders();
+            }
         } catch (err) { alert('Hata!'); }
     };
     reader.readAsText(file);
@@ -329,7 +413,7 @@ function importData(e) {
 
 setInterval(() => { document.getElementById('liveClock').innerText = new Date().toLocaleTimeString('tr-TR'); }, 1000);
 setInterval(render, 30000); 
-renderTemplates(); render();
+renderTemplates(); renderFolders(); render();
 </script>
 </body>
 </html>
