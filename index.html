@@ -4,125 +4,123 @@
   <meta charset="UTF-8">
   <title>Astaroth - Shadow Protocol</title>
   
-  <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAlCAYAAAAwYKuzAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAASFSURBVFhHvZi7bx1FFMa/c6+V2OHhgDENIEWCwhAJF9BAZaEghSAQUqBESCaW7aQMBqek4g9A4pWOggaBhSyooEOYOHRAYUgHSEi4ofBe73MozpmZM7Oze6+diM8azc45u2d+8ziz60vDk6cNAADEFchfygUBACl/Ss4fyUj4Y4oYMIYbAxbAdIAlNQY2MRganryPrQokCRa3nenogAmOTjEgUWLW0mAh1FHgtCYnpOH0/W4PUjxLGrzlU9eBrK0PQnx9t4gEUC9rCOdnTNutzcsPIC2TXNeULRQNp+dMN5yCiUBDoH44VhomDe7FgJ1woY0vU9BHkVGs/XAAQFMzD7g9GMPNz8/hm+3PcfbxBR6pwJEdOREAAwId2//Gm1fwxdZ2J+uAKw3nnYuLizjz6AIOCoOsBLLcYFQgaGcF3Zb/woUXMRwOuf9EoamZeXUOqqUlwvrlK9i8tgkigp2Aoiiwv7/v2saYwN/XvvuuU7h3djbw7+zsYHn5ErKDAz8zDMSzPzUz785BDwcAA6ysXcbVjc3gga+2vsS1d95S96kpH6OlpefwwcfXZe9xvN0bP2J9dQWjLAZkyRLH4k7LGsgKLgd5g6wA8kpm2w7G3p9YnqCAUBuDrDASj+u80nHacoCk+rKzWSnAUUnIcoOicTc5MCLCuD8QUDck8QxGsgcPS8mPeEBSBnZ0YWFVtd3YhusSKEqbbtwpadh4JlU8AqExPMhRIXFLIC/Vs1H/6F5iVlGDs85mXw4UlThjuHZsZWNH3bTj5TZeIA/bC1jVfCSMCpKgBnltN7iVwPVJIOumHe+wNF1HIACApk49yO9iuyRSExFeeG0dF5ff9ncb4Ldff8J325/y/cYApMYYs6vDGQDOPHYW519dCfx7v9zE+++uIj9MZ3Ev4LmL63j59Q22ufPMHXCt+jj+33++gU/eW0PRAdi7xGXFRwG/EfzRYNtxfRx/eg969QJWjRwJNuvsEXEH24elgQk+HsIyYK8t+iaeQRe09Nl3J9t8Kkifbb6uVx3XT51fwzOv+D0IIvz7zx/4c+8HHgsRByIJOKa+Z+4hPLLwrEowwl97u/j6o1VUeXoPdgACwABPPr+Gp1/aCB64dXML338m72eyGapTt1sPP7GEc5c+DGx/39rFt9fXUBUMGB86vAdlmfnr1n5QGkmScM8UlfFBjPElXhtd5J66Tu/BxvA+5DAUlIHQKPmgZd1gJN9vwZ5xfdpnFWiqSMyqYSgdj7M4MSgpPoslkOvTvknca8m+OxsVgCE9C69CWLyvbkwrHmdxYlBSVBZb+aUu5V3sjgg3g/HsWOiU/GzUdbi8WW6Ql+Esx0X90wSVwXwd2qWWhPC+lGz6dstvj37RcHrOIOhQapfZyhaAWvWBptQFlra7f9zRA+kuNaiVuxwHKgBpDlHbOf63Gdd23ghWK2Vrdxqq3z/5r1uBLbJHInlRTKb+G4/w+6C3+2Y35FhNOAIBhOpcfyF7gDass96m+kFpeOK0SQGFoNJOtVrQE2riGTwxy0vcA9P2i+1/0H+L5aWjIQdnYAAAAABJRU5ErkJggg==">
+  <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAlCAYAAAAwYKuzAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAASFSURBVFhHvZi7bx1FFMa/c6+V2OHhgDENIEWCwhAJF9BAZaEghSAQUqBESCaW7aQMBqek4g9A4pWOggaBhSyooEOYOHRAYUgHSEi4ofBe73MozpmZM7Oze6+diM8azc45u2d+8ziz60vDk6cNAADEFchfygUBACl/Ss4fyUj4Y4oYMIYbAxbAdIAlNQY2MRganryPrQokCRa3nenogAmOTjEgUWLW0mAh1FHgtCYnpOH0/W4PUjxLGrzlU9eBrK0PQnx9t4gEUC9rCOdnTNutzcsPIC2TXNeULRQNp+dMN5yCiUBDoH44VhomDe7FgJ1woY0vU9BHkVGs/XAAQFMzD7g9GMPNz8/hm+3PcfbxBR6pwJEdOREAAwId2//Gm1fwxdZ2J+uAKw3nnYuLizjz6AIOCoOsBLLcYFQgaGcF3Zb/woUXMRwOuf9EoamZeXUOqqUlwvrlK9i8tgkigp2Aoiiwv7/v2saYwN/XvvuuU7h3djbw7+zsYHn5ErKDAz8zDMSzPzUz785BDwcAA6ysXcbVjc3gga+2vsS1d95S96kpH6OlpefwwcfXZe9xvN0bP2J9dQWjLAZkyRLH4k7LGsgKLgd5g6wA8kpm2w7G3p9YnqCAUBuDrDASj+u80nHacoCk+rKzWSnAUUnIcoOicTc5MCLCuD8QUDck8QxGsgcPS8mPeEBSBnZ0YWFVtd3YhusSKEqbbtwpadh4JlU8AqExPMhRIXFLIC/Vs1H/6F5iVlGDs85mXw4UlThjuHZsZWNH3bTj5TZeIA/bC1jVfCSMCpKgBnltN7iVwPVJIOumHe+wNF1HIACApk49yO9iuyRSExFeeG0dF5ff9ncb4Ldff8J325/y/cYApMYYs6vDGQDOPHYW519dCfx7v9zE+++uIj9MZ3Ev4LmL63j59Q22ufPMHXCt+jj+33++gU/eW0PRAdi7xGXFRwG/EfzRYNtxfRx/eg969QJWjRwJNuvsEXEH24elgQk+HsIyYK8t+iaeQRe09Nl3J9t8Kkifbb6uVx3XT51fwzOv+D0IIvz7zx/4c+8HHgsRByIJOKa+Z+4hPLLwrEowwl97u/j6o1VUeXoPdgACwABPPr+Gp1/aCB64dXML338m72eyGapTt1sPP7GEc5c+DGx/39rFt9fXUBUMGB86vAdlmfnr1n5QGkmScM8UlfFBjPElXhtd5J66Tu/BxvA+5DAUlIHQKPmgZd1gJN9vwZ5xfdpnFWiqSMyqYSgdj7M4MSgpPoslkOvTvknca8y+OxsVgCE9C69CWLyvbkwrHmdxYlBSVBZb+aUu5V3sjgg3g/HsWOiU/GzUdbi8WW6Ql+Esx0X90wSVwXwd2qWWhPC+lGz6dstvj37RcHrOIOhQapfZyhaAWvWBptQFlra7f9zRA+kuNaiVuxwHKgBpDlHbOf63Gdd23ghWK2Vrdxqq3z/5r1uBLbJHInlRTKb+G4/w+6C3+2Y35FhNOAIBhOpcfyF7gDass96m+kFpeOK0SQGFoNJOtVrQE2riGTwxy0vcA9P2i+1/0H+L5aWjIQdnYAAAAABJRU5ErkJggg==">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@800&family=Poppins:wght@400;600;700&family=JetBrains+Mono:wght@700&display=swap');
+    
     body { font-family: 'Poppins', sans-serif; background: #03060e; color: #e5e7eb; overflow-x: hidden; }
     .glass { background: rgba(10, 15, 28, 0.9); backdrop-filter: blur(10px); border: 1px solid rgba(59, 130, 246, 0.1); }
-    .astaroth-logo { font-family: 'Orbitron', sans-serif; font-size: 2.2rem; font-weight: 800; letter-spacing: 6px; text-transform: uppercase; background: linear-gradient(180deg, #fff, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.3)); }
+    
+    .astaroth-logo {
+        font-family: 'Orbitron', sans-serif; font-size: 2.2rem; font-weight: 800;
+        letter-spacing: 6px; text-transform: uppercase;
+        background: linear-gradient(180deg, #fff, #3b82f6);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.3));
+    }
+
     .mono-timer { font-family: 'JetBrains Mono', monospace; }
-    table { table-layout: fixed; width: 100%; }
-    th, td { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    .folder-icon { cursor:pointer; font-size:24px; color:#3b82f6; transition:0.3s; }
+    .folder-icon:hover { color:#60a5fa; }
+
+    /* modal styles */
+    .modal { display:none; position:fixed; z-index:999; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.8); justify-content:center; align-items:center; }
+    .modal-content { background:#111827; padding:20px; border-radius:1rem; max-width:400px; width:90%; }
+    .modal-content input { width:100%; padding:10px; margin-bottom:10px; border-radius:0.5rem; border:none; outline:none; }
+
+    @keyframes pulse-ready-alert {
+      0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.1); }
+      50% { box-shadow: 0 0 0 15px rgba(16, 185, 129, 0); background: rgba(16, 185, 129, 0.4); }
+      100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.1); }
+    }
+    .ready-alert { animation: pulse-ready-alert 1.5s infinite; border: 1px solid #10b981 !important; color: #10b981 !important; font-weight: 900 !important; }
+
+    .stats-overlay { position: fixed; bottom: 25px; left: 25px; z-index: 100; padding: 15px 20px; border-radius: 20px; background: #080c18; border: 1px solid rgba(59, 130, 246, 0.15); }
+
+    .progress-container { width: 100px; height: 4px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; }
+    .progress-bar { height: 100%; background: #3b82f6; width: 0%; transition: width 0.3s ease-in-out; }
+
   </style>
 </head>
-<body class="p-4 md:p-6 text-sm">
+<body>
 
-<div class="max-w-[1400px] mx-auto pb-24">
-<header class="flex justify-between items-center mb-10 px-4">
-  <div class="astaroth-logo">ASTAROTH</div>
-  <div id="liveClock" class="text-2xl font-bold mono-timer text-blue-500 bg-blue-900/10 px-6 py-2 rounded-2xl border border-blue-500/10">00:00:00</div>
-</header>
+  <!-- Header -->
+  <div class="flex justify-between items-center p-5 glass">
+    <div class="astaroth-logo">ASTAROTH</div>
+    <div class="flex items-center space-x-4">
+      <span class="folder-icon" onclick="openFolderModal()">📁</span>
+    </div>
+  </div>
 
-<div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-<div class="space-y-6 lg:col-span-1">
-<div class="glass p-6 rounded-3xl">
-<h2 class="text-[10px] font-bold mb-5 text-blue-500 tracking-widest uppercase">YENİ KAYIT</h2>
-<div class="space-y-4">
-<input id="name" placeholder="Hesap Adı" class="w-full p-4 rounded-xl bg-black border border-white/5 outline-none focus:border-blue-500 text-xs text-white" />
-<select id="folderSelect" class="w-full p-4 rounded-xl bg-black border border-white/5 outline-none cursor-pointer text-xs text-white"></select>
-<button onclick="addRow()" class="w-full bg-blue-700 hover:bg-blue-600 py-4 rounded-xl font-bold transition-all text-sm uppercase">Ekle</button>
-</div>
-<div class="mt-4 flex gap-2">
-<input id="newFolder" placeholder="Yeni Klasör" class="flex-1 p-3 rounded-lg bg-black border border-white/5 text-xs outline-none text-white" />
-<button onclick="addFolder()" class="bg-blue-500 px-4 rounded-lg font-bold">+</button>
-</div>
-</div>
-</div>
+  <!-- Modal for folder creation -->
+  <div id="folderModal" class="modal flex">
+    <div class="modal-content">
+      <h3>Klasör İsmi Giriniz</h3>
+      <input type="text" id="folderName" placeholder="Klasör adı...">
+      <button onclick="createFolder()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-500">Oluştur</button>
+      <button onclick="closeFolderModal()" class="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2">İptal</button>
+    </div>
+  </div>
 
-<div class="lg:col-span-3">
-<div class="glass rounded-3xl overflow-hidden shadow-2xl">
-<div class="overflow-hidden">
-<table class="w-full">
-<thead class="text-[9px] uppercase text-gray-500 bg-black/30">
-<tr>
-<th class="p-5 w-2/5 text-left">HESAP / NOT</th>
-<th class="p-5 text-center w-1/5">KLASÖR</th>
-<th class="p-5 text-center w-1/5">SİL</th>
-</tr>
-</thead>
-<tbody id="accountTable" class="text-[11px]">
-<!-- Dinamik olarak eklenecek -->
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</div>
-</div>
+  <!-- Klasörler Listesi -->
+  <div id="foldersContainer" class="p-5 grid grid-cols-3 gap-4"></div>
 
-<script>
-const accountTable = document.getElementById('accountTable');
-const folderSelect = document.getElementById('folderSelect');
+  <script>
+    const foldersContainer = document.getElementById('foldersContainer');
+    const folderModal = document.getElementById('folderModal');
+    const folderNameInput = document.getElementById('folderName');
 
-let folders = ['Genel'];
+    // Modal açma
+    function openFolderModal() {
+      folderNameInput.value = '';
+      folderModal.style.display = 'flex';
+      folderNameInput.focus();
+    }
 
-function updateFolderSelect() {
-  folderSelect.innerHTML = '';
-  folders.forEach(f => {
-    const option = document.createElement('option');
-    option.value = f;
-    option.textContent = f;
-    folderSelect.appendChild(option);
-  });
-}
+    // Modal kapama
+    function closeFolderModal() {
+      folderModal.style.display = 'none';
+    }
 
-// Yeni klasör ekle
-function addFolder() {
-  const folderName = document.getElementById('newFolder').value.trim();
-  if (!folderName) return alert('Klasör adı boş olamaz!');
-  if (folders.includes(folderName)) return alert('Bu klasör zaten var!');
-  folders.push(folderName);
-  updateFolderSelect();
-  document.getElementById('newFolder').value = '';
-}
+    // Klasör oluşturma
+    function createFolder() {
+      const name = folderNameInput.value.trim();
+      if (!name) {
+        alert('Lütfen bir isim girin!');
+        return;
+      }
 
-// Yeni hesap ekle
-function addRow() {
-  const nameInput = document.getElementById('name');
-  const name = nameInput.value.trim();
-  const folder = folderSelect.value;
-  if (!name) return alert('Hesap adı boş olamaz!');
-  const tr = document.createElement('tr');
-  tr.innerHTML = `
-    <td class="p-5">${name}</td>
-    <td class="p-5 text-center">${folder}</td>
-    <td class="p-5 text-center"><button onclick="deleteRow(this)" class="bg-red-500 px-3 py-1 rounded-lg text-xs">Sil</button></td>
-  `;
-  accountTable.appendChild(tr);
-  nameInput.value = '';
-}
+      const folderDiv = document.createElement('div');
+      folderDiv.className = 'glass p-4 rounded shadow-md cursor-pointer flex flex-col items-center hover:bg-blue-900 transition';
+      folderDiv.innerHTML = `
+        <span style="font-size:40px;">📁</span>
+        <span class="mt-2">${name}</span>
+        <button onclick="deleteFolder(event)" class="mt-2 bg-red-600 text-white px-2 py-1 rounded text-sm hover:bg-red-500">Sil</button>
+      `;
 
-// Satır sil
-function deleteRow(btn) {
-  btn.closest('tr').remove();
-}
+      foldersContainer.appendChild(folderDiv);
+      closeFolderModal();
+    }
 
-// Saat
-function updateClock() {
-  const now = new Date();
-  const h = String(now.getHours()).padStart(2,'0');
-  const m = String(now.getMinutes()).padStart(2,'0');
-  const s = String(now.getSeconds()).padStart(2,'0');
-  document.getElementById('liveClock').textContent = `${h}:${m}:${s}`;
-}
-setInterval(updateClock, 1000);
-updateClock();
+    // Klasör silme
+    function deleteFolder(event) {
+      event.stopPropagation();
+      const folder = event.currentTarget.parentElement;
+      if (confirm('Bu klasörü silmek istediğinize emin misiniz?')) {
+        folder.remove();
+      }
+    }
 
-// Başlangıçta 'Genel' klasörü
-updateFolderSelect();
-</script>
+    // Modal dışına tıklayınca kapatma
+    window.onclick = function(event) {
+      if (event.target == folderModal) {
+        closeFolderModal();
+      }
+    }
+  </script>
 
 </body>
 </html>
