@@ -37,9 +37,13 @@
 
     .filter-btn { transition: 0.3s; border: 1px solid rgba(255,255,255,0.05); color: #64748b; font-size: 11px; }
     .filter-btn.active { background: #1d4ed8; color: white; border-color: #3b82f6; }
+    
+    /* Müsaitler Özel Renk */
+    #filterReady.active { background: #10b981; border-color: #10b981; color: white; }
+    #filterReady { color: #10b981; border-color: rgba(16, 185, 129, 0.2); }
 
     /* Klasör Stilleri */
-    .folder-wrapper { display: flex; align-items: center; background: rgba(255,255,255,0.03); border-radius: 12px; padding: 2px 8px; border: 1px solid rgba(255,255,255,0.05); }
+    .folder-wrapper { display: flex; align-items: center; background: rgba(255,255,255,0.03); border-radius: 12px; padding: 2px 8px; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; }
     .folder-btn { padding: 6px 12px; font-size: 10px; font-weight: bold; color: #64748b; transition: 0.3s; }
     .folder-btn.active { color: #3b82f6; }
     .folder-delete { color: #444; font-size: 14px; cursor: pointer; padding-left: 5px; }
@@ -51,9 +55,20 @@
     
     #status-header { cursor: pointer; transition: color 0.2s; }
     #status-header:hover { color: #3b82f6; }
+
+    /* Sağ Tık Renk Menüsü */
+    #contextMenu { position: absolute; z-index: 1000; background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); display: none; }
+    .color-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .color-opt { width: 20px; height: 20px; border-radius: 4px; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); }
   </style>
 </head>
 <body class="p-4 md:p-6 text-sm">
+
+  <div id="contextMenu">
+    <div class="text-[9px] uppercase text-gray-500 mb-2 font-bold tracking-widest text-center">Renk Seç</div>
+    <div class="color-grid">
+        <div class="color-opt" style="background: #3b82f6" onclick="setFolderColor('#3b82f6')"></div> <div class="color-opt" style="background: #a855f7" onclick="setFolderColor('#a855f7')"></div> <div class="color-opt" style="background: #ec4899" onclick="setFolderColor('#ec4899')"></div> <div class="color-opt" style="background: #ef4444" onclick="setFolderColor('#ef4444')"></div> <div class="color-opt" style="background: #f97316" onclick="setFolderColor('#f97316')"></div> <div class="color-opt" style="background: #eab308" onclick="setFolderColor('#eab308')"></div> <div class="color-opt" style="background: #10b981" onclick="setFolderColor('#10b981')"></div> <div class="color-opt" style="background: #64748b" onclick="setFolderColor('')"></div> </div>
+  </div>
 
   <div class="stats-overlay space-y-3">
     <div class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-white shadow-[0_0_8px_#fff]"></div><span id="totalCount" class="mono-timer font-bold">0</span></div>
@@ -132,12 +147,7 @@
         <div class="space-y-6">
             <div><label class="text-[10px] ml-2 text-gray-400 uppercase tracking-widest font-mono">Hesap Adı</label><input id="editName" class="w-full p-4 rounded-xl bg-black border border-white/5 outline-none text-white" /></div>
             <div><label class="text-[10px] ml-2 text-gray-400 uppercase tracking-widest font-mono">İtiraz Notu / Sebebi</label><input id="editReason" class="w-full p-4 rounded-xl bg-black border border-white/5 outline-none text-white" /></div>
-            
-            <div>
-                <label class="text-[10px] ml-2 text-emerald-400 uppercase tracking-widest font-mono">Klasör (Taşı)</label>
-                <select id="editFolder" class="w-full p-4 rounded-xl bg-black border border-white/5 outline-none text-white cursor-pointer"></select>
-            </div>
-
+            <div><label class="text-[10px] ml-2 text-emerald-400 uppercase tracking-widest font-mono">Klasör (Taşı)</label><select id="editFolder" class="w-full p-4 rounded-xl bg-black border border-white/5 outline-none text-white cursor-pointer"></select></div>
             <div class="grid grid-cols-2 gap-4">
                 <div><label class="text-[10px] ml-2 text-gray-400 uppercase tracking-widest font-mono">Hak (0-3)</label><input id="editCount" type="number" min="0" max="3" class="w-full p-4 rounded-xl bg-black border border-white/5 text-center text-white text-lg" /></div>
                 <div><label class="text-[10px] ml-2 text-gray-400 uppercase tracking-widest font-mono">Dakika (+/-)</label><input id="editMinutes" type="number" class="w-full p-4 rounded-xl bg-black border border-white/5 text-center text-white" /></div>
@@ -154,11 +164,12 @@
 <script>
 let data = JSON.parse(localStorage.getItem('astar_db_v59')) || [];
 let templates = JSON.parse(localStorage.getItem('astar_tpl_v59')) || ["Ödenmemiş Bakiye", "Sistemleri Atlama", "Kabul Edilemez İş Uygulamaları"];
-let folders = JSON.parse(localStorage.getItem('astar_folders_v59')) || [{id: 'all', name: 'GENEL'}];
+let folders = JSON.parse(localStorage.getItem('astar_folders_v59')) || [{id: 'all', name: 'GENEL', color: ''}];
 let currentFilter = 'all';
 let currentFolderId = 'all';
 let editingIndex = null;
 let currentSortMode = 'none';
+let contextFolderTarget = null;
 
 const save = () => {
     localStorage.setItem('astar_db_v59', JSON.stringify(data));
@@ -181,7 +192,7 @@ function createNewFolder() {
     const name = prompt("Yeni klasör adı:");
     if(name && name.trim()) {
         const id = 'f_' + Date.now();
-        folders.push({ id, name: name.toUpperCase() });
+        folders.push({ id, name: name.toUpperCase(), color: '' });
         save();
         renderFolders();
     }
@@ -207,13 +218,39 @@ function switchFolder(id) {
 
 function renderFolders() {
     const container = document.getElementById('folderList');
-    container.innerHTML = folders.map(f => `
-        <div class="folder-wrapper ${currentFolderId === f.id ? 'border-blue-500/50 bg-blue-500/5' : ''}">
-            <button onclick="switchFolder('${f.id}')" class="folder-btn ${currentFolderId === f.id ? 'active' : ''}">${f.name}</button>
+    container.innerHTML = folders.map(f => {
+        const customStyle = f.color ? `style="border-color: ${f.color}44; background: ${f.color}11;"` : '';
+        const btnStyle = f.color ? `style="color: ${f.color};"` : '';
+        return `
+        <div class="folder-wrapper ${currentFolderId === f.id ? 'border-blue-500/50 bg-blue-500/5' : ''}" ${customStyle} oncontextmenu="showContextMenu(event, '${f.id}')">
+            <button onclick="switchFolder('${f.id}')" class="folder-btn ${currentFolderId === f.id ? 'active' : ''}" ${btnStyle}>${f.name}</button>
             ${f.id !== 'all' ? `<span onclick="deleteFolder('${f.id}')" class="folder-delete">&times;</span>` : ''}
         </div>
-    `).join('');
+    `}).join('');
 }
+
+// Sağ Tık Renk Menüsü Kontrolü
+function showContextMenu(e, id) {
+    e.preventDefault();
+    contextFolderTarget = id;
+    const menu = document.getElementById('contextMenu');
+    menu.style.display = 'block';
+    menu.style.left = e.pageX + 'px';
+    menu.style.top = e.pageY + 'px';
+}
+
+function setFolderColor(color) {
+    const f = folders.find(x => x.id === contextFolderTarget);
+    if(f) {
+        f.color = color;
+        save();
+        renderFolders();
+    }
+    document.getElementById('contextMenu').style.display = 'none';
+}
+
+// Menüyü kapatma
+window.onclick = () => document.getElementById('contextMenu').style.display = 'none';
 
 function setFilter(f) {
     currentFilter = f;
@@ -254,7 +291,6 @@ function deleteTemplate(i) { templates.splice(i, 1); save(); renderTemplates(); 
 function addRow() {
     const n = document.getElementById('name').value.trim();
     if(!n) return;
-    // Yeni kayıt o an seçili olan klasöre (Genel değilse) eklenir
     data.push({ 
         name: n, 
         reason: document.getElementById('reasonSelect').value, 
@@ -284,11 +320,8 @@ function openEdit(id) {
     document.getElementById('editReason').value = item.reason; 
     document.getElementById('editCount').value = item.count;
     document.getElementById('editMinutes').value = 0;
-    
-    // Klasör seçim listesini güncelle
     const fSelect = document.getElementById('editFolder');
     fSelect.innerHTML = folders.map(f => `<option value="${f.id}" ${item.folderId === f.id ? 'selected' : ''}>${f.name}</option>`).join('');
-
     let base = item.resetTime ? new Date(item.resetTime - 604800000) : new Date();
     const tz = base.getTimezoneOffset() * 60000;
     document.getElementById('editTime').value = new Date(base - tz).toISOString().slice(0, 16);
@@ -301,7 +334,6 @@ function saveEdit() {
     item.reason = document.getElementById('editReason').value; 
     item.count = parseInt(document.getElementById('editCount').value);
     item.folderId = document.getElementById('editFolder').value;
-    
     const mins = parseInt(document.getElementById('editMinutes').value);
     const tVal = new Date(document.getElementById('editTime').value).getTime();
     if(item.count === 3) {
@@ -323,33 +355,23 @@ function render() {
     const tbody = document.getElementById('tableBody');
     let list = [...data];
     const q = document.getElementById('search').value.toLowerCase();
-    
-    // Klasör Filtreleme
-    if(currentFolderId !== 'all') {
-        list = list.filter(x => x.folderId === currentFolderId);
-    }
-    
+    if(currentFolderId !== 'all') list = list.filter(x => x.folderId === currentFolderId);
     if(q) list = list.filter(x => x.name.toLowerCase().includes(q));
     if(currentFilter === 'ready') list = list.filter(x => x.count < 3 || (x.resetTime && x.resetTime - Date.now() <= 0));
     else if(currentFilter === 'waiting') list = list.filter(x => x.count === 3 && (x.resetTime - Date.now() > 0));
 
-    // Sıralama Mantığı
     if (currentSortMode === 'time') {
         list.sort((a, b) => {
             let waitA = a.count === 3 && a.resetTime && (a.resetTime - Date.now() > 0);
             let waitB = b.count === 3 && b.resetTime && (b.resetTime - Date.now() > 0);
             if (waitA && waitB) return a.resetTime - b.resetTime;
-            if (waitA && !waitB) return -1;
-            if (!waitA && waitB) return 1;
-            return 0;
+            return waitA ? -1 : 1;
         });
     } else if (currentSortMode === 'ready') {
         list.sort((a, b) => {
             let waitA = a.count === 3 && a.resetTime && (a.resetTime - Date.now() > 0);
             let waitB = b.count === 3 && b.resetTime && (b.resetTime - Date.now() > 0);
-            if (!waitA && waitB) return -1;
-            if (waitA && !waitB) return 1;
-            return 0;
+            return !waitA ? -1 : 1;
         });
     }
 
@@ -357,21 +379,16 @@ function render() {
     list.forEach((item) => {
         let isWaiting = item.count === 3 && item.resetTime && (item.resetTime - Date.now() > 0);
         let diff = isWaiting ? item.resetTime - Date.now() : 0;
-        
         if(item.count === 3 && item.resetTime && diff <= 0) { 
             item.count = 0; item.resetTime = null; item.wasWaiting = true;
             isWaiting = false; save(); 
         }
-
         let readyClass = item.wasWaiting ? 'ready-alert' : '';
         let statusHtml = `<div><span class="${readyClass} text-[10px] font-bold border border-emerald-500/20 px-4 py-1.5 rounded-full bg-emerald-500/5 text-emerald-500 transition-all">MÜSAİT</span></div>`;
-        
         if(isWaiting) {
             const d = Math.floor(diff/86400000), h = Math.floor((diff/3600000)%24), m = Math.floor((diff/60000)%60);
-            const perc = (diff / 604800000) * 100;
-            statusHtml = `<div class="flex flex-col items-center gap-1"><span class="mono-timer text-orange-500 text-xs font-bold">${d}G ${h}S ${m}D</span><div class="progress-container"><div class="progress-bar" style="width: ${perc}%"></div></div></div>`;
+            statusHtml = `<div class="flex flex-col items-center gap-1"><span class="mono-timer text-orange-500 text-xs font-bold">${d}G ${h}S ${m}D</span><div class="progress-container"><div class="progress-bar" style="width: ${(diff / 604800000) * 100}%"></div></div></div>`;
         }
-        
         tbody.innerHTML += `
             <tr class="border-b border-white/[0.02] hover:bg-white/[0.01] transition">
                 <td class="p-4 text-left"><div class="font-bold text-sm truncate text-white">${item.name}</div><div class="text-[10px] text-gray-500 truncate uppercase">${item.reason}</div></td>
@@ -400,12 +417,7 @@ function importData(e) {
     reader.onload = (evt) => {
         try {
             const imp = JSON.parse(evt.target.result);
-            if (imp.data) { 
-                data = imp.data; 
-                templates = imp.templates || templates; 
-                folders = imp.folders || folders;
-                save(); render(); renderTemplates(); renderFolders();
-            }
+            if (imp.data) { data = imp.data; templates = imp.templates || templates; folders = imp.folders || folders; save(); render(); renderTemplates(); renderFolders(); }
         } catch (err) { alert('Hata!'); }
     };
     reader.readAsText(file);
