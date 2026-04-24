@@ -38,11 +38,9 @@
     .filter-btn { transition: 0.3s; border: 1px solid rgba(255,255,255,0.05); color: #64748b; font-size: 11px; }
     .filter-btn.active { background: #1d4ed8; color: white; border-color: #3b82f6; }
     
-    /* Müsaitler Butonu Yeşil Modu */
     #filterReady.active { background: #10b981 !important; border-color: #10b981 !important; color: white !important; }
     #filterReady { color: #10b981; border-color: rgba(16, 185, 129, 0.2); }
 
-    /* Klasör Stilleri */
     .folder-wrapper { display: flex; align-items: center; background: rgba(255,255,255,0.03); border-radius: 12px; padding: 2px 8px; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; cursor: pointer; }
     .folder-btn { padding: 6px 12px; font-size: 10px; font-weight: bold; color: #64748b; transition: 0.3s; background: none; border: none; }
     .folder-btn.active { color: #3b82f6; }
@@ -53,10 +51,9 @@
     th, td { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     input[type="datetime-local"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
     
-    #status-header { cursor: pointer; transition: color 0.2s; }
-    #status-header:hover { color: #3b82f6; }
+    .sortable-header { cursor: pointer; transition: color 0.2s; }
+    .sortable-header:hover { color: #3b82f6; }
 
-    /* Renk Seçici Gizli Input */
     #folderColorPicker { position: absolute; visibility: hidden; width: 0; height: 0; }
   </style>
 </head>
@@ -105,8 +102,7 @@
                 <button id="filterReady" onclick="setFilter('ready')" class="filter-btn px-6 py-2 rounded-xl uppercase font-bold">MÜSAİTLER</button>
                 <button id="filterWaiting" onclick="setFilter('waiting')" class="filter-btn px-6 py-2 rounded-xl uppercase font-bold text-orange-400">SÜREDEKİLER</button>
                 <div class="h-6 w-[1px] bg-white/10 mx-2"></div>
-                <div id="folderList" class="flex gap-2 items-center overflow-x-auto">
-                    </div>
+                <div id="folderList" class="flex gap-2 items-center overflow-x-auto"></div>
                 <button onclick="createNewFolder()" class="bg-emerald-600/20 text-emerald-500 border border-emerald-500/20 px-3 py-1.5 rounded-lg text-[10px] font-bold hover:bg-emerald-500/20 transition-all">+ KLASÖR</button>
             </div>
             <div class="flex items-center gap-4">
@@ -121,9 +117,11 @@
             <table class="w-full">
               <thead class="text-[9px] uppercase text-gray-500 bg-black/30">
                 <tr>
-                  <th class="p-5 w-2/5 text-left">HESAP / NOT</th>
+                  <th class="p-5 w-2/5 text-left">
+                      HESAP / <span onclick="toggleReasonSort()" class="sortable-header text-blue-400 font-bold">SEBEPLER <span id="reason-sort-icon">↕</span></span>
+                  </th>
                   <th class="p-5 text-center w-24">HAK</th>
-                  <th id="status-header" onclick="toggleSort()" class="p-5 text-center w-40">DURUM <span id="status-sort-icon">↕</span></th>
+                  <th id="status-header" onclick="toggleSort()" class="p-5 text-center w-40 sortable-header">DURUM <span id="status-sort-icon">↕</span></th>
                   <th class="p-5 text-right w-44">KONTROL</th>
                 </tr>
               </thead>
@@ -162,7 +160,7 @@ let folders = JSON.parse(localStorage.getItem('astar_folders_v59')) || [{id: 'al
 let currentFilter = 'all';
 let currentFolderId = 'all';
 let editingIndex = null;
-let currentSortMode = 'none';
+let currentSortMode = 'none'; // 'none', 'time', 'ready', 'reason', 'reason-desc'
 let contextFolderId = null;
 
 const save = () => {
@@ -187,14 +185,13 @@ function createNewFolder() {
     if(name && name.trim()) {
         const id = 'f_' + Date.now();
         folders.push({ id, name: name.toUpperCase(), color: '' });
-        save();
-        renderFolders();
+        save(); renderFolders();
     }
 }
 
 function deleteFolder(id) {
     if(id === 'all') return;
-    if(confirm('Klasörü ve içindeki kayıtları silmek istediğinize emin misiniz?')) {
+    if(confirm('Klasörü silmek istediğinize emin misiniz?')) {
         data = data.filter(item => item.folderId !== id);
         folders = folders.filter(f => f.id !== id);
         currentFolderId = 'all';
@@ -202,11 +199,7 @@ function deleteFolder(id) {
     }
 }
 
-function switchFolder(id) {
-    currentFolderId = id;
-    renderFolders();
-    render();
-}
+function switchFolder(id) { currentFolderId = id; renderFolders(); render(); }
 
 function openColorPicker(e, id) {
     e.preventDefault();
@@ -219,11 +212,7 @@ function openColorPicker(e, id) {
 
 function applyFolderColor(color) {
     const folder = folders.find(f => f.id === contextFolderId);
-    if(folder) {
-        folder.color = color;
-        save();
-        renderFolders();
-    }
+    if(folder) { folder.color = color; save(); renderFolders(); }
 }
 
 function renderFolders() {
@@ -234,19 +223,15 @@ function renderFolders() {
         const borderColor = f.color ? `${f.color}88` : (isActive ? '#3b82f688' : 'rgba(255,255,255,0.05)');
         const bg = f.color ? `${f.color}15` : (isActive ? 'rgba(59,130,246,0.1)' : 'rgba(255,255,255,0.03)');
         const textColor = f.color || (isActive ? '#3b82f6' : '#64748b');
-
         return `
-        <div class="folder-wrapper" 
-             style="border: 1px solid ${borderColor}; background: ${bg};"
-             oncontextmenu="openColorPicker(event, '${f.id}')">
-            <button onclick="switchFolder('${f.id}')" 
-                    class="folder-btn ${isActive ? 'active' : ''}" 
-                    style="color: ${textColor};">${f.name}</button>
+        <div class="folder-wrapper" style="border: 1px solid ${borderColor}; background: ${bg};" oncontextmenu="openColorPicker(event, '${f.id}')">
+            <button onclick="switchFolder('${f.id}')" class="folder-btn ${isActive ? 'active' : ''}" style="color: ${textColor};">${f.name}</button>
             ${f.id !== 'all' ? `<span onclick="deleteFolder('${f.id}')" class="folder-delete">&times;</span>` : ''}
-        </div>
-    `}).join('');
+        </div>`;
+    }).join('');
 }
 
+// Filtre ve Sıralama
 function setFilter(f) {
     currentFilter = f;
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -256,11 +241,17 @@ function setFilter(f) {
 
 function toggleSort() {
     const icon = document.getElementById('status-sort-icon');
-    if (currentSortMode === 'none' || currentSortMode === 'ready') {
-        currentSortMode = 'time'; icon.innerText = '⏳';
-    } else {
-        currentSortMode = 'ready'; icon.innerText = '✅';
-    }
+    document.getElementById('reason-sort-icon').innerText = '↕';
+    if (currentSortMode === 'time') { currentSortMode = 'ready'; icon.innerText = '✅'; }
+    else { currentSortMode = 'time'; icon.innerText = '⏳'; }
+    render();
+}
+
+function toggleReasonSort() {
+    const icon = document.getElementById('reason-sort-icon');
+    document.getElementById('status-sort-icon').innerText = '↕';
+    if (currentSortMode === 'reason') { currentSortMode = 'reason-desc'; icon.innerText = '↑'; }
+    else { currentSortMode = 'reason'; icon.innerText = '↓'; }
     render();
 }
 
@@ -327,27 +318,26 @@ function saveEdit() {
     if(item.count === 3) {
         let currentReset = item.resetTime || (Date.now() + 604800000);
         let currentBase = currentReset - 604800000;
-        if(Math.abs(tVal - currentBase) > 60000) { item.resetTime = tVal + 604800000; } 
-        else if(mins !== 0) { item.resetTime = currentReset + (mins * 60000); }
+        if(Math.abs(tVal - currentBase) > 60000) item.resetTime = tVal + 604800000;
+        else if(mins !== 0) item.resetTime = currentReset + (mins * 60000);
     } else { item.resetTime = null; item.wasWaiting = false; }
     save(); render(); closeEdit();
 }
 
 function closeEdit() { document.getElementById('editModal').classList.add('hidden'); }
-
-function deleteRow(id) {
-    if(confirm('Hesap silinsin mi?')) { data = data.filter(x => x.id !== id); save(); render(); }
-}
+function deleteRow(id) { if(confirm('Hesap silinsin mi?')) { data = data.filter(x => x.id !== id); save(); render(); } }
 
 function render() {
     const tbody = document.getElementById('tableBody');
     let list = [...data];
     const q = document.getElementById('search').value.toLowerCase();
+    
     if(currentFolderId !== 'all') list = list.filter(x => x.folderId === currentFolderId);
     if(q) list = list.filter(x => x.name.toLowerCase().includes(q));
     if(currentFilter === 'ready') list = list.filter(x => x.count < 3 || (x.resetTime && x.resetTime - Date.now() <= 0));
     else if(currentFilter === 'waiting') list = list.filter(x => x.count === 3 && (x.resetTime - Date.now() > 0));
 
+    // SIRALAMA MANTIĞI
     if (currentSortMode === 'time') {
         list.sort((a, b) => {
             let waitA = a.count === 3 && a.resetTime && (a.resetTime - Date.now() > 0);
@@ -361,6 +351,10 @@ function render() {
             let waitB = b.count === 3 && b.resetTime && (b.resetTime - Date.now() > 0);
             return !waitA ? -1 : 1;
         });
+    } else if (currentSortMode === 'reason') {
+        list.sort((a, b) => a.reason.localeCompare(b.reason));
+    } else if (currentSortMode === 'reason-desc') {
+        list.sort((a, b) => b.reason.localeCompare(a.reason));
     }
 
     tbody.innerHTML = '';
@@ -368,8 +362,7 @@ function render() {
         let isWaiting = item.count === 3 && item.resetTime && (item.resetTime - Date.now() > 0);
         let diff = isWaiting ? item.resetTime - Date.now() : 0;
         if(item.count === 3 && item.resetTime && diff <= 0) { 
-            item.count = 0; item.resetTime = null; item.wasWaiting = true;
-            isWaiting = false; save(); 
+            item.count = 0; item.resetTime = null; item.wasWaiting = true; isWaiting = false; save(); 
         }
         let readyClass = item.wasWaiting ? 'ready-alert' : '';
         let statusHtml = `<div><span class="${readyClass} text-[10px] font-bold border border-emerald-500/20 px-4 py-1.5 rounded-full bg-emerald-500/5 text-emerald-500 transition-all">MÜSAİT</span></div>`;
@@ -379,7 +372,7 @@ function render() {
         }
         tbody.innerHTML += `
             <tr class="border-b border-white/[0.02] hover:bg-white/[0.01] transition">
-                <td class="p-4 text-left"><div class="font-bold text-sm truncate text-white">${item.name}</div><div class="text-[10px] text-gray-500 truncate uppercase">${item.reason}</div></td>
+                <td class="p-4 text-left"><div class="font-bold text-sm truncate text-white">${item.name}</div><div class="text-[10px] text-gray-400 truncate uppercase font-bold">${item.reason}</div></td>
                 <td class="p-4 text-center text-xl font-bold opacity-10 italic text-white">${item.count}/3</td>
                 <td class="p-4 text-center">${statusHtml}</td>
                 <td class="p-4 text-right flex justify-end gap-2">
